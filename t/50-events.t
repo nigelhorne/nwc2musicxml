@@ -390,4 +390,60 @@ sub score_with_tempo_variance {
 	like $xml, qr/direction placement="above"/,   'above placement used';
 }
 
+# ---------------------------------------------------------------------------
+# Copyright extraction (Copyright1 / Copyright2) and <credit> emission
+# ---------------------------------------------------------------------------
+
+{
+	my $nwctxt = join "\n",
+		'!NoteWorthyComposer(2.751)',
+		'|SongInfo|Title:"Test"|Copyright1:"Copyright (c) 2025 Test"|Copyright2:"All Rights Reserved"',
+		'|AddStaff|Name:"Staff"',
+		'|Clef|Type:Treble',
+		'|Key|Signature:C',
+		'|TimeSig|Signature:4/4',
+		;
+	my $score = Music::NWC2MusicXML::Parser->new->parse($nwctxt);
+	is $score->metadata->{Copyright1}, 'Copyright (c) 2025 Test', 'Copyright1 extracted from SongInfo';
+	is $score->metadata->{Copyright2}, 'All Rights Reserved',      'Copyright2 extracted from SongInfo';
+
+	my $xml = Music::NWC2MusicXML::MusicXML->new->generate($score);
+
+	# Title credit on page 1
+	like $xml, qr/<credit page="1">.*?<credit-type>title<\/credit-type>/s,
+		'title credit page="1" present';
+	like $xml, qr/credit-type>title<\/credit-type>.*?Test.*?<\/credit-words>/s,
+		'title text in title credit';
+
+	# Copyright credit has NO page attribute -> appears on all pages
+	like $xml, qr/<credit>\s*<credit-type>rights<\/credit-type>/,
+		'rights credit has no page attribute (all pages)';
+	like $xml, qr/<credit-type>rights<\/credit-type>/,  'credit-type is rights';
+
+	# Both copyright lines appear as separate <credit-words>
+	like $xml, qr/Copyright \(c\) 2025 Test.*?<\/credit-words>/s,
+		'Copyright1 text in credit-words';
+	like $xml, qr/All Rights Reserved.*?<\/credit-words>/s,
+		'Copyright2 text in credit-words';
+
+	# Both combined into one <rights> element (two separate elements cause
+	# renderers to discard all but the last)
+	like $xml, qr/<rights>Copyright \(c\) 2025 Test\nAll Rights Reserved<\/rights>/,
+		'Copyright1 and Copyright2 combined in identification rights';
+}
+
+# Non-ASCII in copyright is escaped as numeric entity
+{
+	my $staff = Music::NWC2MusicXML::Staff->new(name => 'Test');
+	$staff->set_initial_clef('Treble');
+	$staff->set_initial_key({ signature => 'C', tonic => 'C', fifths => 0 });
+	$staff->set_initial_timesig({ beats => 4, beat_type => 4 });
+	my $score = Music::NWC2MusicXML::Score->new;
+	$score->set_metadata_field('Copyright1', "Copyright \x{a9} 2025");
+	$score->add_staff($staff);
+	my $xml = Music::NWC2MusicXML::MusicXML->new->generate($score);
+	like $xml, qr/Copyright &#169; 2025/, 'non-ASCII copyright symbol escaped as &#169;';
+	unlike $xml, qr/[^\x00-\x7F]/, 'output is pure ASCII';
+}
+
 done_testing();

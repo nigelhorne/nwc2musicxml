@@ -23,6 +23,8 @@ Readonly::Array my @SONGINFO_KEYS => qw(
 	Author
 	Lyricist
 	Copyright
+	Copyright1
+	Copyright2
 	Comments
 );
 

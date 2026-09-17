@@ -333,14 +333,83 @@ sub generate {
 		$DOCTYPE_PUBLIC, $DOCTYPE_SYSTEM);
 	push @out, sprintf('<score-partwise version="%s">', $MUSICXML_VERSION);
 
+	my $layout = _compute_page_layout($score->page_setup // {});
+
 	push @out, $self->_emit_work($score->metadata);
 	push @out, $self->_emit_identification($score->metadata);
+	push @out, $self->_emit_defaults($layout);
+	push @out, $self->_emit_credits($score->metadata, $layout);
 	push @out, $self->_emit_part_list($score->staves);
 	push @out, $self->_emit_parts($score->staves, $divisions);
 
 	push @out, '</score-partwise>';
 
 	return join("\n", @out) . "\n";
+}
+
+# ---------------------------------------------------------------------------
+# Private: page layout constants and helpers
+# ---------------------------------------------------------------------------
+
+# Standard MusicXML scaling: 40 tenths per staff space, 7.2175 mm per space.
+Readonly::Scalar my $MM_PER_SPACE  => 7.2175;
+Readonly::Scalar my $TENTHS_PER_SPACE => 40;
+Readonly::Scalar my $TENTHS_PER_MM => $TENTHS_PER_SPACE / $MM_PER_SPACE;
+
+# Default to A4 paper (210 x 297 mm); most common in international music publishing.
+Readonly::Scalar my $DEFAULT_PAGE_W_MM => 210.0;
+Readonly::Scalar my $DEFAULT_PAGE_H_MM => 297.0;
+Readonly::Scalar my $DEFAULT_MARGIN_CM => 1.27;   # standard NWC default
+
+# Derive page geometry in tenths from PgSetup/PgMargins fields (cm margins).
+# Returns a hashref: page_height, page_width, margin_t, center_x, right_x.
+sub _compute_page_layout {
+	my ($ps) = @_;
+	$ps //= {};
+
+	# Margins: NWC stores them in cm (Left/Top/Right/Bottom from PgMargins).
+	my $margin_cm = $ps->{Left} // $DEFAULT_MARGIN_CM;
+	my $margin_mm = $margin_cm * 10;
+	my $margin_t  = $margin_mm * $TENTHS_PER_MM;
+
+	my $page_h = $DEFAULT_PAGE_H_MM * $TENTHS_PER_MM;
+	my $page_w = $DEFAULT_PAGE_W_MM * $TENTHS_PER_MM;
+
+	return {
+		page_height => $page_h,
+		page_width  => $page_w,
+		margin_t    => $margin_t,
+		center_x    => $page_w / 2,
+		right_x     => $page_w - $margin_t,
+	};
+}
+
+sub _emit_defaults {
+	my ($self, $layout) = @_;
+	my @out;
+	my $i = $self->{_indent};
+
+	my $ph = sprintf '%.2f', $layout->{page_height};
+	my $pw = sprintf '%.2f', $layout->{page_width};
+	my $mg = sprintf '%.2f', $layout->{margin_t};
+
+	push @out, '<defaults>';
+	push @out, "${i}<scaling>";
+	push @out, "${i}${i}<millimeters>$MM_PER_SPACE</millimeters>";
+	push @out, "${i}${i}<tenths>$TENTHS_PER_SPACE</tenths>";
+	push @out, "${i}</scaling>";
+	push @out, "${i}<page-layout>";
+	push @out, "${i}${i}<page-height>$ph</page-height>";
+	push @out, "${i}${i}<page-width>$pw</page-width>";
+	push @out, "${i}${i}<page-margins type=\"both\">";
+	push @out, "${i}${i}${i}<left-margin>$mg</left-margin>";
+	push @out, "${i}${i}${i}<right-margin>$mg</right-margin>";
+	push @out, "${i}${i}${i}<top-margin>$mg</top-margin>";
+	push @out, "${i}${i}${i}<bottom-margin>$mg</bottom-margin>";
+	push @out, "${i}${i}</page-margins>";
+	push @out, "${i}</page-layout>";
+	push @out, '</defaults>';
+	return @out;
 }
 
 # ---------------------------------------------------------------------------
@@ -369,13 +438,90 @@ sub _emit_identification {
 	push @out, "${i}<creator type=\"lyricist\">"
 		. _xml_escape($meta->{Lyricist} // '') . '</creator>'
 		if $meta->{Lyricist};
-	push @out, "${i}<rights>"
-		. _xml_escape($meta->{Copyright} // '') . '</rights>'
-		if $meta->{Copyright};
+	# Combine all copyright lines into one <rights> element; multiple <rights>
+	# elements cause renderers to discard all but the last.
+	my @cr_lines;
+	if (defined $meta->{Copyright1} || defined $meta->{Copyright2}) {
+		push @cr_lines, $meta->{Copyright1}
+			if defined $meta->{Copyright1} && length $meta->{Copyright1};
+		push @cr_lines, $meta->{Copyright2}
+			if defined $meta->{Copyright2} && length $meta->{Copyright2};
+	} elsif (defined $meta->{Copyright} && length $meta->{Copyright}) {
+		push @cr_lines, $meta->{Copyright};
+	}
+	push @out, "${i}<rights>" . _xml_escape(join "\n", @cr_lines) . '</rights>'
+		if @cr_lines;
 	push @out, "${i}<encoding>";
 	push @out, "${i}${i}<software>Music::NWC2MusicXML $VERSION</software>";
 	push @out, "${i}</encoding>";
 	push @out, '</identification>';
+	return @out;
+}
+
+sub _emit_credits {
+	my ($self, $meta, $layout) = @_;
+	$layout //= _compute_page_layout({});
+	my @out;
+	my $i = $self->{_indent};
+
+	my $cx  = sprintf '%.2f', $layout->{center_x};
+	my $ty  = sprintf '%.2f', $layout->{page_height} - $layout->{margin_t};
+	my $sy  = sprintf '%.2f', $layout->{page_height} - $layout->{margin_t} - 60;
+	my $bot = $layout->{margin_t};
+
+	# Title credit on page 1 (large, centred near top)
+	if (defined $meta->{Title} && length $meta->{Title}) {
+		push @out, '<credit page="1">';
+		push @out, "${i}<credit-type>title</credit-type>";
+		push @out, "${i}<credit-words"
+			. " default-x=\"$cx\" default-y=\"$ty\""
+			. ' justify="center" valign="top"'
+			. ' font-size="24"'
+			. '>' . _xml_escape($meta->{Title}) . '</credit-words>';
+		push @out, '</credit>';
+	}
+
+	# Subtitle credit on page 1 (centred, just below title)
+	if (defined $meta->{Author} && length $meta->{Author}) {
+		push @out, '<credit page="1">';
+		push @out, "${i}<credit-type>subtitle</credit-type>";
+		push @out, "${i}<credit-words"
+			. " default-x=\"$cx\" default-y=\"$sy\""
+			. ' justify="center" valign="top"'
+			. ' font-size="14"'
+			. '>' . _xml_escape($meta->{Author}) . '</credit-words>';
+		push @out, '</credit>';
+	}
+
+	# Copyright lines: each gets its OWN <credit> element (no page attribute ->
+	# appears on every page). Multiple <credit-words> in one <credit> cause
+	# renderers to show only the last element.
+	my @cr_lines;
+	if (defined $meta->{Copyright1} || defined $meta->{Copyright2}) {
+		push @cr_lines, $meta->{Copyright1}
+			if defined $meta->{Copyright1} && length $meta->{Copyright1};
+		push @cr_lines, $meta->{Copyright2}
+			if defined $meta->{Copyright2} && length $meta->{Copyright2};
+	} elsif (defined $meta->{Copyright} && length $meta->{Copyright}) {
+		push @cr_lines, $meta->{Copyright};
+	}
+
+	# Stack lines from bottom margin upward: last line at margin, each prior
+	# line 14 tenths higher.
+	my $line_step = 14;
+	my $n         = scalar @cr_lines;
+	for my $idx (0 .. $#cr_lines) {
+		my $y = sprintf '%.2f', $bot + $line_step * ($n - 1 - $idx);
+		push @out, '<credit>';
+		push @out, "${i}<credit-type>rights</credit-type>";
+		push @out, "${i}<credit-words"
+			. " default-x=\"$cx\" default-y=\"$y\""
+			. ' justify="center" valign="bottom"'
+			. ' font-size="10"'
+			. '>' . _xml_escape($cr_lines[$idx]) . '</credit-words>';
+		push @out, '</credit>';
+	}
+
 	return @out;
 }
 
@@ -1212,6 +1358,7 @@ sub _xml_escape {
 	$s =~ s/>/&gt;/g;
 	$s =~ s/"/&quot;/g;
 	$s =~ s/'/&apos;/g;
+	$s =~ s/([^\x00-\x7F])/sprintf "&#%d;", ord($1)/ge;
 	return $s;
 }
 

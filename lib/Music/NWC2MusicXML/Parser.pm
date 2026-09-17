@@ -283,6 +283,7 @@ sub parse {
 Readonly::Hash my %DISPATCH => (
 	SongInfo        => \&_handle_song_info,
 	PgSetup         => \&_handle_pg_setup,
+	PgMargins       => \&_handle_pg_setup,
 	AddStaff        => \&_handle_add_staff,
 	StaffProperties => \&_handle_staff_properties,
 	StaffInstrument => \&_handle_staff_instrument,
@@ -417,7 +418,7 @@ sub _fields_to_hash {
 sub _handle_song_info {
 	my ($self, $fields) = @_;
 	my $h = $self->_fields_to_hash($fields);
-	for my $key (qw(Title Author Lyricist Copyright Comments)) {
+	for my $key (qw(Title Author Lyricist Copyright Copyright1 Copyright2 Comments)) {
 		$self->{_score}->set_metadata_field($key, $h->{$key})
 			if exists $h->{$key};
 	}
