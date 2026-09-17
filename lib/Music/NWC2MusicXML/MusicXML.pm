@@ -383,11 +383,15 @@ sub _emit_part_list {
 	my ($self, $staves) = @_;
 	my @out;
 	my $i = $self->{_indent};
+
+	# Resolve display names once; deduplication happens inside.
+	my @names = _resolve_part_names($staves);
+
 	push @out, '<part-list>';
 	my $part_id = 1;
 	for my $staff (@$staves) {
 		my $id   = "P$part_id";
-		my $name = _xml_escape($staff->name);
+		my $name = _xml_escape($names[$part_id - 1]);
 		push @out, "${i}<score-part id=\"$id\">";
 		push @out, "${i}${i}<part-name>$name</part-name>";
 		my $instr = $staff->instrument;
@@ -409,6 +413,60 @@ sub _emit_part_list {
 	}
 	push @out, '</part-list>';
 	return @out;
+}
+
+# ---------------------------------------------------------------------------
+# Private: part-name resolution
+# ---------------------------------------------------------------------------
+
+# Resolve a display name for every staff, applying a three-level priority:
+#   1. The NWC staff name, if it is not a generic default.
+#   2. The MIDI instrument name, if distinct across all staves using it.
+#   3. "Staff-N" (1-based) as the unconditional last resort.
+#
+# After candidates are chosen, any name that appears more than once is
+# replaced with "Staff-N" to guarantee unique part names in the output.
+sub _resolve_part_names {
+	my ($staves) = @_;
+
+	# Build candidates
+	my @candidates;
+	my $n = 1;
+	for my $staff (@$staves) {
+		push @candidates, _candidate_part_name($staff, $n++);
+	}
+
+	# Count how many staves share each candidate name
+	my %freq;
+	$freq{$_}++ for @candidates;
+
+	# Replace any duplicated name with a positional "Staff-N" fallback
+	my @resolved;
+	my $pos = 1;
+	for my $cand (@candidates) {
+		push @resolved, $freq{$cand} > 1 ? "Staff-$pos" : $cand;
+		$pos++;
+	}
+
+	return @resolved;
+}
+
+# Return a candidate name for one staff before deduplication.
+sub _candidate_part_name {
+	my ($staff, $part_num) = @_;
+	my $name = $staff->name // '';
+
+	# Accept the NWC name unless it matches NWC's own generic defaults
+	# ("Staff", "Staff-0" .. "Staff-99").
+	return $name if length $name && $name !~ /^Staff(?:-\d+)?$/i;
+
+	# Try the instrument name recorded in the MIDI settings.
+	my $instr = $staff->instrument // {};
+	return $instr->{name}
+		if defined $instr->{name} && length $instr->{name};
+
+	# Positional fallback: 1-based "Staff-N".
+	return "Staff-$part_num";
 }
 
 sub _emit_parts {
