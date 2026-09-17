@@ -46,18 +46,18 @@ Readonly::Hash my %CLEF_MAP => (
 );
 
 # ---------------------------------------------------------------------------
-# Articulation mappings: NWC articulation name -> MusicXML element name
-# ---------------------------------------------------------------------------
+# Articulation mappings: NWC token (initial-cap) -> { element, group }
+# group: 'articulations' | 'ornaments' | 'direct' (emitted directly in <notations>)
 Readonly::Hash my %ARTICULATION_MAP => (
-	staccato  => 'staccato',
-	accent    => 'accent',
-	tenuto    => 'tenuto',
-	marcato   => 'strong-accent',
-	fermata   => 'fermata',
-	trill     => 'trill-mark',
-	mordent   => 'mordent',
-	turn      => 'turn',
-	staccatissimo => 'staccatissimo',
+	Tenuto        => { element => 'tenuto',        group => 'articulations' },
+	Staccato      => { element => 'staccato',      group => 'articulations' },
+	Accent        => { element => 'accent',        group => 'articulations' },
+	Marcato       => { element => 'strong-accent', group => 'articulations' },
+	Staccatissimo => { element => 'staccatissimo', group => 'articulations' },
+	Fermata       => { element => 'fermata',       group => 'direct'        },
+	Trill         => { element => 'trill-mark',    group => 'ornaments'     },
+	Mordent       => { element => 'mordent',       group => 'ornaments'     },
+	Turn          => { element => 'turn',          group => 'ornaments'     },
 );
 
 # ---------------------------------------------------------------------------
@@ -746,10 +746,40 @@ sub _emit_note_event {
 
 	# <notations> block
 	my @nots;
-	push @nots, "${pad}${i}${i}<tied type=\"stop\"/>"           if $tie_stop;
-	push @nots, "${pad}${i}${i}<tied type=\"start\"/>"          if $tie_start;
+	push @nots, "${pad}${i}${i}<tied type=\"stop\"/>"               if $tie_stop;
+	push @nots, "${pad}${i}${i}<tied type=\"start\"/>"              if $tie_start;
 	push @nots, "${pad}${i}${i}<slur number=\"1\" type=\"stop\"/>"  if $slur_stop;
 	push @nots, "${pad}${i}${i}<slur number=\"1\" type=\"start\"/>" if $slur_start;
+
+	# Articulations: only on the first note of a chord (is_chord_member is false)
+	my @artic_tokens = !$is_chord_member
+		? grep { $_ ne 'Slur' } @{ $d->{articulations} // [] }
+		: ();
+	if (@artic_tokens) {
+		my (@artic_els, @ornament_els, @direct_els);
+		for my $tok (@artic_tokens) {
+			my $map = $ARTICULATION_MAP{$tok};
+			if (!defined $map) {
+				carp _fmt_msg('warn_unsupported_art', $tok);
+				next;
+			}
+			if    ($map->{group} eq 'articulations') { push @artic_els,   $map->{element} }
+			elsif ($map->{group} eq 'ornaments')     { push @ornament_els, $map->{element} }
+			else                                     { push @direct_els,   $map->{element} }
+		}
+		if (@artic_els) {
+			push @nots, "${pad}${i}${i}<articulations>";
+			push @nots, "${pad}${i}${i}${i}<$_/>" for @artic_els;
+			push @nots, "${pad}${i}${i}</articulations>";
+		}
+		if (@ornament_els) {
+			push @nots, "${pad}${i}${i}<ornaments>";
+			push @nots, "${pad}${i}${i}${i}<$_/>" for @ornament_els;
+			push @nots, "${pad}${i}${i}</ornaments>";
+		}
+		push @nots, "${pad}${i}${i}<$_/>" for @direct_els;
+	}
+
 	if (@nots) {
 		push @out, "${pad}${i}<notations>";
 		push @out, @nots;
@@ -817,9 +847,10 @@ sub _chord_note_event {
 		type     => 'Note',
 		duration => $chord_event->duration,
 		data     => {
-			nwc_pos  => $pos_str,
-			base_dur => $d->{base_dur},
-			dots     => $d->{dots} // 0,
+			nwc_pos       => $pos_str,
+			base_dur      => $d->{base_dur},
+			dots          => $d->{dots} // 0,
+			articulations => $d->{articulations} // [],
 		},
 	);
 }

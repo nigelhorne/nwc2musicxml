@@ -572,6 +572,16 @@ internally; use an external validator with C<--validate>.
 
 =back
 
+=head1 SEE ALSO
+
+=over 4
+
+=item * L<Configure an Object at Runtime|Object::Configure>
+
+=item * L<Test Dashboard|https://nigelhorne.github.io/Music-NWC2MusicXML/coverage/>
+
+=back
+
 =head1 FORMAL SPECIFICATION
 
 =head2 new

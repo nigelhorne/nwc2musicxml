@@ -205,4 +205,76 @@ sub parse_nwctxt {
 	like $xml, qr/<beat-unit-dot\/>/,  'beat-unit-dot present for dotted value';
 }
 
+# ---------------------------------------------------------------------------
+# Articulation emission
+# ---------------------------------------------------------------------------
+
+# Helper: build a score with a single note carrying given articulations
+sub note_with_artic {
+	my (@artic) = @_;
+	my $staff = Music::NWC2MusicXML::Staff->new(name => 'Test');
+	$staff->set_initial_clef('Treble');
+	$staff->set_initial_key({ signature => 'C', tonic => 'C', fifths => 0 });
+	$staff->set_initial_timesig({ beats => 4, beat_type => 4 });
+	$staff->add_event(Music::NWC2MusicXML::Event->new(
+		type     => 'Note',
+		duration => [1, 1],
+		data     => {
+			nwc_pos       => '0',
+			base_dur      => '4th',
+			articulations => \@artic,
+		},
+	));
+	my $score = Music::NWC2MusicXML::Score->new;
+	$score->add_staff($staff);
+	return Music::NWC2MusicXML::MusicXML->new->generate($score);
+}
+
+# Tenuto -> <articulations><tenuto/>
+{
+	my $xml = note_with_artic('Tenuto');
+	like $xml, qr/<articulations>/,  'articulations wrapper present for Tenuto';
+	like $xml, qr/<tenuto\/>/,       'tenuto element emitted';
+}
+
+# Staccato -> <articulations><staccato/>
+{
+	my $xml = note_with_artic('Staccato');
+	like $xml, qr/<staccato\/>/,     'staccato element emitted';
+}
+
+# Accent -> <articulations><accent/>
+{
+	my $xml = note_with_artic('Accent');
+	like $xml, qr/<accent\/>/,       'accent element emitted';
+}
+
+# Slur token alone: no <articulations> wrapper (Slur is handled by annotate_events)
+{
+	my $xml = note_with_artic('Slur');
+	unlike $xml, qr/<articulations>/, 'Slur-only: no articulations wrapper emitted';
+}
+
+# Combined Tenuto + Staccato in one <articulations> block
+{
+	my $xml = note_with_artic('Tenuto', 'Staccato');
+	like $xml, qr/<articulations>/,  'combined articulations wrapper present';
+	like $xml, qr/<tenuto\/>/,       'tenuto in combined articulations';
+	like $xml, qr/<staccato\/>/,     'staccato in combined articulations';
+}
+
+# Trill -> <ornaments><trill-mark/>
+{
+	my $xml = note_with_artic('Trill');
+	like $xml, qr/<ornaments>/,      'ornaments wrapper present for Trill';
+	like $xml, qr/<trill-mark\/>/,   'trill-mark element emitted';
+}
+
+# Fermata -> <fermata/> directly in <notations> (not wrapped)
+{
+	my $xml = note_with_artic('Fermata');
+	like $xml, qr/<fermata\/>/,      'fermata element emitted';
+	unlike $xml, qr/<articulations>/, 'fermata does not produce articulations wrapper';
+}
+
 done_testing();

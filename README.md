@@ -236,6 +236,11 @@ inputs must be passed explicitly.
 - MusicXML validation against the official DTD/XSD is not performed
 internally; use an external validator with `--validate`.
 
+# SEE ALSO
+
+- [Configure an Object at Runtime](https://metacpan.org/pod/Object%3A%3AConfigure)
+- [Test Dashboard](https://nigelhorne.github.io/Music-NWC2MusicXML/coverage/)
+
 # FORMAL SPECIFICATION
 
 ## new
