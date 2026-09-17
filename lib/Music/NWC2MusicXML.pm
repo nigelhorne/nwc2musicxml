@@ -167,15 +167,16 @@ Blessed C<Music::NWC2MusicXML> object.
 
 sub new {
 	my $class = shift;
+	my $input = Params::Get::get_params(undef, \@_) // {};
+	my $warnings_fh = delete $input->{warnings_fh};   # must be extracted before validate_strict (no glob type)
 	my $args = validate_strict(
-		input => Params::Get::get_params(undef, \@_) // {},
+		input => $input,
 		schema => {
 			log_level => { type => 'scalar', optional => 1, default  => 'normal' },
 			validate  => { type => 'scalar', optional => 1, default  => 0 },
 		},
 	);
 	croak $@ unless defined $args;
-	my $warnings_fh = delete $args->{warnings_fh};   # glob refs can't be typed
 
 	$args = Object::Configure::configure($class, $args);
 
@@ -399,8 +400,8 @@ sub batch_convert {
 			);
 		};
 
-		if ($@) {
-			$diag->info(_fmt_msg('info_done', "FAILED: $file -- $@"));
+		if ($@ || !defined $ok) {
+			$diag->info(_fmt_msg('info_done', "FAILED: $file -- $@")) if $@;
 			$diag->count(outcome => 'failed');
 			$counts{failed}++;
 		} else {

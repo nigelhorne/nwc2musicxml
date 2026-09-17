@@ -23,5 +23,6 @@ t/40-input.t
 t/50-events.t
 t/function.t
 t/input/Pilgrim.nwc
+t/integration.t
 t/locales.t
 t/unit.t
