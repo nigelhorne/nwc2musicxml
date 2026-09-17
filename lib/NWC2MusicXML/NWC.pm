@@ -377,7 +377,7 @@ sub _find_zlib_offset {
 	# be a two-byte version/header field after the magic.
 
 	my $len  = length $$data_ref;
-	my $start = $NWC_MAGIC_LEN + 2;
+	my $start = $NWC_MAGIC_LEN;    # zlib stream follows immediately after magic
 
 	for my $i ($start .. $len - 2) {
 		my $cmf = ord(substr($$data_ref, $i,     1));

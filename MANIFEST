@@ -1,0 +1,19 @@
+bin/nwc2musicxml
+Changes
+INSTALL
+lib/NWC2MusicXML.pm
+lib/NWC2MusicXML/Diagnostics.pm
+lib/NWC2MusicXML/Event.pm
+lib/NWC2MusicXML/MusicXML.pm
+lib/NWC2MusicXML/NWC.pm
+lib/NWC2MusicXML/Parser.pm
+lib/NWC2MusicXML/Score.pm
+lib/NWC2MusicXML/Staff.pm
+LICENSE
+Makefile.PL
+MANIFEST			This list of files
+README.md
+t/00-load.t
+t/10-nwc.t
+t/20-parser.t
+t/30-musicxml.t

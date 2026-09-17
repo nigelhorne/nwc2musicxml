@@ -32,24 +32,15 @@ Readonly::Hash my %VALID_DYNAMICS => map { $_ => 1 }
 Readonly::Hash my %VALID_CLEFS => map { $_ => 1 }
 	qw(Treble Bass Alto Tenor Percussion Tab);
 
-# Key signature -> fifths value
-Readonly::Hash my %KEY_FIFTHS => (
-	'C'   =>  0,
-	'G'   =>  1,
-	'D'   =>  2,
-	'A'   =>  3,
-	'E'   =>  4,
-	'B'   =>  5,
-	'F#'  =>  6,
-	'C#'  =>  7,
-	'F'   => -1,
-	'Bb'  => -2,
-	'Eb'  => -3,
-	'Ab'  => -4,
-	'Db'  => -5,
-	'Gb'  => -6,
-	'Cb'  => -7,
-);
+# NWC lists key-signature accidentals in the standard circle-of-fifths order.
+# Signature:F#,C#  = 2 sharps = D major  (fifths +2)
+# Signature:Bb     = 1 flat   = F major  (fifths -1)
+# We compute the fifths value by counting the accidentals rather than using
+# a lookup table, which handles any combination and avoids the common mistake
+# of confusing the tonic name with the signature accidental list.
+
+# The 'C' signature token means no accidentals (C major / A minor = fifths 0).
+Readonly::Scalar my $KEY_SIG_NATURAL => 'C';
 
 # Pitch step letters recognised in NWC note records
 Readonly::Hash my %VALID_STEPS => map { $_ => 1 } qw(A B C D E F G);
@@ -332,11 +323,15 @@ sub _dispatch_record {
 		$dispatch{$type}->($self, $fields);
 	} else {
 		$self->_warn_unknown($type);
-		$self->_append_event(NWC2MusicXML::Event->new(
-			type      => 'UnsupportedEvent',
-			nwc_label => $type,
-			data      => { raw => join('|', $type, @$fields) },
-		));
+		# Only store as UnsupportedEvent if we have an active staff.
+		# Records such as |Editor| appear at score level before any AddStaff.
+		if (defined $self->{_score}->current_staff) {
+			$self->_append_event(NWC2MusicXML::Event->new(
+				type      => 'UnsupportedEvent',
+				nwc_label => $type,
+				data      => { raw => join('|', $type, @$fields) },
+			));
+		}
 	}
 }
 
@@ -486,14 +481,10 @@ sub _handle_key {
 	my $h   = $self->_fields_to_hash($fields);
 	my $sig = $h->{Signature} // 'C';
 
-	unless (exists $KEY_FIFTHS{$sig}) {
-		carp _fmt_msg('warn_bad_value', 'Key.Signature', $sig, $self->{_line_no});
-	}
-
 	my $key_data = {
 		signature => $sig,
 		tonic     => $h->{Tonic} // '',
-		fifths    => $KEY_FIFTHS{$sig} // 0,
+		fifths    => _fifths_from_signature($sig),
 	};
 
 	my $staff = $self->_current_staff_or_croak('Key');
@@ -690,6 +681,24 @@ sub _warn_unknown {
 		# We have no file/staff context here; the caller should wrap this
 		# in a higher-level warn_unsupported call with full context.
 	}
+}
+
+sub _fifths_from_signature {
+	my ($sig) = @_;
+	return 0 unless defined $sig && length $sig;
+	return 0 if $sig eq $KEY_SIG_NATURAL;
+
+	# Signature is a comma-separated list of accidentals in circle-of-fifths order.
+	# Each item ending in '#' is a sharp; each item ending in 'b' (after a letter) is a flat.
+	my @acc = split /,/, $sig;
+	return 0 unless @acc;
+
+	if ($acc[0] =~ /#/) {
+		return scalar @acc;       # positive = sharps
+	} elsif ($acc[0] =~ /b$/) {
+		return -(scalar @acc);    # negative = flats
+	}
+	return 0;
 }
 
 sub _fmt_msg {

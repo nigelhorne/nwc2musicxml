@@ -12,6 +12,8 @@ use Pod::Usage   qw(pod2usage);
 use File::Find   qw(find);
 use File::Spec   ();
 
+Getopt::Long::Configure(qw(no_ignore_case bundling));
+
 use lib 'lib';
 use NWC2MusicXML;
 use NWC2MusicXML::Diagnostics;
@@ -87,26 +89,40 @@ my $converter = NWC2MusicXML->new(
 );
 
 # ---------------------------------------------------------------------------
-# Collect input files
+# Collect input files, detecting an optional explicit output path
 # ---------------------------------------------------------------------------
-my @inputs;
+# When called as: nwc2musicxml input.nwc output.musicxml
+# the second arg is the output, not an input.  Detect this before the loop
+# so the loop does not try to treat the output path as an NWC input.
 
-for my $arg (@ARGV) {
-	if (-d $arg) {
-		# Directory passed: collect .nwc files within it
-		if ($opt{recursive}) {
-			find(
-				sub {
-					push @inputs, $File::Find::name
-						if /\.nwc$/i && -f $File::Find::name;
-				},
-				$arg,
-			);
+my ($explicit_output, @inputs);
+
+if (	@ARGV == 2
+	&& !-d $ARGV[0]
+	&& $ARGV[0] =~ /\.nwc$/i
+	&& $ARGV[1] !~ /\.nwc$/i
+	&& !defined $opt{output_dir}
+) {
+	@inputs          = ($ARGV[0]);
+	$explicit_output = $ARGV[1];
+} else {
+	for my $arg (@ARGV) {
+		if (-d $arg) {
+			# Directory passed: collect .nwc files within it
+			if ($opt{recursive}) {
+				find(
+					sub {
+						push @inputs, $File::Find::name
+							if /\.nwc$/i && -f $File::Find::name;
+					},
+					$arg,
+				);
+			} else {
+				push @inputs, glob(File::Spec->catfile($arg, '*.nwc'));
+			}
 		} else {
-			push @inputs, glob(File::Spec->catfile($arg, '*.nwc'));
+			push @inputs, $arg;
 		}
-	} else {
-		push @inputs, $arg;
 	}
 }
 
@@ -115,13 +131,9 @@ for my $arg (@ARGV) {
 # ---------------------------------------------------------------------------
 
 if (@inputs == 1 && !$opt{recursive} && !defined $opt{output_dir}) {
-	# Single file: allow explicit output as second positional argument
-	my $input  = $inputs[0];
-	my $output = @ARGV == 2 ? $ARGV[1] : undef;
-
 	my $result = $converter->convert(
-		input     => $input,
-		(defined $output ? (output => $output) : ()),
+		input     => $inputs[0],
+		(defined $explicit_output ? (output => $explicit_output) : ()),
 		overwrite => $opt{overwrite},
 	);
 
@@ -137,7 +149,7 @@ if (@inputs == 1 && !$opt{recursive} && !defined $opt{output_dir}) {
 # Multiple files / recursive: batch convert
 my $batch_result = $converter->batch_convert(
 	inputs     => \@inputs,
-	output_dir => $opt{output_dir},
+	(defined $opt{output_dir} ? (output_dir => $opt{output_dir}) : ()),
 	overwrite  => $opt{overwrite},
 	recursive  => $opt{recursive},
 );
