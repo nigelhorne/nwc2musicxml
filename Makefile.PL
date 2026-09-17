@@ -44,6 +44,7 @@ WriteMakefile(
 		'Test::Mockingbird' => 0,
 		'Test::Most' => 0,
 		'Test::Returns' => 0,
+		'Test::Without::Module' => 0,
 		'XML::PP' => 0	# Use this rather than XML::PP for ease of installation on Windows
 	}, META_MERGE => {	# https://perldoc.perl.org/CPAN::Meta::Spec
 		'meta-spec' => { version => 2 },

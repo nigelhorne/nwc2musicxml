@@ -29,6 +29,7 @@ on 'test' => sub {
 	requires 'Test::Mockingbird';
 	requires 'Test::Most';
 	requires 'Test::Returns';
+	requires 'Test::Without::Module';
 	requires 'XML::PP';   # Use this rather than XML::PP for ease of installation on Windows
 };
 

@@ -433,6 +433,7 @@ or approximate comparison only.  Never use the result for musical timing.
 
 sub rational_to_float {
 	my ($class, $r) = @_;
+	croak _fmt_msg('error_bad_rational') unless ref $r eq 'ARRAY' && @$r == 2 && $r->[1];
 	return $r->[0] / $r->[1];
 }
 

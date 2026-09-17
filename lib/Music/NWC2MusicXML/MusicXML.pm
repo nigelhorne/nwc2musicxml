@@ -8,6 +8,7 @@ our $VERSION = '0.01';
 
 use Carp qw(croak carp);
 use Readonly;
+use Scalar::Util qw(blessed);
 use Params::Validate::Strict qw(validate_strict);
 use Params::Get;
 use Music::NWC2MusicXML::Score;
@@ -580,7 +581,7 @@ sub generate {
 	my ($self, $score) = @_;
 
 	croak _fmt_msg('error_bad_score')
-		unless ref($score) && $score->isa('Music::NWC2MusicXML::Score');
+		unless blessed($score) && $score->isa('Music::NWC2MusicXML::Score');
 
 	croak _fmt_msg('error_no_staves')
 		unless $score->staff_count > 0;
@@ -1615,6 +1616,9 @@ sub _calculate_divisions {
 sub _xml_escape {
 	my ($s) = @_;
 	return '' unless defined $s;
+	# Strip XML 1.0 illegal control characters (all controls except tab/LF/CR).
+	# These bytes cannot be represented even as numeric character references.
+	$s =~ s/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]//g;
 	$s =~ s/&/&amp;/g;
 	$s =~ s/</&lt;/g;
 	$s =~ s/>/&gt;/g;
