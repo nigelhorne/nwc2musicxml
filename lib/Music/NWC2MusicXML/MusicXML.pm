@@ -414,10 +414,13 @@ sub _emit_part {
 	my @pending    = ();
 	my $first      = 1;
 
-	# Current clef and key may change mid-staff via Clef/Key events.
 	my $clef       = $staff->initial_clef // 'Treble';
 	my $key_fifths = ($staff->initial_key  // {})->{fifths} // 0;
-	my $prev_bar   = 'normal';   # style of barline that ended the previous measure
+	my $prev_bar   = 'normal';
+
+	# Pre-annotate all events with slur/tie metadata in one pass so that
+	# slurs and ties crossing bar lines are handled correctly.
+	my $ann = $self->_annotate_events($staff->events);
 
 	for my $event (@{ $staff->events }) {
 		my $type = $event->type;
@@ -426,14 +429,13 @@ sub _emit_part {
 			my $bar_style = $event->data->{style} // 'normal';
 			push @out, $self->_emit_measure(
 				$measure_no++, \@pending, $staff, $divisions,
-				$first, $clef, $key_fifths, $prev_bar, $bar_style
+				$first, $clef, $key_fifths, $prev_bar, $bar_style, $ann
 			);
 			@pending  = ();
 			$first    = 0;
 			$prev_bar = $bar_style;
 
 		} elsif ($type eq 'Clef') {
-			# Update clef for subsequent pitch conversions; also queue for mid-measure attributes
 			$clef = $event->data->{nwc_clef} // $clef;
 
 		} elsif ($type eq 'Key') {
@@ -444,11 +446,10 @@ sub _emit_part {
 		}
 	}
 
-	# Flush remaining events after the last barline; always emit at least measure 1
 	if (@pending || $measure_no == 1) {
 		push @out, $self->_emit_measure(
 			$measure_no, \@pending, $staff, $divisions,
-			$first, $clef, $key_fifths, $prev_bar, 'normal'
+			$first, $clef, $key_fifths, $prev_bar, 'normal', $ann
 		);
 	}
 
@@ -458,11 +459,12 @@ sub _emit_part {
 
 sub _emit_measure {
 	my ($self, $number, $events, $staff, $divisions, $is_first,
-	    $clef, $key_fifths, $prev_bar, $bar_style) = @_;
-	$clef      //= 'Treble';
+	    $clef, $key_fifths, $prev_bar, $bar_style, $ann) = @_;
+	$clef       //= 'Treble';
 	$key_fifths //= 0;
-	$prev_bar  //= 'normal';
-	$bar_style //= 'normal';
+	$prev_bar   //= 'normal';
+	$bar_style  //= 'normal';
+	$ann        //= {};
 
 	my @out;
 	my $i   = $self->{_indent};
@@ -470,7 +472,6 @@ sub _emit_measure {
 
 	push @out, "${pad}<measure number=\"$number\">";
 
-	# Left-side repeat barline when the previous measure ended with MasterRepeatOpen
 	if ($prev_bar eq 'MasterRepeatOpen') {
 		push @out, "${pad}${i}<barline location=\"left\">";
 		push @out, "${pad}${i}${i}<bar-style>heavy-light</bar-style>";
@@ -478,27 +479,24 @@ sub _emit_measure {
 		push @out, "${pad}${i}</barline>";
 	}
 
-	# Attributes: divisions, key, time, clef (measure 1 only for now)
 	if ($is_first) {
 		push @out, $self->_emit_attributes($staff, $divisions, $pad . $i);
 	}
 
-	# Emit musical events
 	for my $event (@$events) {
-		my $type = $event->type;
+		my $type   = $event->type;
+		my $ev_ann = $ann->{"$event"} // {};
 		if ($type eq 'Note') {
 			push @out, $self->_emit_note_event(
-				$event, $clef, $key_fifths, $divisions, $pad . $i, 0);
+				$event, $clef, $key_fifths, $divisions, $pad . $i, 0, $ev_ann);
 		} elsif ($type eq 'Rest') {
-			push @out, $self->_emit_rest_event($event, $divisions, $pad . $i);
+			push @out, $self->_emit_rest_event($event, $divisions, $pad . $i, $ev_ann);
 		} elsif ($type eq 'Chord') {
 			push @out, $self->_emit_chord_event(
-				$event, $clef, $key_fifths, $divisions, $pad . $i);
+				$event, $clef, $key_fifths, $divisions, $pad . $i, $ev_ann);
 		}
-		# Tempo, Dynamic, Text etc. deferred to Phase 4
 	}
 
-	# Right-side barline for repeats and double bars
 	if ($bar_style eq 'MasterRepeatClose') {
 		push @out, "${pad}${i}<barline location=\"right\">";
 		push @out, "${pad}${i}${i}<bar-style>light-heavy</bar-style>";
@@ -519,18 +517,101 @@ sub _emit_measure {
 }
 
 # ---------------------------------------------------------------------------
+# Private: slur / tie annotation pass
+# ---------------------------------------------------------------------------
+
+# Walk all events in a staff once and build an annotation hashref keyed by
+# stringified event reference.  Each value is a hashref with:
+#   slur_start      => 1   this note opens a slur arc
+#   slur_stop       => 1   this note closes a slur arc
+#   tie_stop_keys   => { pos_key => 1, ... }  tie stops arriving at this note
+#   tie_start_keys  => { pos_key => 1, ... }  tie starts leaving from this note
+#
+# "pos_key" is the raw position string with any ^ suffix stripped, used as an
+# opaque key to match the tied-to note.  Ties that cross measure boundaries are
+# handled correctly because we walk the entire event list before grouping.
+
+sub _annotate_events {
+	my ($self, $events) = @_;
+	my %ann;
+
+	my $in_slur      = 0;
+	my $last_slur_ev = undef;
+	my %pending_tie;   # pos_key => 1 for notes awaiting a tie-stop
+
+	for my $ev (@$events) {
+		my $type = $ev->type;
+		next unless $type eq 'Note' || $type eq 'Chord' || $type eq 'Rest';
+
+		my $key = "$ev";   # stringified reference, unique per object
+
+		# Tie tracking (not applicable to rests)
+		unless ($type eq 'Rest') {
+			my @pos_strs = $type eq 'Chord'
+				? @{$ev->data->{nwc_positions} // []}
+				: ($ev->data->{nwc_pos} // '0');
+
+			for my $ps (@pos_strs) {
+				(my $pk = $ps) =~ s/\^$//;   # strip tie marker to get the key
+
+				if (delete $pending_tie{$pk}) {
+					$ann{$key}{tie_stop_keys}{$pk} = 1;
+				}
+				if ($ps =~ /\^$/) {
+					$ann{$key}{tie_start_keys}{$pk} = 1;
+					$pending_tie{$pk} = 1;
+				}
+			}
+		}
+
+		# Slur tracking (not applicable to rests — rests are inside slur spans
+		# but don't carry the arc endpoint markers)
+		next if $type eq 'Rest';
+
+		my $has_slur = grep { $_ eq 'Slur' } @{$ev->data->{articulations} // []};
+
+		if ($has_slur) {
+			$ann{$key}{slur_start} = 1 unless $in_slur;
+			$in_slur      = 1;
+			$last_slur_ev = $key;
+		} else {
+			if ($in_slur) {
+				$ann{$last_slur_ev}{slur_stop} = 1;
+				$in_slur      = 0;
+				$last_slur_ev = undef;
+			}
+		}
+	}
+
+	# Close any slur still open at the end of the staff
+	$ann{$last_slur_ev}{slur_stop} = 1 if $in_slur && defined $last_slur_ev;
+
+	return \%ann;
+}
+
+# ---------------------------------------------------------------------------
 # Private: note / rest / chord XML emission
 # ---------------------------------------------------------------------------
 
 sub _emit_note_event {
-	my ($self, $event, $clef, $key_fifths, $divisions, $pad, $is_chord_member) = @_;
-	my $d    = $event->data;
+	my ($self, $event, $clef, $key_fifths, $divisions, $pad, $is_chord_member, $ev_ann) = @_;
+	$ev_ann //= {};
+	my $d   = $event->data;
 	my @out;
-	my $i    = $self->{_indent};
+	my $i   = $self->{_indent};
 
 	my $pitch = $self->_pos_to_pitch($d->{nwc_pos} // '0', $clef, $key_fifths);
 	my $ticks = _rational_to_ticks($event->duration, $divisions);
 	my $type  = $NWC_TYPE_MAP{ $d->{base_dur} // '4th' } // 'quarter';
+
+	# Tie flags for this specific position key
+	(my $pk = $d->{nwc_pos} // '0') =~ s/\^$//;
+	my $tie_stop  = ($ev_ann->{tie_stop_keys}  // {})->{$pk};
+	my $tie_start = ($ev_ann->{tie_start_keys} // {})->{$pk};
+
+	# Slur flags: only the first note of a chord carries the arc endpoints
+	my $slur_start = !$is_chord_member && $ev_ann->{slur_start};
+	my $slur_stop  = !$is_chord_member && $ev_ann->{slur_stop};
 
 	push @out, "${pad}<note>";
 	push @out, "${pad}${i}<chord/>" if $is_chord_member;
@@ -540,20 +621,37 @@ sub _emit_note_event {
 	push @out, "${pad}${i}${i}<octave>$pitch->{octave}</octave>";
 	push @out, "${pad}${i}</pitch>";
 	push @out, "${pad}${i}<duration>$ticks</duration>";
+	# <tie> elements come after <duration> and before <voice> per MusicXML schema
+	push @out, "${pad}${i}<tie type=\"stop\"/>"  if $tie_stop;
+	push @out, "${pad}${i}<tie type=\"start\"/>" if $tie_start;
 	push @out, "${pad}${i}<voice>1</voice>";
 	push @out, "${pad}${i}<type>$type</type>";
 	push @out, "${pad}${i}<dot/>" for 1 .. ($d->{dots} // 0);
 	push @out, "${pad}${i}<accidental>$pitch->{accidental}</accidental>"
 		if $pitch->{accidental};
+
+	# <notations> block
+	my @nots;
+	push @nots, "${pad}${i}${i}<tied type=\"stop\"/>"           if $tie_stop;
+	push @nots, "${pad}${i}${i}<tied type=\"start\"/>"          if $tie_start;
+	push @nots, "${pad}${i}${i}<slur number=\"1\" type=\"stop\"/>"  if $slur_stop;
+	push @nots, "${pad}${i}${i}<slur number=\"1\" type=\"start\"/>" if $slur_start;
+	if (@nots) {
+		push @out, "${pad}${i}<notations>";
+		push @out, @nots;
+		push @out, "${pad}${i}</notations>";
+	}
+
 	push @out, "${pad}</note>";
 	return @out;
 }
 
 sub _emit_rest_event {
-	my ($self, $event, $divisions, $pad) = @_;
-	my $d    = $event->data;
+	my ($self, $event, $divisions, $pad, $ev_ann) = @_;
+	$ev_ann //= {};
+	my $d   = $event->data;
 	my @out;
-	my $i    = $self->{_indent};
+	my $i   = $self->{_indent};
 
 	my $ticks = _rational_to_ticks($event->duration, $divisions);
 	my $type  = $NWC_TYPE_MAP{ $d->{base_dur} // '4th' } // 'quarter';
@@ -569,24 +667,33 @@ sub _emit_rest_event {
 }
 
 sub _emit_chord_event {
-	my ($self, $event, $clef, $key_fifths, $divisions, $pad) = @_;
-	my $d   = $event->data;
+	my ($self, $event, $clef, $key_fifths, $divisions, $pad, $ev_ann) = @_;
+	$ev_ann //= {};
+	my $d     = $event->data;
 	my @out;
 
 	my $positions = $d->{nwc_positions} // ['0'];
 	my $first     = 1;
 
 	for my $pos_str (@$positions) {
+		# Build a per-position annotation that inherits slur flags (first note only)
+		# and picks the tie flags for this specific position key.
+		(my $pk = $pos_str) =~ s/\^$//;
+		my %pos_ann = (
+			tie_stop_keys  => { $pk => ($ev_ann->{tie_stop_keys}  // {})->{$pk} // 0 },
+			tie_start_keys => { $pk => ($ev_ann->{tie_start_keys} // {})->{$pk} // 0 },
+			($first ? (slur_start => $ev_ann->{slur_start}, slur_stop => $ev_ann->{slur_stop}) : ()),
+		);
 		push @out, $self->_emit_note_event(
 			_chord_note_event($event, $pos_str),
-			$clef, $key_fifths, $divisions, $pad, !$first
+			$clef, $key_fifths, $divisions, $pad, !$first, \%pos_ann
 		);
 		$first = 0;
 	}
 	return @out;
 }
 
-# Build a lightweight synthetic Note event for a single chord member.
+# Build a lightweight synthetic Note event for one member of a Chord.
 sub _chord_note_event {
 	my ($chord_event, $pos_str) = @_;
 	my $d = $chord_event->data;
