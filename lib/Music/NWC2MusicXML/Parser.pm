@@ -471,8 +471,7 @@ sub _handle_clef {
 	}
 
 	my $staff = $self->_current_staff_or_croak('Clef');
-	if (!$staff->event_count) {
-		# Before any events: this is the initial clef for the staff
+	if (!$staff->has_notes) {
 		$staff->set_initial_clef($type);
 	} else {
 		$self->_append_event(Music::NWC2MusicXML::Event->new(
@@ -494,7 +493,7 @@ sub _handle_key {
 	};
 
 	my $staff = $self->_current_staff_or_croak('Key');
-	if (!$staff->event_count) {
+	if (!$staff->has_notes) {
 		$staff->set_initial_key($key_data);
 	} else {
 		$self->_append_event(Music::NWC2MusicXML::Event->new(
@@ -518,7 +517,7 @@ sub _handle_time_sig {
 	my $ts_data = { beats => $beats + 0, beat_type => $beat_type + 0 };
 
 	my $staff = $self->_current_staff_or_croak('TimeSig');
-	if (!$staff->event_count) {
+	if (!$staff->has_notes) {
 		$staff->set_initial_timesig($ts_data);
 	} else {
 		$self->_append_event(Music::NWC2MusicXML::Event->new(

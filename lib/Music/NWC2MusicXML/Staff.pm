@@ -309,6 +309,22 @@ sub event_count {
 	return scalar @{ $self->{_events} };
 }
 
+=head2 has_notes
+
+Return true if any note, rest, chord, or bar event has been added to this
+staff.  Used by the parser to distinguish staff-header records (before any
+sounding content) from mid-staff change records.
+
+=cut
+
+sub has_notes {
+	my ($self) = @_;
+	for my $ev (@{ $self->{_events} }) {
+		return 1 if $ev->type =~ /^(?:Note|Rest|Chord|Bar)$/;
+	}
+	return 0;
+}
+
 # ---------------------------------------------------------------------------
 # Private
 # ---------------------------------------------------------------------------
