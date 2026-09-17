@@ -11,6 +11,7 @@ use Readonly;
 use File::Spec ();
 use File::Basename qw(basename dirname);
 use File::Path qw(make_path);
+use Object::Configure;
 use Params::Validate::Strict qw(validate_strict);
 use Params::Get;
 use Music::NWC2MusicXML::NWC;
@@ -181,16 +182,18 @@ None.
 =cut
 
 sub new {
-	my ($class, %input) = @_;
-	my $warnings_fh = delete $input{warnings_fh};   # glob refs can't be typed
+	my $class = shift;
 	my $args = validate_strict(
+		input => Params::Get::get_params(undef, \@_) // {},
 		schema => {
 			log_level => { type => 'scalar', optional => 1, default  => 'normal' },
 			validate  => { type => 'scalar', optional => 1, default  => 0 },
 		},
-		input => \%input,
 	);
 	croak $@ unless defined $args;
+	my $warnings_fh = delete $args->{warnings_fh};   # glob refs can't be typed
+
+	$args = Object::Configure::configure($class, $args);
 
 	my $diag = Music::NWC2MusicXML::Diagnostics->new(
 		level       => $args->{log_level},

@@ -7,7 +7,7 @@ WriteMakefile(
 	AUTHOR           => 'Nigel Horne <njh@nigelhorne.com>',
 	VERSION_FROM     => 'lib/Music/NWC2MusicXML.pm',
 	ABSTRACT_FROM    => 'lib/Music/NWC2MusicXML.pm',
-	LICENSE          => 'perl',
+	LICENSE          => 'gpl_2',
 	MIN_PERL_VERSION => '5.036',
 	EXE_FILES        => [ 'bin/nwc2musicxml' ],
 	PREREQ_PM        => {
@@ -15,6 +15,7 @@ WriteMakefile(
 		'warnings'         => 0,
 		'autodie'          => 0,
 		'Carp'             => 0,
+		'Object::Configure' => 0,
 		'Readonly'         => 0,
 		'Params::Validate::Strict' => 0,
 		'Params::Get'      => 0,
