@@ -413,10 +413,16 @@ sub _emit_part {
 	my $measure_no = 1;
 	my @pending    = ();
 	my $first      = 1;
-
-	my $clef       = $staff->initial_clef // 'Treble';
-	my $key_fifths = ($staff->initial_key  // {})->{fifths} // 0;
 	my $prev_bar   = 'normal';
+
+	# $clef_start / $key_start = state at the beginning of the current measure.
+	# $clef_now   / $key_now   = state updated live as we scan events.
+	# They diverge when Clef/Key events appear mid-measure; at each Bar we
+	# commit the live values as the start-of-next-measure state.
+	my $clef_start  = $staff->initial_clef // 'Treble';
+	my $key_start   = ($staff->initial_key  // {})->{fifths} // 0;
+	my $clef_now    = $clef_start;
+	my $key_now     = $key_start;
 
 	# Pre-annotate all events with slur/tie metadata in one pass so that
 	# slurs and ties crossing bar lines are handled correctly.
@@ -429,17 +435,21 @@ sub _emit_part {
 			my $bar_style = $event->data->{style} // 'normal';
 			push @out, $self->_emit_measure(
 				$measure_no++, \@pending, $staff, $divisions,
-				$first, $clef, $key_fifths, $prev_bar, $bar_style, $ann
+				$first, $clef_start, $key_start, $prev_bar, $bar_style, $ann
 			);
-			@pending  = ();
-			$first    = 0;
-			$prev_bar = $bar_style;
+			@pending    = ();
+			$first      = 0;
+			$prev_bar   = $bar_style;
+			$clef_start = $clef_now;   # carry updated state to next measure
+			$key_start  = $key_now;
 
 		} elsif ($type eq 'Clef') {
-			$clef = $event->data->{nwc_clef} // $clef;
+			$clef_now = $event->data->{nwc_clef} // $clef_now;
+			push @pending, $event;     # included so _emit_measure can emit <attributes>
 
 		} elsif ($type eq 'Key') {
-			$key_fifths = ($event->data // {})->{fifths} // 0;
+			$key_now = ($event->data // {})->{fifths} // 0;
+			push @pending, $event;
 
 		} else {
 			push @pending, $event;
@@ -449,7 +459,7 @@ sub _emit_part {
 	if (@pending || $measure_no == 1) {
 		push @out, $self->_emit_measure(
 			$measure_no, \@pending, $staff, $divisions,
-			$first, $clef, $key_fifths, $prev_bar, 'normal', $ann
+			$first, $clef_start, $key_start, $prev_bar, 'normal', $ann
 		);
 	}
 
@@ -460,11 +470,11 @@ sub _emit_part {
 sub _emit_measure {
 	my ($self, $number, $events, $staff, $divisions, $is_first,
 	    $clef, $key_fifths, $prev_bar, $bar_style, $ann) = @_;
-	$clef       //= 'Treble';
-	$key_fifths //= 0;
-	$prev_bar   //= 'normal';
-	$bar_style  //= 'normal';
-	$ann        //= {};
+	my $curr_clef  = $clef       // 'Treble';
+	my $curr_key   = $key_fifths // 0;
+	$prev_bar  //= 'normal';
+	$bar_style //= 'normal';
+	$ann       //= {};
 
 	my @out;
 	my $i   = $self->{_indent};
@@ -486,14 +496,24 @@ sub _emit_measure {
 	for my $event (@$events) {
 		my $type   = $event->type;
 		my $ev_ann = $ann->{"$event"} // {};
-		if ($type eq 'Note') {
+
+		if ($type eq 'Clef') {
+			$curr_clef = $event->data->{nwc_clef} // $curr_clef;
+			push @out, $self->_emit_clef_change($curr_clef, $pad . $i);
+
+		} elsif ($type eq 'Key') {
+			my $kd = $event->data // {};
+			$curr_key = $kd->{fifths} // 0;
+			push @out, $self->_emit_key_change($kd, $pad . $i);
+
+		} elsif ($type eq 'Note') {
 			push @out, $self->_emit_note_event(
-				$event, $clef, $key_fifths, $divisions, $pad . $i, 0, $ev_ann);
+				$event, $curr_clef, $curr_key, $divisions, $pad . $i, 0, $ev_ann);
 		} elsif ($type eq 'Rest') {
 			push @out, $self->_emit_rest_event($event, $divisions, $pad . $i, $ev_ann);
 		} elsif ($type eq 'Chord') {
 			push @out, $self->_emit_chord_event(
-				$event, $clef, $key_fifths, $divisions, $pad . $i, $ev_ann);
+				$event, $curr_clef, $curr_key, $divisions, $pad . $i, $ev_ann);
 		}
 	}
 
@@ -776,6 +796,36 @@ sub _key_alter_for_step {
 sub _rational_to_ticks {
 	my ($rational, $divisions) = @_;
 	return int($rational->[0] * $divisions / $rational->[1] + 0.5);
+}
+
+sub _emit_clef_change {
+	my ($self, $clef_name, $pad) = @_;
+	my @out;
+	my $i    = $self->{_indent};
+	my $clef = $CLEF_MAP{$clef_name} // $CLEF_MAP{Treble};
+
+	push @out, "${pad}<attributes>";
+	push @out, "${pad}${i}<clef>";
+	push @out, "${pad}${i}${i}<sign>$clef->{sign}</sign>";
+	push @out, "${pad}${i}${i}<line>$clef->{line}</line>"
+		if defined $clef->{line};
+	push @out, "${pad}${i}</clef>";
+	push @out, "${pad}</attributes>";
+	return @out;
+}
+
+sub _emit_key_change {
+	my ($self, $key_data, $pad) = @_;
+	my @out;
+	my $i      = $self->{_indent};
+	my $fifths = $key_data->{fifths} // 0;
+
+	push @out, "${pad}<attributes>";
+	push @out, "${pad}${i}<key>";
+	push @out, "${pad}${i}${i}<fifths>$fifths</fifths>";
+	push @out, "${pad}${i}</key>";
+	push @out, "${pad}</attributes>";
+	return @out;
 }
 
 sub _emit_attributes {
