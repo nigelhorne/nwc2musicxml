@@ -9,6 +9,7 @@ requires 'File::Find';
 requires 'File::Path';
 requires 'File::Spec';
 requires 'Getopt::Long';
+requires 'Object::Configure';
 requires 'Params::Get';
 requires 'Params::Validate::Strict';
 requires 'Pod::Usage';
