@@ -41,7 +41,7 @@ WriteMakefile(
 		'IPC::System::Simple' => 0,
 		'Test::Most' => 0,
 		'Test::Exception'  => 0,
-		'XML::LibXML' => 0,
+		'XML::PP' => 0,	# Use this rather than XML::PP for ease of installation on Windows
 	}, META_MERGE => {	# https://perldoc.perl.org/CPAN::Meta::Spec
 		'meta-spec' => { version => 2 },
 		resources   => {

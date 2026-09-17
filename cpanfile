@@ -26,7 +26,7 @@ on 'test' => sub {
 	requires 'IPC::System::Simple';
 	requires 'Test::Exception';
 	requires 'Test::Most';
-	requires 'XML::LibXML';
+	requires 'XML::PP';   # Use this rather than XML::PP for ease of installation on Windows
 };
 
 on 'develop' => sub {

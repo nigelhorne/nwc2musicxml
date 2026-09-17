@@ -7,7 +7,7 @@ use lib 'lib';
 use_ok('Music::NWC2MusicXML::NWC');
 use_ok('Music::NWC2MusicXML::Parser');
 use_ok('Music::NWC2MusicXML::MusicXML');
-use XML::LibXML;
+use XML::PP;
 
 my $input_dir = 't/input';
 
@@ -17,7 +17,7 @@ unless (@nwc_files) {
 	plan skip_all => "No .nwc files found in $input_dir";
 }
 
-my $xml_parser = XML::LibXML->new();
+my $xml_parser = XML::PP->new();
 my $nwc_reader = new_ok('Music::NWC2MusicXML::NWC');
 my $parser     = new_ok('Music::NWC2MusicXML::Parser');
 my $generator  = new_ok('Music::NWC2MusicXML::MusicXML');
@@ -40,7 +40,7 @@ for my $nwc_file (@nwc_files) {
 
 		my $doc;
 		lives_ok {
-			$doc = $xml_parser->load_xml(string => $xml);
+			$doc = $xml_parser->parse(xml_string => $xml);
 		} "$nwc_file output is well-formed XML";
 
 		SKIP: {
