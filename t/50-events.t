@@ -344,4 +344,50 @@ sub score_with_opts_notes {
 	unlike $xml, qr/wedge/, 'no wedge when no Opts hairpin';
 }
 
+# ---------------------------------------------------------------------------
+# TempoVariance emission (accel., rit., rall., a tempo)
+# ---------------------------------------------------------------------------
+
+sub score_with_tempo_variance {
+	my ($style, $placement) = @_;
+	my $staff = Music::NWC2MusicXML::Staff->new(name => 'Test');
+	$staff->set_initial_clef('Treble');
+	$staff->set_initial_key({ signature => 'C', tonic => 'C', fifths => 0 });
+	$staff->set_initial_timesig({ beats => 4, beat_type => 4 });
+	$staff->add_event(Music::NWC2MusicXML::Event->new(
+		type => 'TempoVariance',
+		data => { style => $style, placement => $placement // 'above' },
+	));
+	my $score = Music::NWC2MusicXML::Score->new;
+	$score->add_staff($staff);
+	return Music::NWC2MusicXML::MusicXML->new->generate($score);
+}
+
+{
+	my $xml = score_with_tempo_variance('Accelerando');
+	like $xml, qr/<words[^>]*>accel\.<\/words>/,  'Accelerando emitted as accel.';
+	like $xml, qr/font-style="italic"/,           'words element has italic style';
+}
+
+{
+	my $xml = score_with_tempo_variance('Ritardando');
+	like $xml, qr/<words[^>]*>rit\.<\/words>/,    'Ritardando emitted as rit.';
+}
+
+{
+	my $xml = score_with_tempo_variance('Rallentando');
+	like $xml, qr/<words[^>]*>rall\.<\/words>/,   'Rallentando emitted as rall.';
+}
+
+{
+	my $xml = score_with_tempo_variance('RitardandoToTempo');
+	like $xml, qr/<words[^>]*>a tempo<\/words>/,  'RitardandoToTempo emitted as a tempo';
+}
+
+# Placement 'above' maps to placement="above" on the direction element
+{
+	my $xml = score_with_tempo_variance('Accelerando', 'above');
+	like $xml, qr/direction placement="above"/,   'above placement used';
+}
+
 done_testing();

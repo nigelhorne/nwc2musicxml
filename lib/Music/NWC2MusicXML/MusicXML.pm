@@ -601,6 +601,11 @@ sub _emit_measure {
 			push @out, $self->_emit_wedge(
 				$d->{style}, $d->{placement}, $pad . $i);
 
+		} elsif ($type eq 'TempoVariance') {
+			my $d = $event->data // {};
+			push @out, $self->_emit_tempo_variance(
+				$d->{style}, $d->{placement}, $pad . $i);
+
 		} elsif ($type eq 'Note') {
 			push @out, $self->_emit_wedge($ev_ann->{wedge_start}, undef, $pad . $i)
 				if $ev_ann->{wedge_start};
@@ -1048,6 +1053,35 @@ sub _emit_wedge {
 	push @out, "${pad}<direction placement=\"$place\">";
 	push @out, "${pad}${i}<direction-type>";
 	push @out, "${pad}${i}${i}<wedge type=\"$wedge_type\" number=\"1\"/>";
+	push @out, "${pad}${i}</direction-type>";
+	push @out, "${pad}</direction>";
+	return @out;
+}
+
+Readonly::Hash my %TEMPO_VARIANCE_TEXT => (
+	Accelerando      => 'accel.',
+	Ritardando       => 'rit.',
+	Rallentando      => 'rall.',
+	RitardandoToTempo => 'a tempo',
+	Stringendo       => 'string.',
+	Breath           => "\x{2019}",   # right single quotation mark used as breath comma
+	Caesura          => '//',
+);
+
+sub _emit_tempo_variance {
+	my ($self, $style, $placement, $pad) = @_;
+	$style     //= '';
+	$placement //= 'above';
+	my $i = $self->{_indent};
+
+	my $text = $TEMPO_VARIANCE_TEXT{$style} // $style;
+	return () unless length $text;
+
+	my $place = ($placement =~ /above/i) ? 'above' : 'below';
+	my @out;
+	push @out, "${pad}<direction placement=\"$place\">";
+	push @out, "${pad}${i}<direction-type>";
+	push @out, "${pad}${i}${i}<words font-style=\"italic\">$text</words>";
 	push @out, "${pad}${i}</direction-type>";
 	push @out, "${pad}</direction>";
 	return @out;

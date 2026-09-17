@@ -753,16 +753,13 @@ sub _handle_tempo_variance {
 	my ($self, $fields) = @_;
 	my $h = $self->_fields_to_hash($fields);
 
-	# TempoVariance records (Accelerando, Ritardando, Staccato, Breath, Caesura)
-	# have no single MusicXML element; the closest representation is <words>.
-	# Phase 4 will emit these as proper <sound> acceleration / direction elements.
-	# We store them as Text events so the data is preserved in the IR.
+	my $style = $h->{Style} // '';
+	my $pos   = $h->{Pos}   // 0;
 	$self->_append_event(Music::NWC2MusicXML::Event->new(
-		type => 'Text',
+		type => 'TempoVariance',
 		data => {
-			text      => $h->{Style} // '',
-			placement => $h->{Pos}   // '',
-			nwc_type  => 'TempoVariance',
+			style     => $style,
+			placement => ($pos >= 0 ? 'above' : 'below'),
 		},
 	));
 }
