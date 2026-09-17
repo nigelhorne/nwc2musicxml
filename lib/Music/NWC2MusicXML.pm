@@ -1,4 +1,4 @@
-package NWC2MusicXML;
+package Music::NWC2MusicXML;
 
 use strict;
 use warnings;
@@ -13,10 +13,10 @@ use File::Basename qw(basename dirname);
 use File::Path qw(make_path);
 use Params::Validate qw(validate_with SCALAR HASHREF);
 use Params::Get;
-use NWC2MusicXML::NWC;
-use NWC2MusicXML::Parser;
-use NWC2MusicXML::MusicXML;
-use NWC2MusicXML::Diagnostics;
+use Music::NWC2MusicXML::NWC;
+use Music::NWC2MusicXML::Parser;
+use Music::NWC2MusicXML::MusicXML;
+use Music::NWC2MusicXML::Diagnostics;
 
 # ---------------------------------------------------------------------------
 # Exit codes (also exported for use by the CLI script)
@@ -50,7 +50,7 @@ Readonly::Hash my %MESSAGES => (
 
 =head1 NAME
 
-NWC2MusicXML - Convert NoteWorthy Composer 2 C<.nwc> score files to MusicXML.
+Music::NWC2MusicXML - Convert NoteWorthy Composer 2 C<.nwc> score files to MusicXML.
 
 =head1 VERSION
 
@@ -59,9 +59,9 @@ NWC2MusicXML - Convert NoteWorthy Composer 2 C<.nwc> score files to MusicXML.
 =head1 SYNOPSIS
 
     # Simple conversion
-    use NWC2MusicXML;
+    use Music::NWC2MusicXML;
 
-    my $converter = NWC2MusicXML->new;
+    my $converter = Music::NWC2MusicXML->new;
     $converter->convert(
         input  => 'Pilgrim.nwc',
         output => 'Pilgrim.musicxml',
@@ -76,26 +76,26 @@ NWC2MusicXML - Convert NoteWorthy Composer 2 C<.nwc> score files to MusicXML.
 
 =head1 DESCRIPTION
 
-C<NWC2MusicXML> is the top-level facade for the NWC-to-MusicXML conversion
+C<Music::NWC2MusicXML> is the top-level facade for the NWC-to-MusicXML conversion
 pipeline.  It coordinates three independent stages:
 
 =over 4
 
-=item 1. B<NWC binary decoding> (C<NWC2MusicXML::NWC>) -- reads the C<.nwc>
+=item 1. B<NWC binary decoding> (C<Music::NWC2MusicXML::NWC>) -- reads the C<.nwc>
 binary container, verifies the magic signature, decompresses the zlib payload,
 and extracts the NWCTXT text representation.
 
-=item 2. B<NWCTXT parsing> (C<NWC2MusicXML::Parser>) -- parses the NWCTXT into
-an internal representation (C<NWC2MusicXML::Score>).
+=item 2. B<NWCTXT parsing> (C<Music::NWC2MusicXML::Parser>) -- parses the NWCTXT into
+an internal representation (C<Music::NWC2MusicXML::Score>).
 
-=item 3. B<MusicXML generation> (C<NWC2MusicXML::MusicXML>) -- serialises the
+=item 3. B<MusicXML generation> (C<Music::NWC2MusicXML::MusicXML>) -- serialises the
 internal representation to a well-formed UTF-8 MusicXML document.
 
 =back
 
 Each stage is independently testable.  The facade wires them together,
 handles batch processing, and routes all diagnostics through a single
-C<NWC2MusicXML::Diagnostics> instance.
+C<Music::NWC2MusicXML::Diagnostics> instance.
 
 =head1 PRESERVATION PRINCIPLE
 
@@ -138,7 +138,7 @@ STDERR in the C<Diagnostics> object).
 
 =head3 Returns
 
-Blessed C<NWC2MusicXML> object.
+Blessed C<Music::NWC2MusicXML> object.
 
 =head3 Side Effects
 
@@ -146,7 +146,7 @@ None.
 
 =head3 Usage Example
 
-    my $c = NWC2MusicXML->new(log_level => 'verbose', validate => 1);
+    my $c = Music::NWC2MusicXML->new(log_level => 'verbose', validate => 1);
 
 =head3 API SPECIFICATION
 
@@ -158,7 +158,7 @@ None.
 
 =head4 Output
 
-    NWC2MusicXML object
+    Music::NWC2MusicXML object
 
 =head3 MESSAGES
 
@@ -192,7 +192,7 @@ sub new {
 		allow_extra => 0,
 	);
 
-	my $diag = NWC2MusicXML::Diagnostics->new(
+	my $diag = Music::NWC2MusicXML::Diagnostics->new(
 		level       => $args{log_level},
 		(defined $args{warnings_fh} ? (warnings_fh => $args{warnings_fh}) : ()),
 	);
@@ -200,9 +200,9 @@ sub new {
 	my $self = bless {
 		_diagnostics => $diag,
 		_validate    => $args{validate},
-		_decoder     => NWC2MusicXML::NWC->new(    diagnostics => $diag ),
-		_parser      => NWC2MusicXML::Parser->new( diagnostics => $diag ),
-		_generator   => NWC2MusicXML::MusicXML->new( diagnostics => $diag ),
+		_decoder     => Music::NWC2MusicXML::NWC->new(    diagnostics => $diag ),
+		_parser      => Music::NWC2MusicXML::Parser->new( diagnostics => $diag ),
+		_generator   => Music::NWC2MusicXML::MusicXML->new( diagnostics => $diag ),
 	}, $class;
 
 	return $self;
@@ -450,7 +450,7 @@ sub batch_convert {
 
 =head2 diagnostics
 
-Return the C<NWC2MusicXML::Diagnostics> instance.
+Return the C<Music::NWC2MusicXML::Diagnostics> instance.
 
 =cut
 

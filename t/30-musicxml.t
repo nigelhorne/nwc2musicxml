@@ -5,26 +5,26 @@ use Test::More;
 use Test::Exception;
 
 use lib 'lib';
-use NWC2MusicXML::MusicXML;
-use NWC2MusicXML::Score;
-use NWC2MusicXML::Staff;
-use NWC2MusicXML::Event;
+use Music::NWC2MusicXML::MusicXML;
+use Music::NWC2MusicXML::Score;
+use Music::NWC2MusicXML::Staff;
+use Music::NWC2MusicXML::Event;
 
 # ---------------------------------------------------------------------------
 # Constructor
 # ---------------------------------------------------------------------------
 {
-	my $gen = NWC2MusicXML::MusicXML->new;
-	isa_ok $gen, 'NWC2MusicXML::MusicXML';
+	my $gen = Music::NWC2MusicXML::MusicXML->new;
+	isa_ok $gen, 'Music::NWC2MusicXML::MusicXML';
 }
 
 # ---------------------------------------------------------------------------
 # generate: bad argument
 # ---------------------------------------------------------------------------
 {
-	my $gen = NWC2MusicXML::MusicXML->new;
+	my $gen = Music::NWC2MusicXML::MusicXML->new;
 	throws_ok { $gen->generate('not a score') }
-		qr/NWC2MusicXML::Score/i,
+		qr/Music::NWC2MusicXML::Score/i,
 		'generate with non-Score croaks';
 }
 
@@ -32,8 +32,8 @@ use NWC2MusicXML::Event;
 # generate: empty score (no staves)
 # ---------------------------------------------------------------------------
 {
-	my $gen   = NWC2MusicXML::MusicXML->new;
-	my $score = NWC2MusicXML::Score->new;
+	my $gen   = Music::NWC2MusicXML::MusicXML->new;
+	my $score = Music::NWC2MusicXML::Score->new;
 	throws_ok { $gen->generate($score) }
 		qr/no staves/i,
 		'generate with no staves croaks';
@@ -43,19 +43,19 @@ use NWC2MusicXML::Event;
 # generate: minimal single-staff score
 # ---------------------------------------------------------------------------
 {
-	my $staff = NWC2MusicXML::Staff->new(
+	my $staff = Music::NWC2MusicXML::Staff->new(
 		name => 'Violin I',
 	);
 	$staff->set_initial_clef('Treble');
 	$staff->set_initial_key({ signature => 'C', tonic => 'C', fifths => 0 });
 	$staff->set_initial_timesig({ beats => 4, beat_type => 4 });
 
-	my $score = NWC2MusicXML::Score->new(
+	my $score = Music::NWC2MusicXML::Score->new(
 		metadata => { Title => 'Test Score', Author => 'Test Author' },
 	);
 	$score->add_staff($staff);
 
-	my $gen = NWC2MusicXML::MusicXML->new;
+	my $gen = Music::NWC2MusicXML::MusicXML->new;
 	my $xml;
 	lives_ok { $xml = $gen->generate($score) } 'generate does not croak';
 
@@ -75,17 +75,17 @@ use NWC2MusicXML::Event;
 # XML escaping
 # ---------------------------------------------------------------------------
 {
-	my $staff = NWC2MusicXML::Staff->new(name => 'A & B <Test>');
+	my $staff = Music::NWC2MusicXML::Staff->new(name => 'A & B <Test>');
 	$staff->set_initial_clef('Treble');
 	$staff->set_initial_key({ signature => 'C', tonic => 'C', fifths => 0 });
 	$staff->set_initial_timesig({ beats => 4, beat_type => 4 });
 
-	my $score = NWC2MusicXML::Score->new(
+	my $score = Music::NWC2MusicXML::Score->new(
 		metadata => { Title => 'Title with "quotes" & ampersands' },
 	);
 	$score->add_staff($staff);
 
-	my $xml = NWC2MusicXML::MusicXML->new->generate($score);
+	my $xml = Music::NWC2MusicXML::MusicXML->new->generate($score);
 
 	unlike $xml, qr/&(?!amp;|lt;|gt;|quot;|apos;)/,
 		'raw ampersands are escaped';

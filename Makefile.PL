@@ -3,10 +3,10 @@ use warnings;
 use ExtUtils::MakeMaker;
 
 WriteMakefile(
-	NAME             => 'NWC2MusicXML',
+	NAME             => 'Music::NWC2MusicXML',
 	AUTHOR           => 'Nigel Horne <nigel.horne@gmail.com>',
-	VERSION_FROM     => 'lib/NWC2MusicXML.pm',
-	ABSTRACT_FROM    => 'lib/NWC2MusicXML.pm',
+	VERSION_FROM     => 'lib/Music/NWC2MusicXML.pm',
+	ABSTRACT_FROM    => 'lib/Music/NWC2MusicXML.pm',
 	LICENSE          => 'perl',
 	MIN_PERL_VERSION => '5.036',
 	EXE_FILES        => [ 'bin/nwc2musicxml' ],
@@ -44,5 +44,5 @@ WriteMakefile(
 		},
 	},
 	dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz' },
-	clean => { FILES    => 'NWC2MusicXML-*' },
+	clean => { FILES    => 'Music-NWC2MusicXML-*' },
 );

@@ -1,4 +1,4 @@
-package NWC2MusicXML::Diagnostics;
+package Music::NWC2MusicXML::Diagnostics;
 
 use strict;
 use warnings;
@@ -59,8 +59,8 @@ Readonly::Hash my %MESSAGES => (
 
 =head1 NAME
 
-NWC2MusicXML::Diagnostics - Warning collection, logging, and reporting for
-the NWC2MusicXML conversion pipeline.
+Music::NWC2MusicXML::Diagnostics - Warning collection, logging, and reporting for
+the Music::NWC2MusicXML conversion pipeline.
 
 =head1 VERSION
 
@@ -68,9 +68,9 @@ the NWC2MusicXML conversion pipeline.
 
 =head1 SYNOPSIS
 
-    use NWC2MusicXML::Diagnostics;
+    use Music::NWC2MusicXML::Diagnostics;
 
-    my $diag = NWC2MusicXML::Diagnostics->new(
+    my $diag = Music::NWC2MusicXML::Diagnostics->new(
         level        => 'verbose',
         warnings_fh  => \*STDERR,
     );
@@ -87,7 +87,7 @@ the NWC2MusicXML conversion pipeline.
 
 =head1 DESCRIPTION
 
-Centralises all diagnostic output for the NWC2MusicXML pipeline.  No
+Centralises all diagnostic output for the Music::NWC2MusicXML pipeline.  No
 module should print warnings or debug traces directly; instead each module
 receives a C<Diagnostics> instance and routes output through it.
 
@@ -154,7 +154,7 @@ C<$self> (for chaining).
 
 =head4 Output
 
-    $self (NWC2MusicXML::Diagnostics)
+    $self (Music::NWC2MusicXML::Diagnostics)
 
 =head3 FORMAL SPECIFICATION
 
@@ -201,7 +201,7 @@ C<$self>.
 
 =head4 Output
 
-    $self (NWC2MusicXML::Diagnostics)
+    $self (Music::NWC2MusicXML::Diagnostics)
 
 =head3 FORMAL SPECIFICATION
 
@@ -244,7 +244,7 @@ C<$self>.
 
 =head4 Output
 
-    $self (NWC2MusicXML::Diagnostics)
+    $self (Music::NWC2MusicXML::Diagnostics)
 
 =head3 FORMAL SPECIFICATION
 
@@ -317,7 +317,7 @@ Increments the internal warning counter.  Writes to C<warnings_fh> if set.
 
 =head4 Output
 
-    $self (NWC2MusicXML::Diagnostics)
+    $self (Music::NWC2MusicXML::Diagnostics)
 
 =head3 MESSAGES
 

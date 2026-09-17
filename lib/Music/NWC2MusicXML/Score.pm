@@ -1,4 +1,4 @@
-package NWC2MusicXML::Score;
+package Music::NWC2MusicXML::Score;
 
 use strict;
 use warnings;
@@ -10,10 +10,10 @@ use Carp qw(croak carp);
 use Readonly;
 use Params::Validate qw(validate_with SCALAR HASHREF ARRAYREF);
 use Params::Get;
-use NWC2MusicXML::Staff;
+use Music::NWC2MusicXML::Staff;
 
 Readonly::Hash my %MESSAGES => (
-	error_bad_staff  => 'add_staff: argument must be a NWC2MusicXML::Staff, got: %s',
+	error_bad_staff  => 'add_staff: argument must be a Music::NWC2MusicXML::Staff, got: %s',
 	error_no_staves  => 'Score contains no staves',
 	error_internal   => 'Internal error: %s',
 );
@@ -29,7 +29,7 @@ Readonly::Array my @SONGINFO_KEYS => qw(
 
 =head1 NAME
 
-NWC2MusicXML::Score - Internal representation of a complete NWC score.
+Music::NWC2MusicXML::Score - Internal representation of a complete NWC score.
 
 =head1 VERSION
 
@@ -37,9 +37,9 @@ NWC2MusicXML::Score - Internal representation of a complete NWC score.
 
 =head1 SYNOPSIS
 
-    use NWC2MusicXML::Score;
+    use Music::NWC2MusicXML::Score;
 
-    my $score = NWC2MusicXML::Score->new(
+    my $score = Music::NWC2MusicXML::Score->new(
         metadata   => { Title => 'To a Pilgrim', Author => 'Trad, Arr Nigel Horne' },
         page_setup => { StaffSize => 16, Zoom => 3 },
     );
@@ -49,7 +49,7 @@ NWC2MusicXML::Score - Internal representation of a complete NWC score.
 
 =head1 DESCRIPTION
 
-C<NWC2MusicXML::Score> is the root of the internal representation tree.
+C<Music::NWC2MusicXML::Score> is the root of the internal representation tree.
 It holds:
 
 =over 4
@@ -60,12 +60,12 @@ It holds:
 
 =item * B<properties> -- additional score-level NWC properties.
 
-=item * B<staves> -- ordered list of C<NWC2MusicXML::Staff> objects.
+=item * B<staves> -- ordered list of C<Music::NWC2MusicXML::Staff> objects.
 
 =back
 
 This class is MusicXML-agnostic; it describes the musical content in NWC
-terms.  The C<NWC2MusicXML::MusicXML> generator translates it to XML.
+terms.  The C<Music::NWC2MusicXML::MusicXML> generator translates it to XML.
 
 =cut
 
@@ -169,7 +169,7 @@ sub set_metadata_field {
 
 =head2 add_staff
 
-Append a C<NWC2MusicXML::Staff> to the score's staff list.
+Append a C<Music::NWC2MusicXML::Staff> to the score's staff list.
 
 =head3 Purpose
 
@@ -181,7 +181,7 @@ list for MusicXML generation.
 
 =over 4
 
-=item C<$staff> -- a blessed C<NWC2MusicXML::Staff> object (required).
+=item C<$staff> -- a blessed C<Music::NWC2MusicXML::Staff> object (required).
 
 =back
 
@@ -196,18 +196,18 @@ Appends to C<_staves>.
 =head3 Usage Example
 
     $score->add_staff(
-        NWC2MusicXML::Staff->new(name => 'Violin I')
+        Music::NWC2MusicXML::Staff->new(name => 'Violin I')
     );
 
 =head3 API SPECIFICATION
 
 =head4 Input
 
-    $staff : NWC2MusicXML::Staff (required)
+    $staff : Music::NWC2MusicXML::Staff (required)
 
 =head4 Output
 
-    $self (NWC2MusicXML::Score)
+    $self (Music::NWC2MusicXML::Score)
 
 =head3 MESSAGES
 
@@ -230,18 +230,18 @@ Appends to C<_staves>.
 sub add_staff {
 	my ($self, $staff) = @_;
 	croak _fmt_msg('error_bad_staff', ref($staff) // 'SCALAR')
-		unless ref($staff) && $staff->isa('NWC2MusicXML::Staff');
+		unless ref($staff) && $staff->isa('Music::NWC2MusicXML::Staff');
 	push @{ $self->{_staves} }, $staff;
 	return $self;
 }
 
 =head2 staves
 
-Return an arrayref of all C<NWC2MusicXML::Staff> objects in score order.
+Return an arrayref of all C<Music::NWC2MusicXML::Staff> objects in score order.
 
 =head3 Returns
 
-Arrayref of C<NWC2MusicXML::Staff>.
+Arrayref of C<Music::NWC2MusicXML::Staff>.
 
 =head3 API SPECIFICATION
 
@@ -251,7 +251,7 @@ Arrayref of C<NWC2MusicXML::Staff>.
 
 =head4 Output
 
-    ARRAYREF of NWC2MusicXML::Staff
+    ARRAYREF of Music::NWC2MusicXML::Staff
 
 =cut
 

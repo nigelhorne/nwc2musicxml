@@ -1,4 +1,4 @@
-package NWC2MusicXML::NWC;
+package Music::NWC2MusicXML::NWC;
 
 use strict;
 use warnings;
@@ -52,7 +52,7 @@ Readonly::Hash my %MESSAGES => (
 
 =head1 NAME
 
-NWC2MusicXML::NWC - Binary NWC container decoder.
+Music::NWC2MusicXML::NWC - Binary NWC container decoder.
 
 =head1 VERSION
 
@@ -60,13 +60,13 @@ NWC2MusicXML::NWC - Binary NWC container decoder.
 
 =head1 SYNOPSIS
 
-    use NWC2MusicXML::NWC;
+    use Music::NWC2MusicXML::NWC;
 
     # From a file
-    my $nwctxt = NWC2MusicXML::NWC->read('Pilgrim.nwc');
+    my $nwctxt = Music::NWC2MusicXML::NWC->read('Pilgrim.nwc');
 
     # From an in-memory buffer (e.g. read from a database blob)
-    my $nwctxt = NWC2MusicXML::NWC->decode($binary_data);
+    my $nwctxt = Music::NWC2MusicXML::NWC->decode($binary_data);
 
     print $nwctxt;   # prints the NWCTXT representation
 
@@ -74,7 +74,7 @@ NWC2MusicXML::NWC - Binary NWC container decoder.
 
 Converts a NoteWorthy Composer 2 binary C<.nwc> file into its NWCTXT text
 representation.  The NWCTXT string is then passed to
-C<NWC2MusicXML::Parser>.
+C<Music::NWC2MusicXML::Parser>.
 
 The conversion pipeline implemented here is:
 
@@ -100,7 +100,7 @@ No NoteWorthy Composer installation is required.
 =head2 new
 
 Construct a decoder object.  Optionally binds diagnostic output to a
-C<NWC2MusicXML::Diagnostics> instance.
+C<Music::NWC2MusicXML::Diagnostics> instance.
 
 =head3 Arguments
 
@@ -108,23 +108,23 @@ Named parameters:
 
 =over 4
 
-=item C<diagnostics> -- a C<NWC2MusicXML::Diagnostics> instance (optional).
+=item C<diagnostics> -- a C<Music::NWC2MusicXML::Diagnostics> instance (optional).
 
 =back
 
 =head3 Returns
 
-Blessed C<NWC2MusicXML::NWC> object.
+Blessed C<Music::NWC2MusicXML::NWC> object.
 
 =head3 API SPECIFICATION
 
 =head4 Input
 
-    diagnostics : NWC2MusicXML::Diagnostics  (optional)
+    diagnostics : Music::NWC2MusicXML::Diagnostics  (optional)
 
 =head4 Output
 
-    NWC2MusicXML::NWC object
+    Music::NWC2MusicXML::NWC object
 
 =head3 FORMAL SPECIFICATION
 
@@ -160,7 +160,7 @@ sub new {
 
 Read a C<.nwc> binary file from disk and return its NWCTXT representation.
 
-Can be called as a class method (C<< NWC2MusicXML::NWC->read($file) >>)
+Can be called as a class method (C<< Music::NWC2MusicXML::NWC->read($file) >>)
 or as an instance method.
 
 =head3 Purpose
@@ -186,7 +186,7 @@ Reads from disk.  Croaks on any I/O or format error.
 
 =head3 Usage Example
 
-    my $nwctxt = NWC2MusicXML::NWC->read('Pilgrim.nwc');
+    my $nwctxt = Music::NWC2MusicXML::NWC->read('Pilgrim.nwc');
 
 =head3 API SPECIFICATION
 
@@ -276,7 +276,7 @@ None (no I/O).  Croaks on any format or decompression error.
 
 =head3 Usage Example
 
-    my $nwctxt = NWC2MusicXML::NWC->decode($binary_blob);
+    my $nwctxt = Music::NWC2MusicXML::NWC->decode($binary_blob);
 
 =head3 API SPECIFICATION
 

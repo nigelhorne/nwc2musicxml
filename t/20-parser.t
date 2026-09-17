@@ -5,22 +5,22 @@ use Test::More;
 use Test::Exception;
 
 use lib 'lib';
-use NWC2MusicXML::Parser;
-use NWC2MusicXML::Event;
+use Music::NWC2MusicXML::Parser;
+use Music::NWC2MusicXML::Event;
 
 # ---------------------------------------------------------------------------
 # Constructor
 # ---------------------------------------------------------------------------
 {
-	my $p = NWC2MusicXML::Parser->new;
-	isa_ok $p, 'NWC2MusicXML::Parser';
+	my $p = Music::NWC2MusicXML::Parser->new;
+	isa_ok $p, 'Music::NWC2MusicXML::Parser';
 }
 
 # ---------------------------------------------------------------------------
 # parse: empty / undef input
 # ---------------------------------------------------------------------------
 {
-	my $p = NWC2MusicXML::Parser->new;
+	my $p = Music::NWC2MusicXML::Parser->new;
 
 	throws_ok { $p->parse(undef) }
 		qr/empty/i, 'parse(undef) croaks';
@@ -33,7 +33,7 @@ use NWC2MusicXML::Event;
 # parse: missing header
 # ---------------------------------------------------------------------------
 {
-	my $p = NWC2MusicXML::Parser->new;
+	my $p = Music::NWC2MusicXML::Parser->new;
 
 	throws_ok { $p->parse("|SongInfo|Title:\"Test\"\n") }
 		qr/header/i, 'parse without NWCTXT header croaks';
@@ -43,14 +43,14 @@ use NWC2MusicXML::Event;
 # parse: minimal valid NWCTXT (header only)
 # ---------------------------------------------------------------------------
 {
-	my $p     = NWC2MusicXML::Parser->new;
+	my $p     = Music::NWC2MusicXML::Parser->new;
 	my $score;
 
 	lives_ok {
 		$score = $p->parse("!NoteWorthyComposer(2.751)\n");
 	} 'header-only NWCTXT parses without exception';
 
-	isa_ok $score, 'NWC2MusicXML::Score';
+	isa_ok $score, 'Music::NWC2MusicXML::Score';
 	is $score->nwc_version, '2.751', 'version extracted from header';
 	is $score->staff_count, 0, 'no staves in header-only score';
 }
@@ -64,7 +64,7 @@ use NWC2MusicXML::Event;
 		'|SongInfo|Title:"To a Pilgrim"|Author:"Trad, Arr Nigel Horne"',
 		;
 
-	my $score = NWC2MusicXML::Parser->new->parse($nwctxt);
+	my $score = Music::NWC2MusicXML::Parser->new->parse($nwctxt);
 	is $score->metadata->{Title},  'To a Pilgrim',         'Title parsed';
 	is $score->metadata->{Author}, 'Trad, Arr Nigel Horne', 'Author parsed';
 }
@@ -78,7 +78,7 @@ use NWC2MusicXML::Event;
 		'|AddStaff|Name:"Violin I"|Group:"Standard"',
 		;
 
-	my $score = NWC2MusicXML::Parser->new->parse($nwctxt);
+	my $score = Music::NWC2MusicXML::Parser->new->parse($nwctxt);
 	is $score->staff_count, 1, 'one staff added';
 	is $score->staves->[0]->name, 'Violin I', 'staff name parsed';
 }
@@ -93,7 +93,7 @@ use NWC2MusicXML::Event;
 		'|Clef|Type:Treble',
 		;
 
-	my $score = NWC2MusicXML::Parser->new->parse($nwctxt);
+	my $score = Music::NWC2MusicXML::Parser->new->parse($nwctxt);
 	is $score->staves->[0]->initial_clef, 'Treble',
 		'initial clef stored on staff';
 }
@@ -108,7 +108,7 @@ use NWC2MusicXML::Event;
 		'|Key|Signature:Bb|Tonic:D',
 		;
 
-	my $score  = NWC2MusicXML::Parser->new->parse($nwctxt);
+	my $score  = Music::NWC2MusicXML::Parser->new->parse($nwctxt);
 	my $key    = $score->staves->[0]->initial_key;
 	is $key->{signature}, 'Bb',  'key signature stored';
 	is $key->{fifths},    -1,    'fifths value correct for Bb (1 flat accidental)';
@@ -124,7 +124,7 @@ use NWC2MusicXML::Event;
 		'|TimeSig|Signature:4/4',
 		;
 
-	my $score = NWC2MusicXML::Parser->new->parse($nwctxt);
+	my $score = Music::NWC2MusicXML::Parser->new->parse($nwctxt);
 	my $ts    = $score->staves->[0]->initial_timesig;
 	is $ts->{beats},     4, 'beats=4';
 	is $ts->{beat_type}, 4, 'beat-type=4';
@@ -141,7 +141,7 @@ use NWC2MusicXML::Event;
 		'|Tempo|Tempo:112|Pos:7',
 		;
 
-	my $score  = NWC2MusicXML::Parser->new->parse($nwctxt);
+	my $score  = Music::NWC2MusicXML::Parser->new->parse($nwctxt);
 	my $events = $score->staves->[0]->events;
 	my ($tempo) = grep { $_->type eq 'Tempo' } @$events;
 	ok defined $tempo, 'Tempo event created';
@@ -159,7 +159,7 @@ use NWC2MusicXML::Event;
 		;
 
 	my $score;
-	lives_ok { $score = NWC2MusicXML::Parser->new->parse($nwctxt) }
+	lives_ok { $score = Music::NWC2MusicXML::Parser->new->parse($nwctxt) }
 		'unknown record type does not croak';
 
 	my $events = $score->staves->[0]->events;
@@ -172,13 +172,13 @@ use NWC2MusicXML::Event;
 # Event: rational duration helpers
 # ---------------------------------------------------------------------------
 {
-	my $r = NWC2MusicXML::Event->rational_from_nwc_duration('4th', 0);
+	my $r = Music::NWC2MusicXML::Event->rational_from_nwc_duration('4th', 0);
 	is_deeply $r, [1, 1], 'quarter note = 1/1';
 
-	my $dotted = NWC2MusicXML::Event->rational_from_nwc_duration('4th', 1);
+	my $dotted = Music::NWC2MusicXML::Event->rational_from_nwc_duration('4th', 1);
 	is_deeply $dotted, [3, 2], 'dotted quarter = 3/2';
 
-	my $eighth = NWC2MusicXML::Event->rational_from_nwc_duration('8th', 0);
+	my $eighth = Music::NWC2MusicXML::Event->rational_from_nwc_duration('8th', 0);
 	is_deeply $eighth, [1, 2], 'eighth note = 1/2';
 }
 

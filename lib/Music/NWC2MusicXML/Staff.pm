@@ -1,4 +1,4 @@
-package NWC2MusicXML::Staff;
+package Music::NWC2MusicXML::Staff;
 
 use strict;
 use warnings;
@@ -10,16 +10,16 @@ use Carp qw(croak carp);
 use Readonly;
 use Params::Validate qw(validate_with SCALAR HASHREF ARRAYREF);
 use Params::Get;
-use NWC2MusicXML::Event;
+use Music::NWC2MusicXML::Event;
 
 Readonly::Hash my %MESSAGES => (
-	error_bad_event  => 'add_event: argument must be a NWC2MusicXML::Event, got: %s',
+	error_bad_event  => 'add_event: argument must be a Music::NWC2MusicXML::Event, got: %s',
 	error_internal   => 'Internal error: %s',
 );
 
 =head1 NAME
 
-NWC2MusicXML::Staff - Internal representation of a single NWC staff.
+Music::NWC2MusicXML::Staff - Internal representation of a single NWC staff.
 
 =head1 VERSION
 
@@ -27,9 +27,9 @@ NWC2MusicXML::Staff - Internal representation of a single NWC staff.
 
 =head1 SYNOPSIS
 
-    use NWC2MusicXML::Staff;
+    use Music::NWC2MusicXML::Staff;
 
-    my $staff = NWC2MusicXML::Staff->new(
+    my $staff = Music::NWC2MusicXML::Staff->new(
         name       => 'Violin I',
         group      => 'Standard',
         instrument => { name => 'String Ensemble 1', patch => 48 },
@@ -40,9 +40,9 @@ NWC2MusicXML::Staff - Internal representation of a single NWC staff.
 
 =head1 DESCRIPTION
 
-C<NWC2MusicXML::Staff> holds all information about one NWC staff: its
+C<Music::NWC2MusicXML::Staff> holds all information about one NWC staff: its
 properties (name, visibility, number of lines), instrument data, and the
-ordered sequence of C<NWC2MusicXML::Event> objects that constitute its
+ordered sequence of C<Music::NWC2MusicXML::Event> objects that constitute its
 musical content.
 
 The event list is in parse order.  MusicXML generation iterates over it
@@ -196,7 +196,7 @@ sub set_initial_timesig {
 
 =head2 add_event
 
-Append a C<NWC2MusicXML::Event> to this staff's event list.
+Append a C<Music::NWC2MusicXML::Event> to this staff's event list.
 
 =head3 Purpose
 
@@ -207,7 +207,7 @@ records belonging to this staff.
 
 =over 4
 
-=item C<$event> -- a blessed C<NWC2MusicXML::Event> object (required).
+=item C<$event> -- a blessed C<Music::NWC2MusicXML::Event> object (required).
 
 =back
 
@@ -222,24 +222,24 @@ Appends to C<_events> array.
 =head3 Usage Example
 
     $staff->add_event(
-        NWC2MusicXML::Event->new(type => 'Note', ...)
+        Music::NWC2MusicXML::Event->new(type => 'Note', ...)
     );
 
 =head3 API SPECIFICATION
 
 =head4 Input
 
-    $event : NWC2MusicXML::Event (required)
+    $event : Music::NWC2MusicXML::Event (required)
 
 =head4 Output
 
-    $self (NWC2MusicXML::Staff)
+    $self (Music::NWC2MusicXML::Staff)
 
 =head3 MESSAGES
 
 | Code           | Meaning                                | Resolution                      |
 |----------------|----------------------------------------|---------------------------------|
-| error_bad_event| Argument is not a NWC2MusicXML::Event  | Construct event before adding   |
+| error_bad_event| Argument is not a Music::NWC2MusicXML::Event  | Construct event before adding   |
 
 =head3 FORMAL SPECIFICATION
 
@@ -256,18 +256,18 @@ Appends to C<_events> array.
 sub add_event {
 	my ($self, $event) = @_;
 	croak _fmt_msg('error_bad_event', ref($event) // 'SCALAR')
-		unless ref($event) && $event->isa('NWC2MusicXML::Event');
+		unless ref($event) && $event->isa('Music::NWC2MusicXML::Event');
 	push @{ $self->{_events} }, $event;
 	return $self;
 }
 
 =head2 events
 
-Return an arrayref of all C<NWC2MusicXML::Event> objects in parse order.
+Return an arrayref of all C<Music::NWC2MusicXML::Event> objects in parse order.
 
 =head3 Returns
 
-Arrayref of C<NWC2MusicXML::Event>.
+Arrayref of C<Music::NWC2MusicXML::Event>.
 
 =head3 API SPECIFICATION
 
@@ -277,7 +277,7 @@ Arrayref of C<NWC2MusicXML::Event>.
 
 =head4 Output
 
-    ARRAYREF of NWC2MusicXML::Event
+    ARRAYREF of Music::NWC2MusicXML::Event
 
 =cut
 

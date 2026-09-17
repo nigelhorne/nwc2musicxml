@@ -1,4 +1,4 @@
-package NWC2MusicXML::Parser;
+package Music::NWC2MusicXML::Parser;
 
 use strict;
 use warnings;
@@ -10,9 +10,9 @@ use Carp qw(croak carp);
 use Readonly;
 use Params::Validate qw(validate_with SCALAR HASHREF);
 use Params::Get;
-use NWC2MusicXML::Score;
-use NWC2MusicXML::Staff;
-use NWC2MusicXML::Event;
+use Music::NWC2MusicXML::Score;
+use Music::NWC2MusicXML::Staff;
+use Music::NWC2MusicXML::Event;
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -58,7 +58,7 @@ Readonly::Hash my %MESSAGES => (
 
 =head1 NAME
 
-NWC2MusicXML::Parser - NWCTXT text parser producing an internal score
+Music::NWC2MusicXML::Parser - NWCTXT text parser producing an internal score
 representation.
 
 =head1 VERSION
@@ -67,15 +67,15 @@ representation.
 
 =head1 SYNOPSIS
 
-    use NWC2MusicXML::Parser;
+    use Music::NWC2MusicXML::Parser;
 
-    my $parser = NWC2MusicXML::Parser->new;
+    my $parser = Music::NWC2MusicXML::Parser->new;
     my $score  = $parser->parse($nwctxt);
 
 =head1 DESCRIPTION
 
-C<NWC2MusicXML::Parser> accepts the NWCTXT string produced by
-C<NWC2MusicXML::NWC> and returns a C<NWC2MusicXML::Score> object.
+C<Music::NWC2MusicXML::Parser> accepts the NWCTXT string produced by
+C<Music::NWC2MusicXML::NWC> and returns a C<Music::NWC2MusicXML::Score> object.
 
 The internal representation is completely independent of MusicXML so that
 parsing and MusicXML generation can be tested separately.
@@ -117,23 +117,23 @@ Named parameters:
 
 =over 4
 
-=item C<diagnostics> -- a C<NWC2MusicXML::Diagnostics> instance (optional).
+=item C<diagnostics> -- a C<Music::NWC2MusicXML::Diagnostics> instance (optional).
 
 =back
 
 =head3 Returns
 
-Blessed C<NWC2MusicXML::Parser> object.
+Blessed C<Music::NWC2MusicXML::Parser> object.
 
 =head3 API SPECIFICATION
 
 =head4 Input
 
-    diagnostics : NWC2MusicXML::Diagnostics  (optional)
+    diagnostics : Music::NWC2MusicXML::Diagnostics  (optional)
 
 =head4 Output
 
-    NWC2MusicXML::Parser object
+    Music::NWC2MusicXML::Parser object
 
 =head3 FORMAL SPECIFICATION
 
@@ -171,7 +171,7 @@ sub new {
 =head2 parse
 
 Parse a complete NWCTXT string and return the corresponding
-C<NWC2MusicXML::Score>.
+C<Music::NWC2MusicXML::Score>.
 
 =head3 Purpose
 
@@ -190,7 +190,7 @@ Score object.
 
 =head3 Returns
 
-A C<NWC2MusicXML::Score> object.
+A C<Music::NWC2MusicXML::Score> object.
 
 =head3 Side Effects
 
@@ -199,7 +199,7 @@ Issues warnings via C<diagnostics> for non-fatal issues (e.g. unknown records).
 
 =head3 Usage Example
 
-    my $score = NWC2MusicXML::Parser->new->parse($nwctxt);
+    my $score = Music::NWC2MusicXML::Parser->new->parse($nwctxt);
 
 =head3 API SPECIFICATION
 
@@ -209,7 +209,7 @@ Issues warnings via C<diagnostics> for non-fatal issues (e.g. unknown records).
 
 =head4 Output
 
-    NWC2MusicXML::Score
+    Music::NWC2MusicXML::Score
 
 =head3 MESSAGES
 
@@ -240,7 +240,7 @@ sub parse {
 		unless defined $nwctxt && length $nwctxt;
 
 	# Initialise fresh parse state for each call, enabling object reuse.
-	$self->{_score}        = NWC2MusicXML::Score->new;
+	$self->{_score}        = Music::NWC2MusicXML::Score->new;
 	$self->{_line_no}      = 0;
 	$self->{_record_count} = 0;
 
@@ -329,7 +329,7 @@ sub _dispatch_record {
 		if (defined $staff) {
 			# Unknown type within a staff: record and warn.
 			$self->_warn_unknown($type);
-			$self->_append_event(NWC2MusicXML::Event->new(
+			$self->_append_event(Music::NWC2MusicXML::Event->new(
 				type      => 'UnsupportedEvent',
 				nwc_label => $type,
 				data      => { raw => join('|', $type, @$fields) },
@@ -429,7 +429,7 @@ sub _handle_pg_setup {
 sub _handle_add_staff {
 	my ($self, $fields) = @_;
 	my $h = $self->_fields_to_hash($fields);
-	my $staff = NWC2MusicXML::Staff->new(
+	my $staff = Music::NWC2MusicXML::Staff->new(
 		name  => $h->{Name}  // 'Staff',
 		group => $h->{Group} // 'Standard',
 	);
@@ -474,7 +474,7 @@ sub _handle_clef {
 		# Before any events: this is the initial clef for the staff
 		$staff->set_initial_clef($type);
 	} else {
-		$self->_append_event(NWC2MusicXML::Event->new(
+		$self->_append_event(Music::NWC2MusicXML::Event->new(
 			type => 'Clef',
 			data => { nwc_clef => $type },
 		));
@@ -496,7 +496,7 @@ sub _handle_key {
 	if (!$staff->event_count) {
 		$staff->set_initial_key($key_data);
 	} else {
-		$self->_append_event(NWC2MusicXML::Event->new(
+		$self->_append_event(Music::NWC2MusicXML::Event->new(
 			type => 'Key',
 			data => $key_data,
 		));
@@ -520,7 +520,7 @@ sub _handle_time_sig {
 	if (!$staff->event_count) {
 		$staff->set_initial_timesig($ts_data);
 	} else {
-		$self->_append_event(NWC2MusicXML::Event->new(
+		$self->_append_event(Music::NWC2MusicXML::Event->new(
 			type => 'TimeSig',
 			data => $ts_data,
 		));
@@ -534,7 +534,7 @@ sub _handle_time_sig {
 sub _handle_tempo {
 	my ($self, $fields) = @_;
 	my $h = $self->_fields_to_hash($fields);
-	$self->_append_event(NWC2MusicXML::Event->new(
+	$self->_append_event(Music::NWC2MusicXML::Event->new(
 		type => 'Tempo',
 		data => { bpm => $h->{Tempo} // 120 },
 	));
@@ -545,9 +545,9 @@ sub _handle_note {
 	my $h = $self->_fields_to_hash($fields);
 
 	my ($base_dur, $dots, $triplet, $artic) = _parse_dur_tokens($h->{Dur} // '4th');
-	my $rational = NWC2MusicXML::Event->rational_from_nwc_duration($base_dur, $dots);
+	my $rational = Music::NWC2MusicXML::Event->rational_from_nwc_duration($base_dur, $dots);
 
-	$self->_append_event(NWC2MusicXML::Event->new(
+	$self->_append_event(Music::NWC2MusicXML::Event->new(
 		type     => 'Note',
 		duration => $rational,
 		data     => {
@@ -566,9 +566,9 @@ sub _handle_rest {
 	my $h = $self->_fields_to_hash($fields);
 
 	my ($base_dur, $dots) = _parse_dur_tokens($h->{Dur} // '4th');
-	my $rational = NWC2MusicXML::Event->rational_from_nwc_duration($base_dur, $dots);
+	my $rational = Music::NWC2MusicXML::Event->rational_from_nwc_duration($base_dur, $dots);
 
-	$self->_append_event(NWC2MusicXML::Event->new(
+	$self->_append_event(Music::NWC2MusicXML::Event->new(
 		type     => 'Rest',
 		duration => $rational,
 		data     => {
@@ -584,13 +584,13 @@ sub _handle_chord {
 	my $h = $self->_fields_to_hash($fields);
 
 	my ($base_dur, $dots, $triplet, $artic) = _parse_dur_tokens($h->{Dur} // '4th');
-	my $rational = NWC2MusicXML::Event->rational_from_nwc_duration($base_dur, $dots);
+	my $rational = Music::NWC2MusicXML::Event->rational_from_nwc_duration($base_dur, $dots);
 
 	# Pos field contains a comma-separated list of position strings.
 	# Each entry: optional accidental prefix (#/b/n/##/bb/x) + signed integer + optional ^ (tie)
 	my @positions = split /,/, ($h->{Pos} // '0');
 
-	$self->_append_event(NWC2MusicXML::Event->new(
+	$self->_append_event(Music::NWC2MusicXML::Event->new(
 		type     => 'Chord',
 		duration => $rational,
 		data     => {
@@ -609,7 +609,7 @@ sub _handle_bar {
 	my $h = $self->_fields_to_hash($fields);
 	# NWC bar records carry an optional Style named field; plain |Bar| has none.
 	my $style = $h->{Style} // $h->{_positional} // 'normal';
-	$self->_append_event(NWC2MusicXML::Event->new(
+	$self->_append_event(Music::NWC2MusicXML::Event->new(
 		type => 'Bar',
 		data => { style => $style },
 	));
@@ -651,7 +651,7 @@ sub _parse_opts {
 sub _handle_dynamic {
 	my ($self, $fields) = @_;
 	my $h = $self->_fields_to_hash($fields);
-	$self->_append_event(NWC2MusicXML::Event->new(
+	$self->_append_event(Music::NWC2MusicXML::Event->new(
 		type => 'Dynamic',
 		data => { marking => $h->{Style} // $h->{_positional} // '' },
 	));
@@ -660,7 +660,7 @@ sub _handle_dynamic {
 sub _handle_text {
 	my ($self, $fields) = @_;
 	my $h = $self->_fields_to_hash($fields);
-	$self->_append_event(NWC2MusicXML::Event->new(
+	$self->_append_event(Music::NWC2MusicXML::Event->new(
 		type => 'Text',
 		data => { text => $h->{Text} // '', placement => $h->{Placement} // '' },
 	));
@@ -669,7 +669,7 @@ sub _handle_text {
 sub _handle_lyric {
 	my ($self, $fields) = @_;
 	my $h = $self->_fields_to_hash($fields);
-	$self->_append_event(NWC2MusicXML::Event->new(
+	$self->_append_event(Music::NWC2MusicXML::Event->new(
 		type => 'Lyric',
 		data => { text => $h->{Text} // '', verse => $h->{Verse} // 1 },
 	));
@@ -677,7 +677,7 @@ sub _handle_lyric {
 
 sub _handle_tie {
 	my ($self, $fields) = @_;
-	$self->_append_event(NWC2MusicXML::Event->new(
+	$self->_append_event(Music::NWC2MusicXML::Event->new(
 		type => 'Tie',
 		data => {},
 	));
@@ -686,7 +686,7 @@ sub _handle_tie {
 sub _handle_slur {
 	my ($self, $fields) = @_;
 	my $h = $self->_fields_to_hash($fields);
-	$self->_append_event(NWC2MusicXML::Event->new(
+	$self->_append_event(Music::NWC2MusicXML::Event->new(
 		type => 'Slur',
 		data => { _raw_fields => $h },
 	));
@@ -695,7 +695,7 @@ sub _handle_slur {
 sub _handle_beam {
 	my ($self, $fields) = @_;
 	my $h = $self->_fields_to_hash($fields);
-	$self->_append_event(NWC2MusicXML::Event->new(
+	$self->_append_event(Music::NWC2MusicXML::Event->new(
 		type => 'Beam',
 		data => { _raw_fields => $h },
 	));
@@ -704,7 +704,7 @@ sub _handle_beam {
 sub _handle_tuplet {
 	my ($self, $fields) = @_;
 	my $h = $self->_fields_to_hash($fields);
-	$self->_append_event(NWC2MusicXML::Event->new(
+	$self->_append_event(Music::NWC2MusicXML::Event->new(
 		type => 'Tuplet',
 		data => { _raw_fields => $h },
 	));
@@ -713,7 +713,7 @@ sub _handle_tuplet {
 sub _handle_instrument_change {
 	my ($self, $fields) = @_;
 	my $h = $self->_fields_to_hash($fields);
-	$self->_append_event(NWC2MusicXML::Event->new(
+	$self->_append_event(Music::NWC2MusicXML::Event->new(
 		type => 'Instrument',
 		data => { name => $h->{Name} // '', patch => $h->{Patch} // 0 },
 	));
@@ -722,7 +722,7 @@ sub _handle_instrument_change {
 sub _handle_flow_control {
 	my ($self, $fields) = @_;
 	my $h = $self->_fields_to_hash($fields);
-	$self->_append_event(NWC2MusicXML::Event->new(
+	$self->_append_event(Music::NWC2MusicXML::Event->new(
 		type => 'FlowControl',
 		data => { directive => $h->{_positional} // '', extra => $h },
 	));
@@ -736,7 +736,7 @@ sub _handle_tempo_variance {
 	# have no single MusicXML element; the closest representation is <words>.
 	# Phase 4 will emit these as proper <sound> acceleration / direction elements.
 	# We store them as Text events so the data is preserved in the IR.
-	$self->_append_event(NWC2MusicXML::Event->new(
+	$self->_append_event(Music::NWC2MusicXML::Event->new(
 		type => 'Text',
 		data => {
 			text      => $h->{Style} // '',
@@ -761,7 +761,7 @@ sub _handle_rest_chord {
 	# plays.  Full handling requires voice assignment (Phase 4).
 	# Stored as UnsupportedEvent so the raw field data is preserved for
 	# diagnostics and future implementation.
-	$self->_append_event(NWC2MusicXML::Event->new(
+	$self->_append_event(Music::NWC2MusicXML::Event->new(
 		type      => 'UnsupportedEvent',
 		nwc_label => 'RestChord',
 		data      => { _raw_fields => $h },

@@ -1,4 +1,4 @@
-package NWC2MusicXML::MusicXML;
+package Music::NWC2MusicXML::MusicXML;
 
 use strict;
 use warnings;
@@ -10,7 +10,7 @@ use Carp qw(croak carp);
 use Readonly;
 use Params::Validate qw(validate_with SCALAR HASHREF);
 use Params::Get;
-use NWC2MusicXML::Score;
+use Music::NWC2MusicXML::Score;
 
 # ---------------------------------------------------------------------------
 # MusicXML structural constants
@@ -112,7 +112,7 @@ Readonly::Hash my %NWC_TYPE_MAP => (
 );
 
 Readonly::Hash my %MESSAGES => (
-	error_bad_score      => 'generate: argument must be a NWC2MusicXML::Score',
+	error_bad_score      => 'generate: argument must be a Music::NWC2MusicXML::Score',
 	error_no_staves      => 'Score contains no staves -- cannot generate MusicXML',
 	error_write_failed   => 'Cannot write to output: %s',
 	error_internal       => 'Internal error: %s',
@@ -124,7 +124,7 @@ Readonly::Hash my %MESSAGES => (
 
 =head1 NAME
 
-NWC2MusicXML::MusicXML - MusicXML generator.
+Music::NWC2MusicXML::MusicXML - MusicXML generator.
 
 =head1 VERSION
 
@@ -132,16 +132,16 @@ NWC2MusicXML::MusicXML - MusicXML generator.
 
 =head1 SYNOPSIS
 
-    use NWC2MusicXML::MusicXML;
+    use Music::NWC2MusicXML::MusicXML;
 
-    my $gen = NWC2MusicXML::MusicXML->new;
+    my $gen = Music::NWC2MusicXML::MusicXML->new;
     my $xml = $gen->generate($score);
     print $xml;
 
 =head1 DESCRIPTION
 
-C<NWC2MusicXML::MusicXML> accepts a C<NWC2MusicXML::Score> object (the
-internal representation produced by C<NWC2MusicXML::Parser>) and emits a
+C<Music::NWC2MusicXML::MusicXML> accepts a C<Music::NWC2MusicXML::Score> object (the
+internal representation produced by C<Music::NWC2MusicXML::Parser>) and emits a
 well-formed, UTF-8-encoded MusicXML 4.0 document.
 
 The generator is deliberately isolated from the parser: it knows nothing
@@ -178,7 +178,7 @@ Named parameters:
 
 =over 4
 
-=item C<diagnostics> -- a C<NWC2MusicXML::Diagnostics> instance (optional).
+=item C<diagnostics> -- a C<Music::NWC2MusicXML::Diagnostics> instance (optional).
 
 =item C<indent>      -- indentation string, default two spaces (optional).
 
@@ -186,18 +186,18 @@ Named parameters:
 
 =head3 Returns
 
-Blessed C<NWC2MusicXML::MusicXML> object.
+Blessed C<Music::NWC2MusicXML::MusicXML> object.
 
 =head3 API SPECIFICATION
 
 =head4 Input
 
-    diagnostics : NWC2MusicXML::Diagnostics  (optional)
+    diagnostics : Music::NWC2MusicXML::Diagnostics  (optional)
     indent      : SCALAR                     (optional, default '  ')
 
 =head4 Output
 
-    NWC2MusicXML::MusicXML object
+    Music::NWC2MusicXML::MusicXML object
 
 =head3 FORMAL SPECIFICATION
 
@@ -234,7 +234,7 @@ sub new {
 
 =head2 generate
 
-Generate a MusicXML document from a C<NWC2MusicXML::Score> and return it as
+Generate a MusicXML document from a C<Music::NWC2MusicXML::Score> and return it as
 a UTF-8 string.
 
 =head3 Purpose
@@ -247,7 +247,7 @@ parts.
 
 =over 4
 
-=item C<$score> -- a C<NWC2MusicXML::Score> object (required).
+=item C<$score> -- a C<Music::NWC2MusicXML::Score> object (required).
 
 =back
 
@@ -271,7 +271,7 @@ Croaks on fatal structural errors.
 
 =head4 Input
 
-    $score : NWC2MusicXML::Score (required)
+    $score : Music::NWC2MusicXML::Score (required)
 
 =head4 Output
 
@@ -300,7 +300,7 @@ sub generate {
 	my ($self, $score) = @_;
 
 	croak _fmt_msg('error_bad_score')
-		unless ref($score) && $score->isa('NWC2MusicXML::Score');
+		unless ref($score) && $score->isa('Music::NWC2MusicXML::Score');
 
 	croak _fmt_msg('error_no_staves')
 		unless $score->staff_count > 0;
@@ -355,7 +355,7 @@ sub _emit_identification {
 		. _xml_escape($meta->{Copyright} // '') . '</rights>'
 		if $meta->{Copyright};
 	push @out, "${i}<encoding>";
-	push @out, "${i}${i}<software>NWC2MusicXML $VERSION</software>";
+	push @out, "${i}${i}<software>Music::NWC2MusicXML $VERSION</software>";
 	push @out, "${i}</encoding>";
 	push @out, '</identification>';
 	return @out;

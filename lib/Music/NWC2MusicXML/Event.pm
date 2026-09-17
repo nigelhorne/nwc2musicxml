@@ -1,4 +1,4 @@
-package NWC2MusicXML::Event;
+package Music::NWC2MusicXML::Event;
 
 use strict;
 use warnings;
@@ -70,7 +70,7 @@ Readonly::Hash my %MESSAGES => (
 
 =head1 NAME
 
-NWC2MusicXML::Event - Internal representation of a single NWC musical event
+Music::NWC2MusicXML::Event - Internal representation of a single NWC musical event
 or score metadata record.
 
 =head1 VERSION
@@ -79,10 +79,10 @@ or score metadata record.
 
 =head1 SYNOPSIS
 
-    use NWC2MusicXML::Event;
+    use Music::NWC2MusicXML::Event;
 
     # Musical event
-    my $note = NWC2MusicXML::Event->new(
+    my $note = Music::NWC2MusicXML::Event->new(
         type       => 'Note',
         start_time => [0, 1],   # rational: 0 quarter-notes from measure start
         duration   => [1, 1],   # rational: one quarter note
@@ -94,7 +94,7 @@ or score metadata record.
     );
 
     # Unsupported / unknown object
-    my $unknown = NWC2MusicXML::Event->new(
+    my $unknown = Music::NWC2MusicXML::Event->new(
         type      => 'UnsupportedEvent',
         nwc_label => 'SomeFutureObject',
         data      => { raw => '|SomeFutureObject|...' },
@@ -102,7 +102,7 @@ or score metadata record.
 
 =head1 DESCRIPTION
 
-C<NWC2MusicXML::Event> is the internal representation of one NWC record.
+C<Music::NWC2MusicXML::Event> is the internal representation of one NWC record.
 It covers both musical events (notes, rests, bars, dynamics, ...) and
 score/staff metadata (SongInfo, StaffProperties, ...).
 
@@ -186,7 +186,7 @@ C<grace>.
 
 =head3 Returns
 
-A blessed C<NWC2MusicXML::Event> object.
+A blessed C<Music::NWC2MusicXML::Event> object.
 
 =head3 Side Effects
 
@@ -194,7 +194,7 @@ None.
 
 =head3 Usage Example
 
-    my $rest = NWC2MusicXML::Event->new(
+    my $rest = Music::NWC2MusicXML::Event->new(
         type       => 'Rest',
         start_time => [1, 1],
         duration   => [1, 2],   # eighth rest
@@ -212,7 +212,7 @@ None.
 
 =head4 Output
 
-    NWC2MusicXML::Event object
+    Music::NWC2MusicXML::Event object
 
 =head3 MESSAGES
 

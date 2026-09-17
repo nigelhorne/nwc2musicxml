@@ -5,21 +5,21 @@ use Test::More;
 use Test::Exception;
 
 use lib 'lib';
-use NWC2MusicXML::NWC;
+use Music::NWC2MusicXML::NWC;
 
 # ---------------------------------------------------------------------------
 # Constructor
 # ---------------------------------------------------------------------------
 {
-	my $nwc = new_ok('NWC2MusicXML::NWC');
-	isa_ok $nwc, 'NWC2MusicXML::NWC', 'constructor returns object';
+	my $nwc = new_ok('Music::NWC2MusicXML::NWC');
+	isa_ok $nwc, 'Music::NWC2MusicXML::NWC', 'constructor returns object';
 }
 
 # ---------------------------------------------------------------------------
 # decode: empty / undef input
 # ---------------------------------------------------------------------------
 {
-	my $nwc = NWC2MusicXML::NWC->new;
+	my $nwc = Music::NWC2MusicXML::NWC->new;
 
 	throws_ok { $nwc->decode(undef) }
 		qr/truncated/i,
@@ -38,7 +38,7 @@ use NWC2MusicXML::NWC;
 # decode: wrong magic
 # ---------------------------------------------------------------------------
 {
-	my $nwc  = NWC2MusicXML::NWC->new;
+	my $nwc  = Music::NWC2MusicXML::NWC->new;
 	my $fake = 'NOTANWCFILE' . "\x00" x 64;
 
 	throws_ok { $nwc->decode($fake) }
@@ -50,7 +50,7 @@ use NWC2MusicXML::NWC;
 # read: non-existent file
 # ---------------------------------------------------------------------------
 {
-	my $nwc = NWC2MusicXML::NWC->new;
+	my $nwc = Music::NWC2MusicXML::NWC->new;
 
 	throws_ok { $nwc->read('/tmp/__does_not_exist_nwc2musicxml__.nwc') }
 		qr/cannot read file|not found/i,
@@ -69,7 +69,7 @@ SKIP: {
 	skip 'Corpus .nwc files not present in t/corpus/', 2
 		unless @corpus == 2;
 
-	my $nwc = NWC2MusicXML::NWC->new;
+	my $nwc = Music::NWC2MusicXML::NWC->new;
 
 	for my $file (@corpus) {
 		my $nwctxt;
