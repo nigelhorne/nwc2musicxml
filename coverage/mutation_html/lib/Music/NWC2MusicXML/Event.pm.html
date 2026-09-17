@@ -293,10 +293,10 @@ a.intra-dot:hover { color: #7700bb; }
 <div class="nav"><a href="../../../../index.html">Index</a>
  <a href="NWC.pm.html">Next ➡</a></div><div class='summary'>
 <strong>Structural Coverage (Approximate)</strong><p>
-TER1 (Statement): 98.55%<br>
-TER2 (Branch): 75.00%<br>
+TER1 (Statement): 98.57%<br>
+TER2 (Branch): 71.43%<br>
 TER3 (LCSAJ): 100.0% (2/2)<br>
-Approximate LCSAJ segments: 13<br>
+Approximate LCSAJ segments: 15<br>
 </div>
 
     <div class="legend">
@@ -645,7 +645,7 @@ Approximate LCSAJ segments: 13<br>
 </span><span class="">  304: 
 </span><span class="">  305: =cut
 </span><span class="">  306: 
-</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  307: sub start_time { return $_[0]-&gt;{_start_time} }
+</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  307: sub start_time { return $_[0]-&gt;{_start_time} }
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
@@ -795,82 +795,83 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </span><span class="">  433: 
 </span><span class="">  434: sub rational_to_float {
 </span><span class="">  435: 	my ($class, $r) = @_;
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  436: 	return $r-&gt;[0] / $r-&gt;[1];
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  437: }
-</span><span class="">  438: 
-</span><span class="">  439: # ---------------------------------------------------------------------------
-</span><span class="">  440: # Private helpers
-</span><span class="">  441: # ---------------------------------------------------------------------------
-</span><span class="">  442: 
-</span><span class="">  443: sub _validate_rational {
-</span><span class="">  444: 	my ($r) = @_;
-</span><span class="">  445: 	croak _fmt_msg(&#39;error_bad_rational&#39;)
-</span><span class="">  446: 		unless ref $r eq &#39;ARRAY&#39;
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  447: 		&amp;&amp; @$r == 2
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  448: 		&amp;&amp; $r-&gt;[0] =~ /^\d+$/
-</span><span class="">  449: 		&amp;&amp; $r-&gt;[1] =~ /^[1-9]\d*$/;
-</span><span class="">  450: 	return;
-</span><span class="">  451: }
-</span><span class="">  452: 
-</span><span class="">  453: sub _add_rationals {
-</span><span class="">  454: 	my ($r1, $r2) = @_;
-</span><span class="">  455: 	my $num = $r1-&gt;[0] * $r2-&gt;[1] + $r2-&gt;[0] * $r1-&gt;[1];
-</span><span class="">  456: 	my $den = $r1-&gt;[1] * $r2-&gt;[1];
-</span><span class="">  457: 	return [$num, $den];
-</span><span class="">  458: }
-</span><span class="">  459: 
-</span><span class="">  460: sub _reduce_rational {
-</span><span class="">  461: 	my ($r) = @_;
-</span><span class="">  462: 	my $g = _gcd($r-&gt;[0], $r-&gt;[1]);
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  463: 	return $g ? [$r-&gt;[0] / $g, $r-&gt;[1] / $g] : [0, 1];
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  464: }
-</span><span class="">  465: 
-</span><span class="">  466: sub _gcd {
-</span><span class="">  467: 	my ($a, $b) = @_;
-</span><span class="">  468: 	($a, $b) = ($b, $a % $b) while $b;
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  469: 	return $a;
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  470: }
-</span><span class="">  471: 
-</span><span class="">  472: sub _fmt_msg {
-</span><span class="">  473: 	my ($key, @args) = @_;
-</span><span class="">  474: 	croak &quot;Unknown message key: $key&quot; unless exists $MESSAGES{$key};
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  475: 	return sprintf $MESSAGES{$key}, @args;
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  476: }
-</span><span class="">  477: 
-</span><span class="">  478: 1;
-</span><span class="">  479: 
-</span><span class="">  480: __END__
-</span><span class="">  481: 
-</span><span class="">  482: =head1 DIAGNOSTICS
-</span><span class="">  483: 
-</span><span class="">  484: =head3 MESSAGES
-</span><span class="">  485: 
-</span><span class="">  486: | Code                 | Meaning                              | Resolution                  |
-</span><span class="">  487: |----------------------|--------------------------------------|-----------------------------|
-</span><span class="">  488: | error_unknown_type   | Unrecognised event type              | Will be stored as UnsupportedEvent |
-</span><span class="">  489: | error_bad_duration   | NWC duration name not in lookup table| Check parser input          |
-</span><span class="">  490: | error_bad_rational   | Rational arrayref malformed          | Use [$non-neg-int, $pos-int] |
-</span><span class="">  491: 
-</span><span class="">  492: =head1 LIMITATIONS
-</span><span class="">  493: 
-</span><span class="">  494: =over 4
-</span><span class="">  495: 
-</span><span class="">  496: =item * Double-dotted notes supported; triple-dotted are not.
-</span><span class="">  497: 
-</span><span class="">  498: =item * Tuplet time-modification is not computed here; the parser applies it to each affected event.
-</span><span class="">  499: 
-</span><span class="">  500: =back
-</span><span class="">  501: 
-</span><span class="">  502: =head1 AUTHOR
-</span><span class="">  503: 
-</span><span class="">  504: Nigel Horne C&lt;&lt; &lt;nigel.horne@gmail.com&gt; &gt;&gt;
-</span><span class="">  505: 
-</span><span class="">  506: =head1 LICENSE
-</span><span class="">  507: 
-</span><span class="">  508: This library is free software; you can redistribute it and/or modify it
-</span><span class="">  509: under the same terms as Perl itself.
-</span><span class="">  510: 
-</span><span class="">  511: =cut
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  436: 	croak _fmt_msg(&#39;error_bad_rational&#39;) unless ref $r eq &#39;ARRAY&#39; &amp;&amp; @$r == 2 &amp;&amp; $r-&gt;[1];
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  437: 	return $r-&gt;[0] / $r-&gt;[1];
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  438: }
+</span><span class="">  439: 
+</span><span class="">  440: # ---------------------------------------------------------------------------
+</span><span class="">  441: # Private helpers
+</span><span class="">  442: # ---------------------------------------------------------------------------
+</span><span class="">  443: 
+</span><span class="">  444: sub _validate_rational {
+</span><span class="">  445: 	my ($r) = @_;
+</span><span class="">  446: 	croak _fmt_msg(&#39;error_bad_rational&#39;)
+</span><span class="">  447: 		unless ref $r eq &#39;ARRAY&#39;
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  448: 		&amp;&amp; @$r == 2
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  449: 		&amp;&amp; $r-&gt;[0] =~ /^\d+$/
+</span><span class="">  450: 		&amp;&amp; $r-&gt;[1] =~ /^[1-9]\d*$/;
+</span><span class="">  451: 	return;
+</span><span class="">  452: }
+</span><span class="">  453: 
+</span><span class="">  454: sub _add_rationals {
+</span><span class="">  455: 	my ($r1, $r2) = @_;
+</span><span class="">  456: 	my $num = $r1-&gt;[0] * $r2-&gt;[1] + $r2-&gt;[0] * $r1-&gt;[1];
+</span><span class="">  457: 	my $den = $r1-&gt;[1] * $r2-&gt;[1];
+</span><span class="">  458: 	return [$num, $den];
+</span><span class="">  459: }
+</span><span class="">  460: 
+</span><span class="">  461: sub _reduce_rational {
+</span><span class="">  462: 	my ($r) = @_;
+</span><span class="">  463: 	my $g = _gcd($r-&gt;[0], $r-&gt;[1]);
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  464: 	return $g ? [$r-&gt;[0] / $g, $r-&gt;[1] / $g] : [0, 1];
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  465: }
+</span><span class="">  466: 
+</span><span class="">  467: sub _gcd {
+</span><span class="">  468: 	my ($a, $b) = @_;
+</span><span class="">  469: 	($a, $b) = ($b, $a % $b) while $b;
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  470: 	return $a;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  471: }
+</span><span class="">  472: 
+</span><span class="">  473: sub _fmt_msg {
+</span><span class="">  474: 	my ($key, @args) = @_;
+</span><span class="">  475: 	croak &quot;Unknown message key: $key&quot; unless exists $MESSAGES{$key};
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  476: 	return sprintf $MESSAGES{$key}, @args;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  477: }
+</span><span class="">  478: 
+</span><span class="">  479: 1;
+</span><span class="">  480: 
+</span><span class="">  481: __END__
+</span><span class="">  482: 
+</span><span class="">  483: =head1 DIAGNOSTICS
+</span><span class="">  484: 
+</span><span class="">  485: =head3 MESSAGES
+</span><span class="">  486: 
+</span><span class="">  487: | Code                 | Meaning                              | Resolution                  |
+</span><span class="">  488: |----------------------|--------------------------------------|-----------------------------|
+</span><span class="">  489: | error_unknown_type   | Unrecognised event type              | Will be stored as UnsupportedEvent |
+</span><span class="">  490: | error_bad_duration   | NWC duration name not in lookup table| Check parser input          |
+</span><span class="">  491: | error_bad_rational   | Rational arrayref malformed          | Use [$non-neg-int, $pos-int] |
+</span><span class="">  492: 
+</span><span class="">  493: =head1 LIMITATIONS
+</span><span class="">  494: 
+</span><span class="">  495: =over 4
+</span><span class="">  496: 
+</span><span class="">  497: =item * Double-dotted notes supported; triple-dotted are not.
+</span><span class="">  498: 
+</span><span class="">  499: =item * Tuplet time-modification is not computed here; the parser applies it to each affected event.
+</span><span class="">  500: 
+</span><span class="">  501: =back
+</span><span class="">  502: 
+</span><span class="">  503: =head1 AUTHOR
+</span><span class="">  504: 
+</span><span class="">  505: Nigel Horne C&lt;&lt; &lt;nigel.horne@gmail.com&gt; &gt;&gt;
+</span><span class="">  506: 
+</span><span class="">  507: =head1 LICENSE
+</span><span class="">  508: 
+</span><span class="">  509: This library is free software; you can redistribute it and/or modify it
+</span><span class="">  510: under the same terms as Perl itself.
+</span><span class="">  511: 
+</span><span class="">  512: =cut
 </span></pre>
 
 <script>
