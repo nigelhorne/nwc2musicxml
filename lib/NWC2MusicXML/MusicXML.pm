@@ -397,8 +397,10 @@ sub _emit_part {
 		}
 	}
 
-	# Flush any remaining events after the last bar line
-	if (@pending) {
+	# Flush remaining events after the last bar line, or emit an empty
+	# measure 1 when the staff has no events (ensures the attributes block
+	# -- divisions, key, time, clef -- is always written).
+	if (@pending || $measure_no == 1) {
 		push @out, $self->_emit_measure(
 			$measure_no, \@pending, $staff, $divisions, $first
 		);

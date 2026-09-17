@@ -317,21 +317,26 @@ sub _dispatch_record {
 		Tuplet          => \&_handle_tuplet,
 		Instrument      => \&_handle_instrument_change,
 		FlowControl     => \&_handle_flow_control,
+		TempoVariance   => \&_handle_tempo_variance,
+		Spacer          => \&_handle_spacer,
+		RestChord       => \&_handle_rest_chord,
 	);
 
 	if (exists $dispatch{$type}) {
 		$dispatch{$type}->($self, $fields);
 	} else {
-		$self->_warn_unknown($type);
-		# Only store as UnsupportedEvent if we have an active staff.
-		# Records such as |Editor| appear at score level before any AddStaff.
-		if (defined $self->{_score}->current_staff) {
+		my $staff = $self->{_score}->current_staff;
+		if (defined $staff) {
+			# Unknown type within a staff: record and warn.
+			$self->_warn_unknown($type);
 			$self->_append_event(NWC2MusicXML::Event->new(
 				type      => 'UnsupportedEvent',
 				nwc_label => $type,
 				data      => { raw => join('|', $type, @$fields) },
 			));
 		}
+		# else: score-level record (Editor, Font, PgMargins, ...) before any
+		# AddStaff -- silently skip; these are not musical events.
 	}
 }
 
@@ -654,6 +659,46 @@ sub _handle_flow_control {
 	$self->_append_event(NWC2MusicXML::Event->new(
 		type => 'FlowControl',
 		data => { directive => $h->{_positional} // '', extra => $h },
+	));
+}
+
+sub _handle_tempo_variance {
+	my ($self, $fields) = @_;
+	my $h = $self->_fields_to_hash($fields);
+
+	# TempoVariance records (Accelerando, Ritardando, Staccato, Breath, Caesura)
+	# have no single MusicXML element; the closest representation is <words>.
+	# Phase 4 will emit these as proper <sound> acceleration / direction elements.
+	# We store them as Text events so the data is preserved in the IR.
+	$self->_append_event(NWC2MusicXML::Event->new(
+		type => 'Text',
+		data => {
+			text      => $h->{Style} // '',
+			placement => $h->{Pos}   // '',
+			nwc_type  => 'TempoVariance',
+		},
+	));
+}
+
+sub _handle_spacer {
+	# Spacer is a graphical-layout hint with no MusicXML equivalent.
+	# Per the preservation principle (musical meaning > graphical appearance)
+	# it is silently discarded; no event, no warning.
+	return;
+}
+
+sub _handle_rest_chord {
+	my ($self, $fields) = @_;
+	my $h = $self->_fields_to_hash($fields);
+
+	# RestChord is a multi-voice construct: one layer rests while another
+	# plays.  Full handling requires voice assignment (Phase 4).
+	# Stored as UnsupportedEvent so the raw field data is preserved for
+	# diagnostics and future implementation.
+	$self->_append_event(NWC2MusicXML::Event->new(
+		type      => 'UnsupportedEvent',
+		nwc_label => 'RestChord',
+		data      => { _raw_fields => $h },
 	));
 }
 

@@ -111,7 +111,7 @@ use NWC2MusicXML::Event;
 	my $score  = NWC2MusicXML::Parser->new->parse($nwctxt);
 	my $key    = $score->staves->[0]->initial_key;
 	is $key->{signature}, 'Bb',  'key signature stored';
-	is $key->{fifths},    -2,    'fifths value correct for Bb';
+	is $key->{fifths},    -1,    'fifths value correct for Bb (1 flat accidental)';
 }
 
 # ---------------------------------------------------------------------------
