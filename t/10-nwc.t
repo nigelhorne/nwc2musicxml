@@ -11,7 +11,7 @@ use NWC2MusicXML::NWC;
 # Constructor
 # ---------------------------------------------------------------------------
 {
-	my $nwc = NWC2MusicXML::NWC->new;
+	my $nwc = new_ok('NWC2MusicXML::NWC');
 	isa_ok $nwc, 'NWC2MusicXML::NWC', 'constructor returns object';
 }
 

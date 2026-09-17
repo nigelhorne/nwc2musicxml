@@ -542,44 +542,110 @@ sub _handle_tempo {
 
 sub _handle_note {
 	my ($self, $fields) = @_;
-
-	# NWC note field: positional field encodes pitch and duration.
-	# Format example: ^C4q (stem-up, C, octave 4, quarter)
-	# A full parser for this sub-syntax is needed in Phase 2.
-	# For the scaffold, store the raw field for later expansion.
-
 	my $h = $self->_fields_to_hash($fields);
+
+	my ($base_dur, $dots, $triplet, $artic) = _parse_dur_tokens($h->{Dur} // '4th');
+	my $rational = NWC2MusicXML::Event->rational_from_nwc_duration($base_dur, $dots);
+
 	$self->_append_event(NWC2MusicXML::Event->new(
-		type => 'Note',
-		data => { _raw_fields => $h },
+		type     => 'Note',
+		duration => $rational,
+		data     => {
+			nwc_pos       => $h->{Pos} // '0',
+			base_dur      => $base_dur,
+			dots          => $dots,
+			triplet       => $triplet,
+			articulations => $artic,
+			opts          => _parse_opts($h->{Opts}),
+		},
 	));
 }
 
 sub _handle_rest {
 	my ($self, $fields) = @_;
 	my $h = $self->_fields_to_hash($fields);
+
+	my ($base_dur, $dots) = _parse_dur_tokens($h->{Dur} // '4th');
+	my $rational = NWC2MusicXML::Event->rational_from_nwc_duration($base_dur, $dots);
+
 	$self->_append_event(NWC2MusicXML::Event->new(
-		type => 'Rest',
-		data => { _raw_fields => $h },
+		type     => 'Rest',
+		duration => $rational,
+		data     => {
+			base_dur => $base_dur,
+			dots     => $dots,
+			opts     => _parse_opts($h->{Opts}),
+		},
 	));
 }
 
 sub _handle_chord {
 	my ($self, $fields) = @_;
 	my $h = $self->_fields_to_hash($fields);
+
+	my ($base_dur, $dots, $triplet, $artic) = _parse_dur_tokens($h->{Dur} // '4th');
+	my $rational = NWC2MusicXML::Event->rational_from_nwc_duration($base_dur, $dots);
+
+	# Pos field contains a comma-separated list of position strings.
+	# Each entry: optional accidental prefix (#/b/n/##/bb/x) + signed integer + optional ^ (tie)
+	my @positions = split /,/, ($h->{Pos} // '0');
+
 	$self->_append_event(NWC2MusicXML::Event->new(
-		type => 'Chord',
-		data => { _raw_fields => $h },
+		type     => 'Chord',
+		duration => $rational,
+		data     => {
+			nwc_positions => \@positions,
+			base_dur      => $base_dur,
+			dots          => $dots,
+			triplet       => $triplet,
+			articulations => $artic,
+			opts          => _parse_opts($h->{Opts}),
+		},
 	));
 }
 
 sub _handle_bar {
 	my ($self, $fields) = @_;
 	my $h = $self->_fields_to_hash($fields);
+	# NWC bar records carry an optional Style named field; plain |Bar| has none.
+	my $style = $h->{Style} // $h->{_positional} // 'normal';
 	$self->_append_event(NWC2MusicXML::Event->new(
 		type => 'Bar',
-		data => { style => $h->{_positional} // 'normal', extra => $h },
+		data => { style => $style },
 	));
+}
+
+# ---------------------------------------------------------------------------
+# Private: duration / options parsing helpers
+# ---------------------------------------------------------------------------
+
+sub _parse_dur_tokens {
+	my ($dur_str) = @_;
+	my @tokens   = split /,/, ($dur_str // '4th');
+	my $base     = shift(@tokens) // '4th';
+	my ($dots, $triplet) = (0, undef);
+	my @artic;
+
+	for my $tok (@tokens) {
+		if    ($tok eq 'Dotted')              { $dots = 1 }
+		elsif ($tok eq 'DblDotted')           { $dots = 2 }
+		elsif ($tok =~ /^Triplet(?:=(.+))?$/) { $triplet = $1 // 'Middle' }
+		elsif ($tok eq 'Grace')               { }   # grace notes: Phase 4
+		else                                  { push @artic, $tok }
+	}
+
+	return ($base, $dots, $triplet, \@artic);
+}
+
+sub _parse_opts {
+	my ($opts_str) = @_;
+	return {} unless defined $opts_str && length $opts_str;
+	my %opts;
+	for my $opt (split /,/, $opts_str) {
+		if ($opt =~ /^(\w+)=(.*)$/) { $opts{$1} = $2 }
+		else                        { $opts{$opt} = 1 }
+	}
+	return \%opts;
 }
 
 sub _handle_dynamic {
