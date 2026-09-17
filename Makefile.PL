@@ -25,9 +25,9 @@ WriteMakefile(
 		'File::Spec'       => 0,
 		'Getopt::Long'     => 0,
 		'Pod::Usage'       => 0,
-	},
-	TEST_REQUIRES => {
-		'Test::More'       => '0.98',
+	}, TEST_REQUIRES => {
+		'IPC::System::Simple' => 0,
+		'Test::Most' => 0,
 		'Test::Exception'  => 0,
 	},
 	META_MERGE => {

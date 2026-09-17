@@ -18,8 +18,9 @@ requires 'strict';
 requires 'warnings';
 
 on 'test' => sub {
+	requires 'IPC::System::Simple';
 	requires 'Test::Exception';
-	requires 'Test::More', '0.98';
+	requires 'Test::Most';
 };
 
 on 'develop' => sub {
