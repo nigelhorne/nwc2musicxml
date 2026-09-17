@@ -500,9 +500,10 @@ sub _emit_part {
 	my $clef_now    = $clef_start;
 	my $key_now     = $key_start;
 
-	# Pre-annotate all events with slur/tie metadata in one pass so that
-	# slurs and ties crossing bar lines are handled correctly.
+	# Pre-annotate all events with slur/tie and wedge metadata in one pass
+	# so that arcs crossing bar lines are handled correctly.
 	my $ann = $self->_annotate_events($staff->events);
+	$self->_annotate_wedges($staff->events, $ann);
 
 	for my $event (@{ $staff->events }) {
 		my $type = $event->type;
@@ -601,13 +602,25 @@ sub _emit_measure {
 				$d->{style}, $d->{placement}, $pad . $i);
 
 		} elsif ($type eq 'Note') {
+			push @out, $self->_emit_wedge($ev_ann->{wedge_start}, undef, $pad . $i)
+				if $ev_ann->{wedge_start};
 			push @out, $self->_emit_note_event(
 				$event, $curr_clef, $curr_key, $divisions, $pad . $i, 0, $ev_ann);
+			push @out, $self->_emit_wedge('crescOff', undef, $pad . $i)
+				if $ev_ann->{wedge_stop_after};
 		} elsif ($type eq 'Rest') {
+			push @out, $self->_emit_wedge($ev_ann->{wedge_start}, undef, $pad . $i)
+				if $ev_ann->{wedge_start};
 			push @out, $self->_emit_rest_event($event, $divisions, $pad . $i, $ev_ann);
+			push @out, $self->_emit_wedge('crescOff', undef, $pad . $i)
+				if $ev_ann->{wedge_stop_after};
 		} elsif ($type eq 'Chord') {
+			push @out, $self->_emit_wedge($ev_ann->{wedge_start}, undef, $pad . $i)
+				if $ev_ann->{wedge_start};
 			push @out, $self->_emit_chord_event(
 				$event, $curr_clef, $curr_key, $divisions, $pad . $i, $ev_ann);
+			push @out, $self->_emit_wedge('crescOff', undef, $pad . $i)
+				if $ev_ann->{wedge_stop_after};
 		}
 	}
 
@@ -701,6 +714,47 @@ sub _annotate_events {
 	$ann{$last_slur_ev}{slur_stop} = 1 if $in_slur && defined $last_slur_ev;
 
 	return \%ann;
+}
+
+# Annotate wedge (hairpin) start/stop transitions into an existing %$ann hash.
+# NWC stores hairpins as Opts:Crescendo / Opts:Diminuendo on each note/rest/chord
+# under the arc, NOT as standalone DynVariance records.
+# Sets wedge_start => 'Crescendo'|'Diminuendo' on the first event of each arc,
+# and wedge_stop_after => 1 on the last event of each arc.
+sub _annotate_wedges {
+	my ($self, $events, $ann) = @_;
+	$ann //= {};
+
+	my $wedge_now      = undef;   # 'Crescendo' | 'Diminuendo' | undef
+	my $prev_wedge_key = undef;   # stringified ref of last event under the arc
+
+	for my $ev (@$events) {
+		my $type = $ev->type;
+		next unless $type eq 'Note' || $type eq 'Rest' || $type eq 'Chord';
+
+		my $key     = "$ev";
+		my $opts    = $ev->data->{opts} // {};
+		my $ev_wedge = $opts->{Crescendo}  ? 'Crescendo'
+		             : $opts->{Diminuendo} ? 'Diminuendo'
+		             : undef;
+
+		if (defined $wedge_now && (!defined $ev_wedge || $ev_wedge ne $wedge_now)) {
+			$ann->{$prev_wedge_key}{wedge_stop_after} = 1 if defined $prev_wedge_key;
+			$wedge_now = undef;
+		}
+		if (!defined $wedge_now && defined $ev_wedge) {
+			$ann->{$key}{wedge_start} = $ev_wedge;
+			$wedge_now = $ev_wedge;
+		}
+
+		$prev_wedge_key = defined $ev_wedge ? $key : undef;
+	}
+
+	# Close any arc still open at end of staff
+	$ann->{$prev_wedge_key}{wedge_stop_after} = 1
+		if defined $wedge_now && defined $prev_wedge_key;
+
+	return $ann;
 }
 
 # ---------------------------------------------------------------------------

@@ -277,4 +277,71 @@ sub note_with_artic {
 	unlike $xml, qr/<articulations>/, 'fermata does not produce articulations wrapper';
 }
 
+# ---------------------------------------------------------------------------
+# Hairpin (wedge) emission from Opts:Crescendo / Opts:Diminuendo on notes
+# ---------------------------------------------------------------------------
+
+# Helper: build a score with a sequence of notes, each carrying opts
+sub score_with_opts_notes {
+	my (@note_opts_list) = @_;
+	my $staff = Music::NWC2MusicXML::Staff->new(name => 'Test');
+	$staff->set_initial_clef('Treble');
+	$staff->set_initial_key({ signature => 'C', tonic => 'C', fifths => 0 });
+	$staff->set_initial_timesig({ beats => 4, beat_type => 4 });
+	for my $opts (@note_opts_list) {
+		$staff->add_event(Music::NWC2MusicXML::Event->new(
+			type     => 'Note',
+			duration => [1, 4],
+			data     => {
+				nwc_pos  => '0',
+				base_dur => '4th',
+				opts     => $opts,
+			},
+		));
+	}
+	my $score = Music::NWC2MusicXML::Score->new;
+	$score->add_staff($staff);
+	return Music::NWC2MusicXML::MusicXML->new->generate($score);
+}
+
+# Two notes under crescendo -> one start + one stop
+{
+	my $xml = score_with_opts_notes(
+		{ Crescendo => 1 },
+		{ Crescendo => 1 },
+	);
+	my @starts = ($xml =~ /wedge type="crescendo"/g);
+	my @stops  = ($xml =~ /wedge type="stop"/g);
+	is scalar @starts, 1, 'one crescendo wedge start emitted';
+	is scalar @stops,  1, 'one crescendo wedge stop emitted';
+}
+
+# Two notes under diminuendo -> one start + one stop
+{
+	my $xml = score_with_opts_notes(
+		{ Diminuendo => 1 },
+		{ Diminuendo => 1 },
+	);
+	my @starts = ($xml =~ /wedge type="diminuendo"/g);
+	is scalar @starts, 1, 'one diminuendo wedge start emitted';
+}
+
+# Crescendo followed by diminuendo -> stop crescendo, start diminuendo
+{
+	my $xml = score_with_opts_notes(
+		{ Crescendo  => 1 },
+		{ Diminuendo => 1 },
+	);
+	like $xml, qr/wedge type="crescendo"/,  'crescendo start present';
+	like $xml, qr/wedge type="diminuendo"/, 'diminuendo start present';
+	my @stops = ($xml =~ /wedge type="stop"/g);
+	is scalar @stops, 2, 'two stops emitted (one per hairpin)';
+}
+
+# No Opts: no wedge elements
+{
+	my $xml = score_with_opts_notes({}, {});
+	unlike $xml, qr/wedge/, 'no wedge when no Opts hairpin';
+}
+
 done_testing();
