@@ -142,7 +142,7 @@ Readonly::Hash my %MESSAGES => (
 
 =head1 NAME
 
-Music::NWC2MusicXML::MusicXML - MusicXML generator.
+Music::NWC2MusicXML::MusicXML - Convert an internal Score object to a MusicXML 4.0 document string.
 
 =head1 VERSION
 
@@ -150,35 +150,233 @@ Music::NWC2MusicXML::MusicXML - MusicXML generator.
 
 =head1 SYNOPSIS
 
+    # --- Pattern 1: full pipeline from a .nwc file ---
+    use Music::NWC2MusicXML::NWC;
+    use Music::NWC2MusicXML::Parser;
     use Music::NWC2MusicXML::MusicXML;
 
-    my $gen = Music::NWC2MusicXML::MusicXML->new;
+    my $nwctxt = Music::NWC2MusicXML::NWC->read('my_score.nwc');
+    my $score  = Music::NWC2MusicXML::Parser->new->parse($nwctxt);
+    my $xml    = Music::NWC2MusicXML::MusicXML->new->generate($score);
+
+    # Write raw bytes -- the string is already pure ASCII (numeric entities
+    # for any non-ASCII source characters).
+    open my $fh, '>:raw', 'output.musicxml' or die $!;
+    print $fh $xml;
+    close $fh;
+
+    # --- Pattern 2: custom indentation ---
+    my $gen = Music::NWC2MusicXML::MusicXML->new(indent => "\t");
     my $xml = $gen->generate($score);
-    print $xml;
+
+    # --- Pattern 3: validate the output with an external tool ---
+    # (run in the shell after writing the file)
+    # xmllint --noout output.musicxml
+
+    # --- Pattern 4: generate and keep in memory for further processing ---
+    my $xml_string = Music::NWC2MusicXML::MusicXML->new->generate($score);
+    my @lines = split /\n/, $xml_string;
+    my ($part_list) = grep { /part-list/ } @lines;
 
 =head1 DESCRIPTION
 
-C<Music::NWC2MusicXML::MusicXML> accepts a C<Music::NWC2MusicXML::Score> object (the
-internal representation produced by C<Music::NWC2MusicXML::Parser>) and emits a
-well-formed, UTF-8-encoded MusicXML 4.0 document.
+C<Music::NWC2MusicXML::MusicXML> is the last stage of the NWC-to-MusicXML
+pipeline.  It takes a C<Music::NWC2MusicXML::Score> object -- the internal
+representation built by C<Music::NWC2MusicXML::Parser> -- and returns a
+self-contained MusicXML 4.0 document as a plain string.
 
-The generator is deliberately isolated from the parser: it knows nothing
-about the NWCTXT format.  All musical decisions have already been encoded
-in the Score IR; the generator only needs to serialise them.
+The generator knows nothing about the NWCTXT or NWC binary format.  Every
+musical decision (pitches, durations, articulations, dynamics, tempo, key,
+clef, copyright text) was already made by the parser.  The generator only
+serialises the Score object tree into valid XML.
 
 =head2 Divisions
 
-MusicXML requires a C<< <divisions> >> value declaring how many ticks
-represent one quarter note.  To represent all durations exactly, the
-generator computes the least common multiple (LCM) of the denominators of
-every rational duration it encounters across the score.  This avoids
-arbitrary fixed-size grids that might truncate unusual tuplet durations.
+MusicXML requires one integer, C<< <divisions> >>, that says how many ticks
+equal one quarter note.  To represent every note duration exactly -- including
+unusual tuplet values -- the generator scans all note durations across all
+staves, collects the denominators of their rational representations, and
+computes their least common multiple (LCM).  That LCM becomes
+C<< <divisions> >>.  No duration is ever rounded or truncated.
 
-=head2 Voices
+=head2 Page layout and credits
 
-Where a staff contains simultaneous events (overlapping start times), the
-generator assigns them to MusicXML voices 1 and 2 based on stem direction
-hints where available, falling back to a simple greedy assignment.
+The generator emits a C<< <defaults> >> block that records the actual page
+size and margin values expressed in MusicXML tenths.  Without this block a
+renderer cannot interpret the absolute coordinate values used by credit
+elements, so title and copyright placement would be undefined.
+
+Page dimensions default to A4 (210 x 297 mm) with 1.27 cm margins, which
+match NWC's own defaults.  If the source NWC file contained a C<PgMargins>
+record the parser stores the margin values in the Score's C<page_setup>
+hashref and the generator reads them from there.
+
+Each title, subtitle, and copyright line is emitted as its own separate
+C<< <credit> >> element:
+
+=over 4
+
+=item * Title -- C<< <credit page="1"> >>; large font; centred near the top
+of page 1.
+
+=item * Subtitle (the NWC Author field) -- C<< <credit page="1"> >>; medium
+font; centred directly below the title.
+
+=item * Each copyright line -- C<< <credit> >> with B<no page attribute>;
+this instructs conforming renderers to display the line on B<every> page.
+One separate C<< <credit> >> element is used per line; putting multiple
+C<< <credit-words> >> inside a single C<< <credit> >> causes many renderers
+to display only the last one.
+
+=back
+
+=head2 Articulations
+
+NWC encodes articulations as initial-capital tokens in the C<Dur:> field
+(for example C<Tenuto>, C<Staccato>, C<Accent>).  The generator groups them
+into the correct MusicXML wrapper:
+
+=over 4
+
+=item * C<< <articulations> >> -- tenuto, staccato, accent, strong-accent,
+staccatissimo.
+
+=item * C<< <ornaments> >> -- trill-mark, mordent, turn.
+
+=item * Direct child of C<< <notations> >> -- fermata.
+
+=back
+
+The C<Slur> token is never emitted as an articulation; it is handled by the
+slur-annotation pre-pass (see L</Slurs and ties> below).
+
+=head2 Slurs and ties
+
+A single pre-pass over all events in a staff (C<_annotate_events>) detects
+slur arcs and tie pairs before the events are grouped into measures.  This
+means arcs that cross a bar line are handled correctly.  Each event is
+annotated with flags that the measure emitter reads when writing
+C<< <slur> >> and C<< <tied> >> elements.
+
+Tie detection uses the raw NWC position string as a key.  A C<^> suffix on a
+position string (e.g. C<Pos:-7^>) means the note is tied forward; the
+generator strips the suffix to match the tied-to note.
+
+=head2 Hairpins (wedges)
+
+NWC does not use standalone records for in-staff hairpins.  Instead it
+attaches C<Opts:Crescendo> or C<Opts:Diminuendo> to every note and rest that
+sits under the arc.  A second pre-pass (C<_annotate_wedges>) detects the
+start and end of each arc by watching for transitions: the first event
+carrying a hairpin flag starts the arc; the first event that drops the flag
+closes it.  The wedge stop is emitted as a C<crescOff> direction immediately
+after the last note of the arc.
+
+=head2 Tempo variance
+
+Markings such as C<Accelerando>, C<Ritardando>, C<Rallentando>, and
+C<RitardandoToTempo> (rendered as "a tempo") are stored as C<TempoVariance>
+events by the parser.  The generator converts them to italic
+C<< <words> >> direction elements using the C<%TEMPO_VARIANCE_TEXT> table.
+
+=head2 Part name resolution
+
+Display names for each staff are resolved in three steps:
+
+=over 4
+
+=item 1. Use the NWC staff name, if it is not a generic default such as
+C<Staff> or C<Staff-2>.
+
+=item 2. Fall back to the MIDI instrument name.
+
+=item 3. Fall back to the positional name C<Staff-N> (1-based).
+
+=back
+
+After all candidates are found, any name that appears on more than one staff
+is replaced with C<Staff-N> to guarantee unique C<< <part-name> >> values.
+
+=head1 COMMON PITFALLS
+
+=over 4
+
+=item B<Opening the output file in text mode>
+
+The output string is pure ASCII (all non-ASCII characters are escaped as
+numeric XML entities).  Opening the output file with C<< '>:encoding(UTF-8)' >>
+is harmless but unnecessary; opening it with C<< '>:encoding(Latin-1)' >> or
+a similar 8-bit encoding and then printing a string that contains non-ASCII
+bytes would corrupt the file.  The safest choice is C<< '>:raw' >>.
+
+=item B<Multiple copyright lines in one credit element>
+
+If you call C<_emit_credits> and place two C<< <credit-words> >> children
+inside a single C<< <credit> >> element, most renderers (including MuseScore
+and Finale) display only the B<last> C<< <credit-words> >> and silently
+discard the rest.  This module uses one C<< <credit> >> per copyright line to
+avoid this.
+
+=item B<Missing defaults section>
+
+The absolute coordinates in C<< <credit> >> elements (C<default-x>,
+C<default-y>) are measured in MusicXML "tenths" from the bottom-left corner
+of the page.  They are meaningless to a renderer unless a C<< <defaults> >>
+block defines the page size and the tenths-per-mm scaling factor.  This module
+always emits C<< <defaults> >> before any C<< <credit> >> elements.
+
+=item B<Two separate rights elements in identification>
+
+C<< <identification> >> accepts only one C<< <rights> >> child in practice;
+a second one shadows the first.  This module joins multiple copyright lines
+with a newline character inside a single C<< <rights> >> element.
+
+=item B<Slur token treated as an articulation>
+
+NWC encodes slurs as C<Slur> in the same token list as articulations.  Do not
+add C<Slur> to C<%ARTICULATION_MAP>; the slur-annotation pre-pass handles it.
+If C<Slur> were also emitted as an articulation element the output XML would be
+invalid.
+
+=item B<Score with no staves>
+
+Calling C<generate> on a C<Score> object that has no staves will C<croak>
+immediately.  Always check that the parser produced at least one staff before
+calling the generator.
+
+=back
+
+=head1 ENCODING
+
+=over 4
+
+=item B<Input (Score metadata fields)>
+
+Metadata strings (Title, Author, Copyright1, Copyright2, etc.) may contain any
+Unicode characters, including non-ASCII letters, accented characters, and the
+copyright symbol (U+00A9).  The NWC binary decoder may deliver these as Latin-1
+bytes; once stored in Perl scalars they are handled correctly as long as they
+pass through C<_xml_escape> before being written to the output.
+
+=item B<Output (the generated XML string)>
+
+The string returned by C<generate> is B<pure 7-bit ASCII>.  Every character
+whose code point is above 127 is converted to a numeric XML character
+reference (C<&#N;>), for example C<&#169;> for the copyright symbol.  The XML
+declaration at the top of the document reads C<encoding="UTF-8">, which
+remains correct because numeric character references are valid in any XML
+encoding.
+
+=item B<Emojis and full Unicode>
+
+Emoji and supplementary-plane characters (code points above U+FFFF) are not
+tested but will be escaped correctly by C<_xml_escape> as long as Perl has
+decoded them to proper Unicode code points (i.e. C<utf8::decode> has been
+applied or the string was read with a C<:utf8> layer).  Raw multi-byte UTF-8
+bytes that have B<not> been decoded will be escaped byte-by-byte and will
+produce incorrect numeric references.
+
+=back
 
 =cut
 
@@ -188,42 +386,63 @@ hints where available, falling back to a simple greedy assignment.
 
 =head2 new
 
-Construct a generator.
+Create a new generator object.
+
+=head3 Purpose
+
+Factory constructor.  Creates a configured generator ready to call C<generate>
+one or more times.  The same generator instance can be used to process
+multiple Score objects; each C<generate> call is independent.
 
 =head3 Arguments
 
-Named parameters:
+All arguments are named (passed as a flat key/value list) and optional.
 
 =over 4
 
-=item C<diagnostics> -- a C<Music::NWC2MusicXML::Diagnostics> instance (optional).
+=item C<indent>
 
-=item C<indent>      -- indentation string, default two spaces (optional).
+The string used for one level of XML indentation.  Defaults to two spaces.
+Pass C<"\t"> for tab indentation.  Only affects whitespace; the XML content
+is identical regardless of the indent setting.
+
+=item C<diagnostics>
+
+A C<Music::NWC2MusicXML::Diagnostics> instance for routing warning messages.
+When omitted, warnings are sent directly to C<carp>.
 
 =back
 
 =head3 Returns
 
-Blessed C<Music::NWC2MusicXML::MusicXML> object.
+A blessed C<Music::NWC2MusicXML::MusicXML> object.
+
+=head3 Side Effects
+
+None.
+
+=head3 Usage Example
+
+    # Default (two-space indent)
+    my $gen = Music::NWC2MusicXML::MusicXML->new;
+
+    # Tab indent
+    my $gen = Music::NWC2MusicXML::MusicXML->new(indent => "\t");
 
 =head3 API SPECIFICATION
 
 =head4 Input
 
-    diagnostics : Music::NWC2MusicXML::Diagnostics  (optional)
-    indent      : SCALAR                     (optional, default '  ')
+    indent      : SCALAR   (optional, default '  ')
+    diagnostics : OBJECT   Music::NWC2MusicXML::Diagnostics  (optional)
 
 =head4 Output
 
     Music::NWC2MusicXML::MusicXML object
 
-=head3 FORMAL SPECIFICATION
+=head3 MESSAGES
 
- [GeneratorInit]
-   diagnostics : Diagnostics
-   indent      : String
-
- (placeholder -- populate with Z calculus as implementation matures)
+This method does not emit any diagnostic messages.
 
 =cut
 
@@ -252,36 +471,85 @@ sub new {
 
 =head2 generate
 
-Generate a MusicXML document from a C<Music::NWC2MusicXML::Score> and return it as
-a UTF-8 string.
+Convert a C<Music::NWC2MusicXML::Score> object to a MusicXML 4.0 document and
+return the complete document as a string.
 
 =head3 Purpose
 
-Top-level entry point for MusicXML generation.  Orchestrates the emission of
-the XML declaration, DOCTYPE, score-partwise root, part-list, and individual
-parts.
+Top-level entry point.  Orchestrates, in order:
+
+=over 4
+
+=item 1. XML declaration and DOCTYPE header.
+
+=item 2. Page layout geometry (C<< <defaults> >>).
+
+=item 3. Work title (C<< <work> >>).
+
+=item 4. Identification metadata: composer, lyricist, rights (C<< <identification> >>).
+
+=item 5. Visual credits: title, subtitle, and copyright lines (C<< <credit> >> elements).
+
+=item 6. Part list: one C<< <score-part> >> per staff (C<< <part-list> >>).
+
+=item 7. Musical content: one C<< <part> >> per staff, each containing numbered
+measures with notes, rests, dynamics, tempo, articulations, slurs, ties,
+and wedge hairpins.
+
+=back
+
+Each staff is processed by a two-stage pipeline:
+
+=over 4
+
+=item Stage 1 -- annotation pre-passes.
+
+C<_annotate_events> detects slur arcs and tie pairs across the entire staff
+before measure grouping.  C<_annotate_wedges> detects hairpin (crescendo /
+diminuendo) arcs stored as per-note C<Opts:> flags.  Both passes store their
+results in a shared C<%ann> hash keyed by stringified event reference.
+
+=item Stage 2 -- measure emission.
+
+Events are gathered into measure-sized groups separated by C<Bar> events.
+For each measure, C<_emit_measure> serialises notes, rests, directions, and
+mid-staff attribute changes, consulting C<%ann> for slur, tie, and wedge
+annotations.
+
+=back
 
 =head3 Arguments
 
 =over 4
 
-=item C<$score> -- a C<Music::NWC2MusicXML::Score> object (required).
+=item C<$score>
+
+A C<Music::NWC2MusicXML::Score> object (required).  Must contain at least one
+staff; otherwise the method croaks.
 
 =back
 
 =head3 Returns
 
-Scalar string containing the complete MusicXML document (UTF-8).
+A scalar string holding the complete MusicXML 4.0 document.  The string is
+pure 7-bit ASCII: all non-ASCII source characters are replaced with numeric
+XML character references (C<&#N;>).  The XML declaration at the top of the
+string declares C<encoding="UTF-8">, which is correct.
+
+The string ends with a single newline character.
 
 =head3 Side Effects
 
-Issues warnings via C<diagnostics> for unsupported features.
-Croaks on fatal structural errors.
+May issue warnings via C<carp> for unsupported or unrecognised values
+(unknown clef, unknown dynamic marking, unsupported articulation token,
+approximate barline style).
 
 =head3 Usage Example
 
     my $xml = $gen->generate($score);
-    open my $fh, '>:encoding(UTF-8)', 'out.musicxml';
+
+    # Write to a file -- ':raw' is sufficient; the string is pure ASCII.
+    open my $fh, '>:raw', 'out.musicxml' or die $!;
     print $fh $xml;
     close $fh;
 
@@ -289,28 +557,22 @@ Croaks on fatal structural errors.
 
 =head4 Input
 
-    $score : Music::NWC2MusicXML::Score (required)
+    $score : Music::NWC2MusicXML::Score  (required, must have staff_count > 0)
 
 =head4 Output
 
-    SCALAR (UTF-8 MusicXML document string)
+    SCALAR  -- complete MusicXML 4.0 document, pure 7-bit ASCII, newline-terminated
 
 =head3 MESSAGES
 
-| Code              | Meaning                             | Resolution                       |
-|-------------------|-------------------------------------|----------------------------------|
-| error_bad_score   | Argument is not a Score object      | Pass a proper Score              |
-| error_no_staves   | Score has no staves                 | Ensure parser succeeded          |
-| warn_unknown_clef | NWC clef has no known MusicXML map  | Treble used as fallback          |
-
-=head3 FORMAL SPECIFICATION
-
- [Generate]
-   score? : Score
-   ----------
-   xml!   : MusicXMLDocument
-
- (placeholder)
+| Code                | Meaning                                  | Resolution                      |
+|---------------------|------------------------------------------|---------------------------------|
+| error_bad_score     | Argument is not a Score object           | Pass the object returned by Parser |
+| error_no_staves     | Score has zero staves                    | Confirm the parser found AddStaff records |
+| warn_unknown_clef   | NWC clef name not in CLEF_MAP            | Treble used as fallback         |
+| warn_unknown_dynamic| Dynamic marking not in DYNAMIC_MAP       | Direction element omitted       |
+| warn_unsupported_art| Articulation token not in ARTICULATION_MAP| Mark omitted; warning issued   |
+| warn_approx_bar     | Barline style has no direct MusicXML map | Regular barline used            |
 
 =cut
 
@@ -1385,31 +1647,105 @@ __END__
 
 =head1 DIAGNOSTICS
 
-=head3 MESSAGES
+The module uses C<croak> for unrecoverable errors and C<carp> for warnings
+that allow generation to continue.  All messages are looked up in the
+C<%MESSAGES> constant at the top of the file so that the strings are easy to
+find and change without searching the whole source.
 
-| Code                | Meaning                              | Resolution                     |
-|---------------------|--------------------------------------|--------------------------------|
-| error_bad_score     | Argument is not a Score              | Construct Score via Parser     |
-| error_no_staves     | Score has no staves                  | Parser may have failed         |
-| warn_unknown_clef   | NWC clef not in CLEF_MAP             | Will default to Treble         |
-| warn_unknown_dynamic| NWC dynamic not in DYNAMIC_MAP       | Warning emitted; ignored       |
-| warn_unsupported_art| NWC articulation not in map          | Warning emitted; ignored       |
+=head2 Fatal errors (croak)
+
+=over 4
+
+=item C<error_bad_score>
+
+C<generate> was called with an argument that is not a
+C<Music::NWC2MusicXML::Score> object.  B<Resolution:> pass the Score object
+returned by C<Music::NWC2MusicXML::Parser-E<gt>parse>.
+
+=item C<error_no_staves>
+
+The Score object has zero staves.  Generation cannot proceed without at least
+one staff.  B<Resolution:> confirm that the parser found one or more
+C<AddStaff> records in the NWCTXT input.
+
+=back
+
+=head2 Warnings (carp)
+
+=over 4
+
+=item C<warn_unknown_clef>
+
+An NWC clef name was encountered that is not present in C<%CLEF_MAP>
+(currently: Treble, Bass, Alto, Tenor, Percussion, Tab).
+B<Resolution:> Treble is used as a fallback.  The output is playable but
+visually incorrect for that staff.
+
+=item C<warn_unknown_dynamic>
+
+A dynamic marking was encountered that is not in C<%DYNAMIC_MAP>
+(currently: pppp ppp pp p mp mf f ff fff ffff).
+B<Resolution:> the direction element is omitted; the surrounding music is
+unaffected.
+
+=item C<warn_unsupported_art>
+
+An articulation token from the NWC C<Dur:> field is not present in
+C<%ARTICULATION_MAP>.  B<Resolution:> the mark is omitted from that note;
+the note itself is still emitted correctly.
+
+=item C<warn_approx_bar>
+
+A barline style has no direct MusicXML equivalent.
+B<Resolution:> a regular barline is used.
+
+=back
 
 =head1 LIMITATIONS
 
 =over 4
 
-=item * Tuplet C<< <time-modification> >> and C<< <tuplet> >> elements are not yet emitted.
+=item *
 
-=item * Multi-voice staves (simultaneous events) assign all notes to voice 1; true voice
-splitting is deferred.
+Tuplet C<< <time-modification> >> and C<< <tuplet> >> notation elements are
+not yet emitted.  Tuplet durations are stored correctly as rational numbers
+in the Score, so the audio timing is right, but the printed notation will
+show normal note values rather than tuplet brackets.
 
-=item * Slur arcs spanning more than C<$MAX_SLUR_NUMBER> simultaneous open slurs will
-reuse number 1, which is incorrect.
+=item *
 
-=item * Lyric emission is not yet implemented.
+Multi-voice staves (two melodic lines on one staff) assign all events to
+MusicXML voice 1.  True voice splitting -- two simultaneous streams with
+independent stems -- is deferred to a future release.
 
-=item * Flow-control (Coda, Segno, DaCapo, etc.) produces no MusicXML output.
+=item *
+
+Slur numbering: all slurs use number 1.  If more than one slur arc is open
+simultaneously (which is rare but legal in NWC), the overlapping slurs will
+share the same number and the output will be invalid.  The constant
+C<$MAX_SLUR_NUMBER> documents the intended limit.
+
+=item *
+
+Lyric text (C<Lyric> events) is not yet serialised.  The events are parsed
+and stored in the Score but no C<< <lyric> >> elements appear in the output.
+
+=item *
+
+Flow-control directives (Coda, Segno, DaCapo, Volta brackets, etc.) are
+stored as C<FlowControl> events by the parser but produce no MusicXML output.
+
+=item *
+
+Page dimensions are always assumed to be A4 (210 x 297 mm).  NWC supports
+custom page sizes through C<PgSetup> fields that are not yet read by the
+parser.
+
+=item *
+
+Only uniform margins are supported.  NWC allows different left, right, top,
+and bottom margins, and also supports mirrored margins for left/right pages.
+The generator uses only the left margin value and applies it to all four sides.
 
 =back
 
@@ -1417,9 +1753,164 @@ reuse number 1, which is incorrect.
 
 Nigel Horne C<< <nigel.horne@gmail.com> >>
 
-=head1 LICENSE
+=head1 LICENSE AND COPYRIGHT
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
+
+Copyright (C) 2025 Nigel Horne.
+
+=head1 FORMAL SPECIFICATION
+
+This section uses Z-notation-inspired schemas to describe the state
+transformations performed by the key methods.  The notation is informal;
+its purpose is to make the invariants and pre/post-conditions precise enough
+for future verification or reimplementation.
+
+Mathematical sets used below:
+
+    Score    -- the internal score object type
+    Staff    -- a single staff within a Score
+    Event    -- a single musical or structural event
+    XML      -- a well-formed XML document string (7-bit ASCII)
+    Tenths   -- a non-negative real number representing a MusicXML tenths value
+    Q+       -- the set of non-negative rational numbers
+    Z        -- the set of integers
+
+=head2 new
+
+    GeneratorInit
+    ___________________________
+    indent?      : String
+    diagnostics? : Diagnostics
+    ___________________________
+    gen!         : MusicXMLGenerator
+
+    Pre:  indent? in String   (any string, default '  ')
+    Post: gen!._indent  = indent? | '  '
+          gen!._diagnostics = diagnostics? | undef
+          No I/O side effects.
+
+=head2 generate
+
+    Generate
+    ___________________________
+    gen        : MusicXMLGenerator
+    score      : Score
+    ___________________________
+    xml!       : XML
+
+    Pre:  score.staff_count > 0
+    Pre:  score.isa('Music::NWC2MusicXML::Score')
+
+    Let D = lcm { ev.duration.denominator | ev in events(score) }
+    Let L = compute_page_layout(score.page_setup)
+
+    Post: xml! is a well-formed MusicXML 4.0 document string
+    Post: xml! contains exactly one <defaults> block with
+              page_height = 297.0 * TENTHS_PER_MM   (A4)
+              page_width  = 210.0 * TENTHS_PER_MM
+              margin      = score.page_setup.Left * 10 * TENTHS_PER_MM
+                            | DEFAULT_MARGIN_CM * 10 * TENTHS_PER_MM
+    Post: xml! contains one <score-part> per staff in score order
+    Post: xml! contains one <part> per staff
+    Post: for every note event ev in score,
+              tick_count(ev) = round(ev.duration[0] * D / ev.duration[1])
+          -- no duration is lost or rounded by more than 0.5 ticks
+
+=head2 _annotate_events
+
+    AnnotateSlursTies
+    ___________________________
+    events : seq Event
+    ___________________________
+    ann!   : Map(EventRef -> Annotation)
+
+    Let sounding = { ev in events | ev.type in {Note, Rest, Chord} }
+
+    Post: forall ev in sounding,
+              ev.data.nwc_pos ends with '^'
+              => ann!(ev).tie_start_keys contains stripped_key(ev.data.nwc_pos)
+    Post: every tie_start has a matching tie_stop on the next sounding event
+          with the same stripped position key (or the arc is left open at
+          end-of-staff)
+    Post: slur_start is set on the first event of each uninterrupted run of
+          events carrying the 'Slur' articulation token
+    Post: slur_stop  is set on the last event of each such run
+    Post: Rest events are included in slur spans but carry neither
+          slur_start nor slur_stop
+
+=head2 _annotate_wedges
+
+    AnnotateWedges
+    ___________________________
+    events : seq Event
+    ann    : Map(EventRef -> Annotation)   -- pre-existing, mutated in place
+    ___________________________
+    ann!   : Map(EventRef -> Annotation)   -- same map, extended
+
+    Let sounding = { ev in events | ev.type in {Note, Rest, Chord} }
+
+    Post: forall consecutive pairs (e1, e2) in sounding,
+              e1.data.opts.Crescendo  and not e2.data.opts.Crescendo
+              => ann!(e1).wedge_stop_after = 1
+
+              e1.data.opts.Diminuendo and not e2.data.opts.Diminuendo
+              => ann!(e1).wedge_stop_after = 1
+
+              not e1.data.opts.Crescendo  and e2.data.opts.Crescendo
+              => ann!(e2).wedge_start = 'Crescendo'
+
+              not e1.data.opts.Diminuendo and e2.data.opts.Diminuendo
+              => ann!(e2).wedge_start = 'Diminuendo'
+
+    Post: if the last sounding event carries a hairpin flag,
+              ann!(last).wedge_stop_after = 1
+
+=head2 _compute_page_layout
+
+    ComputePageLayout
+    ___________________________
+    page_setup : HashRef   -- from Score.page_setup (may be empty)
+    ___________________________
+    layout!    : HashRef
+
+    Let margin_cm = page_setup.Left | DEFAULT_MARGIN_CM   (1.27 cm)
+    Let margin_t  = margin_cm * 10 * (TENTHS_PER_SPACE / MM_PER_SPACE)
+
+    Post: layout!.page_height = 297.0 * (TENTHS_PER_SPACE / MM_PER_SPACE)
+    Post: layout!.page_width  = 210.0 * (TENTHS_PER_SPACE / MM_PER_SPACE)
+    Post: layout!.margin_t    = margin_t
+    Post: layout!.center_x    = layout!.page_width / 2
+    Post: layout!.right_x     = layout!.page_width - margin_t
+    Post: function is pure (no I/O, no state mutation)
+
+=head2 _pos_to_pitch
+
+    PosToPitch
+    ___________________________
+    pos_str    : String    -- NWC position string, e.g. '#-6', 'b3', '-9^'
+    clef       : String    -- NWC clef name, e.g. 'Treble', 'Bass'
+    key_fifths : Z         -- circle-of-fifths integer (-7 .. 7)
+    ___________________________
+    pitch!     : HashRef { step, octave, alter, accidental? }
+
+    Let (acc_prefix, pos_num) = parse(pos_str)
+    Let (ref_oct, ref_step)   = CLEF_REF[clef]
+    Let index  = ref_oct * 7 + ref_step + pos_num
+    Let octave = floor(index / 7)
+    Let step_i = index - octave * 7               -- in 0..6
+    Let step   = STEP_NAMES[step_i]               -- in {C,D,E,F,G,A,B}
+
+    Post: pitch!.step   = step
+    Post: pitch!.octave = octave
+    Post: acc_prefix = ''  => pitch!.alter = key_alter_for_step(step_i, key_fifths)
+                               pitch!.accidental = undef
+          acc_prefix = '#'  => pitch!.alter = 1,   pitch!.accidental = 'sharp'
+          acc_prefix = 'b'  => pitch!.alter = -1,  pitch!.accidental = 'flat'
+          acc_prefix = 'n'  => pitch!.alter = 0,   pitch!.accidental = 'natural'
+          acc_prefix = 'x'
+       or acc_prefix = '##' => pitch!.alter = 2,   pitch!.accidental = 'double-sharp'
+          acc_prefix = 'bb' => pitch!.alter = -2,  pitch!.accidental = 'double-flat'
 
 =cut
