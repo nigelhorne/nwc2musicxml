@@ -8,7 +8,7 @@ our $VERSION = '0.01';
 
 use Carp qw(croak carp);
 use Readonly;
-use Params::Validate qw(validate_with SCALAR HASHREF ARRAYREF);
+use Params::Validate::Strict qw(validate_strict);
 use Params::Get;
 
 # ---------------------------------------------------------------------------
@@ -99,22 +99,22 @@ and can be printed at batch completion.
 =cut
 
 sub new {
-	my $class = shift;
-	my %args  = validate_with(
-		params => \@_,
-		spec   => {
-			level       => { type => SCALAR,  default  => 'normal' },
-			warnings_fh => { optional => 1 },
+	my ($class, %input) = @_;
+	my $warnings_fh = delete $input{warnings_fh};   # glob refs can't be typed
+	my $args = validate_strict(
+		schema => {
+			level => { type => 'scalar', optional => 1, default => 'normal' },
 		},
-		allow_extra => 0,
+		input => \%input,
 	);
+	croak $@ unless defined $args;
 
-	croak _fmt_msg('error_internal', 'Unknown log level: ' . $args{level})
-		unless exists $LOG_LEVEL_MAP{ $args{level} };
+	croak _fmt_msg('error_internal', 'Unknown log level: ' . $args->{level})
+		unless exists $LOG_LEVEL_MAP{ $args->{level} };
 
 	my $self = bless {
-		_level       => $LOG_LEVEL_MAP{ $args{level} },
-		_warnings_fh => $args{warnings_fh},
+		_level       => $LOG_LEVEL_MAP{ $args->{level} },
+		_warnings_fh => $warnings_fh,
 		_warnings    => [],
 		_counts      => { processed => 0, successful => 0, warnings => 0, failed => 0 },
 	}, $class;
@@ -332,21 +332,21 @@ Increments the internal warning counter.  Writes to C<warnings_fh> if set.
 =cut
 
 sub warn_unsupported {
-	my $self = shift;
-	my %args = validate_with(
-		params => \@_,
-		spec   => {
-			file   => { type => SCALAR },
-			staff  => { type => SCALAR },
-			pos    => { type => SCALAR, default => '?' },
-			object => { type => SCALAR },
-			reason => { type => SCALAR, default => 'unknown' },
+	my ($self, %input) = @_;
+	my $args = validate_strict(
+		schema => {
+			file   => { type => 'scalar' },
+			staff  => { type => 'scalar' },
+			pos    => { type => 'scalar', optional => 1, default => '?' },
+			object => { type => 'scalar' },
+			reason => { type => 'scalar', optional => 1, default => 'unknown' },
 		},
-		allow_extra => 0,
+		input => \%input,
 	);
+	croak $@ unless defined $args;
 
 	my $msg = _fmt_msg('warn_unsupported_obj',
-		$args{file}, $args{staff}, $args{pos}, $args{object}, $args{reason});
+		$args->{file}, $args->{staff}, $args->{pos}, $args->{object}, $args->{reason});
 
 	$self->_record_warning($msg);
 	return $self;
@@ -389,22 +389,22 @@ C<$self>.
 =cut
 
 sub warn_approximate {
-	my $self = shift;
-	my %args = validate_with(
-		params => \@_,
-		spec   => {
-			file          => { type => SCALAR },
-			staff         => { type => SCALAR },
-			pos           => { type => SCALAR, default => '?' },
-			feature       => { type => SCALAR },
-			approximation => { type => SCALAR },
+	my ($self, %input) = @_;
+	my $args = validate_strict(
+		schema => {
+			file          => { type => 'scalar' },
+			staff         => { type => 'scalar' },
+			pos           => { type => 'scalar', optional => 1, default => '?' },
+			feature       => { type => 'scalar' },
+			approximation => { type => 'scalar' },
 		},
-		allow_extra => 0,
+		input => \%input,
 	);
+	croak $@ unless defined $args;
 
 	my $msg = _fmt_msg('warn_approx_feature',
-		$args{file}, $args{staff}, $args{pos},
-		$args{feature}, $args{approximation});
+		$args->{file}, $args->{staff}, $args->{pos},
+		$args->{feature}, $args->{approximation});
 
 	$self->_record_warning($msg);
 	return $self;
@@ -444,17 +444,17 @@ C<$self>.
 =cut
 
 sub count {
-	my $self = shift;
-	my %args = validate_with(
-		params => \@_,
-		spec   => { outcome => { type => SCALAR } },
-		allow_extra => 0,
+	my ($self, %input) = @_;
+	my $args = validate_strict(
+		schema => { outcome => { type => 'scalar' } },
+		input  => \%input,
 	);
+	croak $@ unless defined $args;
 
-	croak _fmt_msg('error_internal', 'Unknown counter: ' . $args{outcome})
-		unless exists $self->{_counts}{ $args{outcome} };
+	croak _fmt_msg('error_internal', 'Unknown counter: ' . $args->{outcome})
+		unless exists $self->{_counts}{ $args->{outcome} };
 
-	$self->{_counts}{ $args{outcome} }++;
+	$self->{_counts}{ $args->{outcome} }++;
 	return $self;
 }
 

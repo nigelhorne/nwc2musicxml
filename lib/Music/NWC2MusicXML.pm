@@ -11,7 +11,7 @@ use Readonly;
 use File::Spec ();
 use File::Basename qw(basename dirname);
 use File::Path qw(make_path);
-use Params::Validate qw(validate_with SCALAR HASHREF);
+use Params::Validate::Strict qw(validate_strict);
 use Params::Get;
 use Music::NWC2MusicXML::NWC;
 use Music::NWC2MusicXML::Parser;
@@ -181,25 +181,25 @@ None.
 =cut
 
 sub new {
-	my $class = shift;
-	my %args  = validate_with(
-		params => \@_,
-		spec   => {
-			log_level   => { type => SCALAR, default  => 'normal' },
-			warnings_fh => { optional => 1 },
-			validate    => { type => SCALAR, default  => 0 },
+	my ($class, %input) = @_;
+	my $warnings_fh = delete $input{warnings_fh};   # glob refs can't be typed
+	my $args = validate_strict(
+		schema => {
+			log_level => { type => 'scalar', optional => 1, default  => 'normal' },
+			validate  => { type => 'scalar', optional => 1, default  => 0 },
 		},
-		allow_extra => 0,
+		input => \%input,
 	);
+	croak $@ unless defined $args;
 
 	my $diag = Music::NWC2MusicXML::Diagnostics->new(
-		level       => $args{log_level},
-		(defined $args{warnings_fh} ? (warnings_fh => $args{warnings_fh}) : ()),
+		level       => $args->{log_level},
+		(defined $warnings_fh ? (warnings_fh => $warnings_fh) : ()),
 	);
 
 	my $self = bless {
 		_diagnostics => $diag,
-		_validate    => $args{validate},
+		_validate    => $args->{validate},
 		_decoder     => Music::NWC2MusicXML::NWC->new(    diagnostics => $diag ),
 		_parser      => Music::NWC2MusicXML::Parser->new( diagnostics => $diag ),
 		_generator   => Music::NWC2MusicXML::MusicXML->new( diagnostics => $diag ),
@@ -287,33 +287,33 @@ Croaks on fatal errors; non-fatal issues are issued as warnings.
 =cut
 
 sub convert {
-	my $self = shift;
-	my %args = validate_with(
-		params => \@_,
-		spec   => {
-			input     => { type => SCALAR },
-			output    => { type => SCALAR, optional => 1 },
-			overwrite => { type => SCALAR, default  => 0 },
+	my ($self, %input) = @_;
+	my $args = validate_strict(
+		schema => {
+			input     => { type => 'scalar' },
+			output    => { type => 'scalar', optional => 1 },
+			overwrite => { type => 'scalar', optional => 1, default  => 0 },
 		},
-		allow_extra => 0,
+		input => \%input,
 	);
+	croak $@ unless defined $args;
 
-	my $input  = $args{input};
-	my $output = $args{output} // _default_output($input);
+	my $in     = $args->{input};
+	my $output = $args->{output} // _default_output($in);
 	my $diag   = $self->{_diagnostics};
 
-	croak _fmt_msg('error_file_not_found', $input)
-		unless -f $input;
+	croak _fmt_msg('error_file_not_found', $in)
+		unless -f $in;
 
-	if (!$args{overwrite} && -f $output) {
+	if (!$args->{overwrite} && -f $output) {
 		$diag->verbose(_fmt_msg('info_skipped', $output));
 		return $output;
 	}
 
 	$diag->count(outcome => 'processed');
-	$diag->info(_fmt_msg('info_converting', $input, $output));
+	$diag->info(_fmt_msg('info_converting', $in, $output));
 
-	return $self->_single_convert($input, $output);
+	return $self->_single_convert($in, $output);
 }
 
 # ---------------------------------------------------------------------------
@@ -397,48 +397,48 @@ Does not croak on per-file failures.
 =cut
 
 sub batch_convert {
-	my $self = shift;
-	my %args = validate_with(
-		params => \@_,
-		spec   => {
-			inputs     => {},
-			output_dir => { type => SCALAR, optional => 1 },
-			overwrite  => { type => SCALAR, default  => 0 },
-			recursive  => { type => SCALAR, default  => 0 },
-			base_dir   => { type => SCALAR, optional => 1 },
+	my ($self, %input) = @_;
+	my $args = validate_strict(
+		schema => {
+			inputs     => { type => 'arrayref' },
+			output_dir => { type => 'scalar',   optional => 1 },
+			overwrite  => { type => 'scalar',   optional => 1, default  => 0 },
+			recursive  => { type => 'scalar',   optional => 1, default  => 0 },
+			base_dir   => { type => 'scalar',   optional => 1 },
 		},
-		allow_extra => 0,
+		input => \%input,
 	);
+	croak $@ unless defined $args;
 
 	my $diag = $self->{_diagnostics};
 	my @results;
 
-	for my $input (@{ $args{inputs} }) {
+	for my $file (@{ $args->{inputs} }) {
 		# Compute output path
 		my $output = $self->_batch_output_path(
-			input      => $input,
-			output_dir => $args{output_dir},
-			recursive  => $args{recursive},
-			base_dir   => $args{base_dir},
+			input      => $file,
+			output_dir => $args->{output_dir},
+			recursive  => $args->{recursive},
+			base_dir   => $args->{base_dir},
 		);
 
 		# A per-file failure must not abort the batch
 		my $ok = eval {
 			$self->convert(
-				input     => $input,
+				input     => $file,
 				output    => $output,
-				overwrite => $args{overwrite},
+				overwrite => $args->{overwrite},
 			);
 		};
 
 		if ($@) {
-			$diag->info(_fmt_msg('info_done', "FAILED: $input -- $@"));
+			$diag->info(_fmt_msg('info_done', "FAILED: $file -- $@"));
 			$diag->count(outcome => 'failed');
 		} else {
 			$diag->count(outcome => 'successful');
 		}
 
-		push @results, { input => $input, output => $output, ok => !!$ok };
+		push @results, { input => $file, output => $output, ok => !!$ok };
 	}
 
 	$diag->summary;
@@ -529,33 +529,33 @@ sub _default_output {
 }
 
 sub _batch_output_path {
-	my $self = shift;
-	my %args = validate_with(
-		params => \@_,
-		spec   => {
-			input      => { type => SCALAR },
-			output_dir => { type => SCALAR, optional => 1 },
-			recursive  => { type => SCALAR, default  => 0 },
-			base_dir   => { type => SCALAR, optional => 1 },
+	my ($self, %input) = @_;
+	my $args = validate_strict(
+		schema => {
+			input      => { type => 'scalar' },
+			output_dir => { type => 'scalar', optional => 1 },
+			recursive  => { type => 'scalar', optional => 1, default  => 0 },
+			base_dir   => { type => 'scalar', optional => 1 },
 		},
-		allow_extra => 0,
+		input => \%input,
 	);
+	croak $@ unless defined $args;
 
-	my $out_name = basename($args{input});
+	my $out_name = basename($args->{input});
 	$out_name =~ s/\Q$INPUT_EXT\E$//i;
 	$out_name .= $OUTPUT_EXT;
 
-	unless (defined $args{output_dir}) {
-		return File::Spec->catfile(dirname($args{input}), $out_name);
+	unless (defined $args->{output_dir}) {
+		return File::Spec->catfile(dirname($args->{input}), $out_name);
 	}
 
-	if ($args{recursive} && defined $args{base_dir}) {
+	if ($args->{recursive} && defined $args->{base_dir}) {
 		# Compute relative path from base_dir to preserve directory structure
-		my $rel = File::Spec->abs2rel(dirname($args{input}), $args{base_dir});
-		return File::Spec->catfile($args{output_dir}, $rel, $out_name);
+		my $rel = File::Spec->abs2rel(dirname($args->{input}), $args->{base_dir});
+		return File::Spec->catfile($args->{output_dir}, $rel, $out_name);
 	}
 
-	return File::Spec->catfile($args{output_dir}, $out_name);
+	return File::Spec->catfile($args->{output_dir}, $out_name);
 }
 
 sub _fmt_msg {

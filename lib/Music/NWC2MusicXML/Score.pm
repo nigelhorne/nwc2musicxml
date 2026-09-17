@@ -8,7 +8,7 @@ our $VERSION = '0.01';
 
 use Carp qw(croak carp);
 use Readonly;
-use Params::Validate qw(validate_with SCALAR HASHREF ARRAYREF);
+use Params::Validate::Strict qw(validate_strict);
 use Params::Get;
 use Music::NWC2MusicXML::Staff;
 
@@ -70,23 +70,23 @@ terms.  The C<Music::NWC2MusicXML::MusicXML> generator translates it to XML.
 =cut
 
 sub new {
-	my $class = shift;
-	my %args  = validate_with(
-		params => \@_,
-		spec   => {
-			metadata      => { type => HASHREF, default  => {} },
-			page_setup    => { type => HASHREF, default  => {} },
-			properties    => { type => HASHREF, default  => {} },
-			nwc_version   => { type => SCALAR,  optional => 1 },
+	my ($class, %input) = @_;
+	my $args = validate_strict(
+		schema => {
+			metadata      => { type => 'hashref', optional => 1, default  => {} },
+			page_setup    => { type => 'hashref', optional => 1, default  => {} },
+			properties    => { type => 'hashref', optional => 1, default  => {} },
+			nwc_version   => { type => 'scalar',  optional => 1 },
 		},
-		allow_extra => 0,
+		input => \%input,
 	);
+	croak $@ unless defined $args;
 
 	my $self = bless {
-		_metadata    => $args{metadata},
-		_page_setup  => $args{page_setup},
-		_properties  => $args{properties},
-		_nwc_version => $args{nwc_version},
+		_metadata    => $args->{metadata},
+		_page_setup  => $args->{page_setup},
+		_properties  => $args->{properties},
+		_nwc_version => $args->{nwc_version},
 		_staves      => [],
 	}, $class;
 

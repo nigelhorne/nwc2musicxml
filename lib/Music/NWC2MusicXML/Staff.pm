@@ -8,7 +8,7 @@ our $VERSION = '0.01';
 
 use Carp qw(croak carp);
 use Readonly;
-use Params::Validate qw(validate_with SCALAR HASHREF ARRAYREF);
+use Params::Validate::Strict qw(validate_strict);
 use Params::Get;
 use Music::NWC2MusicXML::Event;
 
@@ -51,33 +51,33 @@ to produce C<< <measure> >> elements.
 =cut
 
 sub new {
-	my $class = shift;
-	my %args  = validate_with(
-		params => \@_,
-		spec   => {
-			name          => { type => SCALAR,  default  => 'Staff' },
-			group         => { type => SCALAR,  default  => 'Standard' },
-			lines         => { type => SCALAR,  default  => 5 },
-			visible       => { type => SCALAR,  default  => 1 },
-			ending_bar    => { type => SCALAR,  optional => 1 },
-			instrument    => { type => HASHREF, default  => {} },
-			initial_clef  => { type => SCALAR,  optional => 1 },
-			initial_key   => { type => HASHREF, optional => 1 },
-			initial_timesig => { type => HASHREF, optional => 1 },
+	my ($class, %input) = @_;
+	my $args = validate_strict(
+		schema => {
+			name          => { type => 'scalar',  optional => 1, default  => 'Staff' },
+			group         => { type => 'scalar',  optional => 1, default  => 'Standard' },
+			lines         => { type => 'scalar',  optional => 1, default  => 5 },
+			visible       => { type => 'scalar',  optional => 1, default  => 1 },
+			ending_bar    => { type => 'scalar',  optional => 1 },
+			instrument    => { type => 'hashref', optional => 1, default  => {} },
+			initial_clef  => { type => 'scalar',  optional => 1 },
+			initial_key   => { type => 'hashref', optional => 1 },
+			initial_timesig => { type => 'hashref', optional => 1 },
 		},
-		allow_extra => 0,
+		input => \%input,
 	);
+	croak $@ unless defined $args;
 
 	my $self = bless {
-		_name            => $args{name},
-		_group           => $args{group},
-		_lines           => $args{lines},
-		_visible         => $args{visible},
-		_ending_bar      => $args{ending_bar},
-		_instrument      => $args{instrument},
-		_initial_clef    => $args{initial_clef},
-		_initial_key     => $args{initial_key},
-		_initial_timesig => $args{initial_timesig},
+		_name            => $args->{name},
+		_group           => $args->{group},
+		_lines           => $args->{lines},
+		_visible         => $args->{visible},
+		_ending_bar      => $args->{ending_bar},
+		_instrument      => $args->{instrument},
+		_initial_clef    => $args->{initial_clef},
+		_initial_key     => $args->{initial_key},
+		_initial_timesig => $args->{initial_timesig},
 		_events          => [],
 	}, $class;
 

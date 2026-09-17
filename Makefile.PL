@@ -16,7 +16,7 @@ WriteMakefile(
 		'autodie'          => 0,
 		'Carp'             => 0,
 		'Readonly'         => 0,
-		'Params::Validate' => 0,
+		'Params::Validate::Strict' => 0,
 		'Params::Get'      => 0,
 		'Compress::Zlib'   => 0,
 		'File::Basename'   => 0,

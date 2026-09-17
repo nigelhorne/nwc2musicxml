@@ -8,7 +8,7 @@ our $VERSION = '0.01';
 
 use Carp qw(croak carp);
 use Readonly;
-use Params::Validate qw(validate_with SCALAR HASHREF);
+use Params::Validate::Strict qw(validate_strict);
 use Params::Get;
 use Music::NWC2MusicXML::Score;
 use Music::NWC2MusicXML::Staff;
@@ -145,17 +145,17 @@ Blessed C<Music::NWC2MusicXML::Parser> object.
 =cut
 
 sub new {
-	my $class = shift;
-	my %args  = validate_with(
-		params => \@_,
-		spec   => {
-			diagnostics => { optional => 1 },
+	my ($class, %input) = @_;
+	my $args = validate_strict(
+		schema => {
+			diagnostics => { type => 'object', optional => 1 },
 		},
-		allow_extra => 0,
+		input => \%input,
 	);
+	croak $@ unless defined $args;
 
 	my $self = bless {
-		_diagnostics => $args{diagnostics},
+		_diagnostics => $args->{diagnostics},
 		_score       => undef,
 		_line_no     => 0,
 		_record_count => 0,

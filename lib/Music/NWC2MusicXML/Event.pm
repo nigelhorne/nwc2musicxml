@@ -8,7 +8,7 @@ our $VERSION = '0.01';
 
 use Carp qw(croak carp);
 use Readonly;
-use Params::Validate qw(validate_with SCALAR HASHREF ARRAYREF);
+use Params::Validate::Strict qw(validate_strict);
 use Params::Get;
 
 # ---------------------------------------------------------------------------
@@ -234,40 +234,40 @@ None.
 =cut
 
 sub new {
-	my $class = shift;
-	my %args  = validate_with(
-		params => \@_,
-		spec   => {
-			type       => { type => SCALAR },
-			nwc_label  => { type => SCALAR,   optional => 1 },
-			start_time => { type => ARRAYREF, default  => [0, 1] },
-			duration   => { type => ARRAYREF, default  => [0, 1] },
-			data       => { type => HASHREF,  default  => {} },
+	my ($class, %input) = @_;
+	my $args = validate_strict(
+		schema => {
+			type       => { type => 'scalar' },
+			nwc_label  => { type => 'scalar',   optional => 1 },
+			start_time => { type => 'arrayref', optional => 1, default  => [0, 1] },
+			duration   => { type => 'arrayref', optional => 1, default  => [0, 1] },
+			data       => { type => 'hashref',  optional => 1, default  => {} },
 		},
-		allow_extra => 0,
+		input => \%input,
 	);
+	croak $@ unless defined $args;
 
 	# Normalise unknown types to UnsupportedEvent rather than croaking;
 	# this preserves conversion continuity when new NWC versions add objects.
 	unless (
-		exists $MUSICAL_EVENT_TYPES{ $args{type} }
-		|| exists $METADATA_EVENT_TYPES{ $args{type} }
+		exists $MUSICAL_EVENT_TYPES{ $args->{type} }
+		|| exists $METADATA_EVENT_TYPES{ $args->{type} }
 	) {
-		carp _fmt_msg('error_unknown_type', $args{type})
+		carp _fmt_msg('error_unknown_type', $args->{type})
 			. ' -- storing as UnsupportedEvent';
-		$args{nwc_label} //= $args{type};
-		$args{type} = 'UnsupportedEvent';
+		$args->{nwc_label} //= $args->{type};
+		$args->{type} = 'UnsupportedEvent';
 	}
 
-	_validate_rational($args{start_time});
-	_validate_rational($args{duration});
+	_validate_rational($args->{start_time});
+	_validate_rational($args->{duration});
 
 	my $self = bless {
-		_type       => $args{type},
-		_nwc_label  => $args{nwc_label} // $args{type},
-		_start_time => _reduce_rational($args{start_time}),
-		_duration   => _reduce_rational($args{duration}),
-		_data       => $args{data},
+		_type       => $args->{type},
+		_nwc_label  => $args->{nwc_label} // $args->{type},
+		_start_time => _reduce_rational($args->{start_time}),
+		_duration   => _reduce_rational($args->{duration}),
+		_data       => $args->{data},
 	}, $class;
 
 	return $self;
