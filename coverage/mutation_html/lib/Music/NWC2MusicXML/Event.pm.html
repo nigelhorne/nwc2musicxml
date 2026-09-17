@@ -293,8 +293,8 @@ a.intra-dot:hover { color: #7700bb; }
 <div class="nav"><a href="../../../../index.html">Index</a>
  <a href="NWC.pm.html">Next ➡</a></div><div class='summary'>
 <strong>Structural Coverage (Approximate)</strong><p>
-TER1 (Statement): 98.57%<br>
-TER2 (Branch): 71.43%<br>
+TER1 (Statement): 98.59%<br>
+TER2 (Branch): 78.57%<br>
 TER3 (LCSAJ): 100.0% (2/2)<br>
 Approximate LCSAJ segments: 15<br>
 </div>
@@ -576,7 +576,7 @@ Approximate LCSAJ segments: 15<br>
 </span><span class="">  235: =cut
 </span><span class="">  236: 
 </span><span class="">  237: sub new {
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">238 → 253 → 263</span></span>  238: 	my ($class, %input) = @_;
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">238 → 254 → 264</span></span>  238: 	my ($class, %input) = @_;
 </span><span class="">  239: 	my $args = validate_strict(
 </span><span class="">  240: 		schema =&gt; {
 </span><span class="">  241: 			type       =&gt; { type =&gt; &#39;scalar&#39; },
@@ -591,66 +591,67 @@ Approximate LCSAJ segments: 15<br>
 </span><span class="">  250: 
 </span><span class="">  251: 	# Normalise unknown types to UnsupportedEvent rather than croaking;
 </span><span class="">  252: 	# this preserves conversion continuity when new NWC versions add objects.
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  253: 	unless (
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  254: 		exists $MUSICAL_EVENT_TYPES{ $args-&gt;{type} }
-</span><span class="">  255: 		|| exists $METADATA_EVENT_TYPES{ $args-&gt;{type} }
-</span><span class="">  256: 	) {
-</span><span class="">  257: 		carp _fmt_msg(&#39;error_unknown_type&#39;, $args-&gt;{type})
-</span><span class="">  258: 			. &#39; -- storing as UnsupportedEvent&#39;;
-</span><span class="">  259: 		$args-&gt;{nwc_label} //= $args-&gt;{type};
-</span><span class="">  260: 		$args-&gt;{type} = &#39;UnsupportedEvent&#39;;
-</span><span class="">  261: 	}
-</span><span class="">  262: 
-</span><span class="">  263: 	_validate_rational($args-&gt;{start_time});
-</span><span class="">  264: 	_validate_rational($args-&gt;{duration});
-</span><span class="">  265: 
-</span><span class="">  266: 	my $self = bless {
-</span><span class="">  267: 		_type       =&gt; $args-&gt;{type},
-</span><span class="">  268: 		_nwc_label  =&gt; $args-&gt;{nwc_label} // $args-&gt;{type},
-</span><span class="">  269: 		_start_time =&gt; _reduce_rational($args-&gt;{start_time}),
-</span><span class="">  270: 		_duration   =&gt; _reduce_rational($args-&gt;{duration}),
-</span><span class="">  271: 		_data       =&gt; $args-&gt;{data},
-</span><span class="">  272: 	}, $class;
-</span><span class="">  273: 
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  274: 	return $self;
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  275: }
-</span><span class="">  276: 
-</span><span class="">  277: # ---------------------------------------------------------------------------
-</span><span class="">  278: # Accessors
-</span><span class="">  279: # ---------------------------------------------------------------------------
-</span><span class="">  280: 
-</span><span class="">  281: =head2 type
-</span><span class="">  282: 
-</span><span class="">  283: Return the event type string.
-</span><span class="">  284: 
-</span><span class="">  285: =head3 Returns
-</span><span class="">  286: 
-</span><span class="">  287: Scalar string.
-</span><span class="">  288: 
-</span><span class="">  289: =cut
-</span><span class="">  290: 
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  291: sub type       { return $_[0]-&gt;{_type} }
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  292: 
-</span><span class="">  293: =head2 nwc_label
-</span><span class="">  294: 
-</span><span class="">  295: Return the original NWC record label (especially useful for UnsupportedEvent).
-</span><span class="">  296: 
-</span><span class="">  297: =cut
-</span><span class="">  298: 
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  299: sub nwc_label  { return $_[0]-&gt;{_nwc_label} }
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  300: 
-</span><span class="">  301: =head2 start_time
-</span><span class="">  302: 
-</span><span class="">  303: Return the rational start time as an arrayref C&lt;[$num, $den]&gt;.
-</span><span class="">  304: 
-</span><span class="">  305: =cut
-</span><span class="">  306: 
-</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  307: sub start_time { return $_[0]-&gt;{_start_time} }
+</span><span class="">  253: 	my $type_key = $args-&gt;{type} // &#39;&#39;;
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  254: 	unless (
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  255: 		exists $MUSICAL_EVENT_TYPES{$type_key}
+</span><span class="">  256: 		|| exists $METADATA_EVENT_TYPES{$type_key}
+</span><span class="">  257: 	) {
+</span><span class="">  258: 		carp _fmt_msg(&#39;error_unknown_type&#39;, $type_key || &#39;(undef)&#39;)
+</span><span class="">  259: 			. &#39; -- storing as UnsupportedEvent&#39;;
+</span><span class="">  260: 		$args-&gt;{nwc_label} //= $args-&gt;{type};
+</span><span class="">  261: 		$args-&gt;{type} = &#39;UnsupportedEvent&#39;;
+</span><span class="">  262: 	}
+</span><span class="">  263: 
+</span><span class="">  264: 	_validate_rational($args-&gt;{start_time});
+</span><span class="">  265: 	_validate_rational($args-&gt;{duration});
+</span><span class="">  266: 
+</span><span class="">  267: 	my $self = bless {
+</span><span class="">  268: 		_type       =&gt; $args-&gt;{type},
+</span><span class="">  269: 		_nwc_label  =&gt; $args-&gt;{nwc_label} // $args-&gt;{type},
+</span><span class="">  270: 		_start_time =&gt; _reduce_rational($args-&gt;{start_time}),
+</span><span class="">  271: 		_duration   =&gt; _reduce_rational($args-&gt;{duration}),
+</span><span class="">  272: 		_data       =&gt; $args-&gt;{data},
+</span><span class="">  273: 	}, $class;
+</span><span class="">  274: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  275: 	return $self;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  276: }
+</span><span class="">  277: 
+</span><span class="">  278: # ---------------------------------------------------------------------------
+</span><span class="">  279: # Accessors
+</span><span class="">  280: # ---------------------------------------------------------------------------
+</span><span class="">  281: 
+</span><span class="">  282: =head2 type
+</span><span class="">  283: 
+</span><span class="">  284: Return the event type string.
+</span><span class="">  285: 
+</span><span class="">  286: =head3 Returns
+</span><span class="">  287: 
+</span><span class="">  288: Scalar string.
+</span><span class="">  289: 
+</span><span class="">  290: =cut
+</span><span class="">  291: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  292: sub type       { return $_[0]-&gt;{_type} }
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  293: 
+</span><span class="">  294: =head2 nwc_label
+</span><span class="">  295: 
+</span><span class="">  296: Return the original NWC record label (especially useful for UnsupportedEvent).
+</span><span class="">  297: 
+</span><span class="">  298: =cut
+</span><span class="">  299: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  300: sub nwc_label  { return $_[0]-&gt;{_nwc_label} }
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  301: 
+</span><span class="">  302: =head2 start_time
+</span><span class="">  303: 
+</span><span class="">  304: Return the rational start time as an arrayref C&lt;[$num, $den]&gt;.
+</span><span class="">  305: 
+</span><span class="">  306: =cut
+</span><span class="">  307: 
+</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  308: sub start_time { return $_[0]-&gt;{_start_time} }
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
 					<ul>
-				<li><b>BOOL_NEGATE_307_18: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
+				<li><b>BOOL_NEGATE_308_18: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
 
 								<div class="suggested-test">
 								<div class="suggest-label">🧪 Suggested Test</div>
@@ -658,7 +659,7 @@ Approximate LCSAJ segments: 15<br>
 ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
 </pre>
 								</div>
-							</li><li><b>RETURN_UNDEF_307_18: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
+							</li><li><b>RETURN_UNDEF_308_18: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
 
 								<div class="suggested-test">
 								<div class="suggest-label">🧪 Suggested Test</div>
@@ -667,211 +668,211 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </pre>
 								</div>
 							</li></ul></details>
-<span class="">  308: 
-</span><span class="">  309: =head2 duration
-</span><span class="">  310: 
-</span><span class="">  311: Return the rational duration as an arrayref C&lt;[$num, $den]&gt;.
-</span><span class="">  312: 
-</span><span class="">  313: =cut
-</span><span class="">  314: 
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  315: sub duration   { return $_[0]-&gt;{_duration} }
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  316: 
-</span><span class="">  317: =head2 data
-</span><span class="">  318: 
-</span><span class="">  319: Return the type-specific payload hashref.
-</span><span class="">  320: 
-</span><span class="">  321: =cut
-</span><span class="">  322: 
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  323: sub data       { return $_[0]-&gt;{_data} }
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  324: 
-</span><span class="">  325: =head2 is_musical_event
-</span><span class="">  326: 
-</span><span class="">  327: Return true if this event contributes to the musical timeline (note, rest,
-</span><span class="">  328: chord, ...) as opposed to being a metadata record.
-</span><span class="">  329: 
-</span><span class="">  330: =cut
-</span><span class="">  331: 
-</span><span class="">  332: sub is_musical_event {
-</span><span class="">  333: 	my ($self) = @_;
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  334: 	return exists $MUSICAL_EVENT_TYPES{ $self-&gt;{_type} };
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  335: }
-</span><span class="">  336: 
-</span><span class="">  337: =head2 is_metadata
-</span><span class="">  338: 
-</span><span class="">  339: Return true if this record is score/staff metadata.
-</span><span class="">  340: 
-</span><span class="">  341: =cut
-</span><span class="">  342: 
-</span><span class="">  343: sub is_metadata {
-</span><span class="">  344: 	my ($self) = @_;
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  345: 	return exists $METADATA_EVENT_TYPES{ $self-&gt;{_type} };
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  346: }
-</span><span class="">  347: 
-</span><span class="">  348: # ---------------------------------------------------------------------------
-</span><span class="">  349: # Rational arithmetic helpers (class-level, not methods)
-</span><span class="">  350: # ---------------------------------------------------------------------------
-</span><span class="">  351: 
-</span><span class="">  352: =head2 rational_from_nwc_duration
-</span><span class="">  353: 
-</span><span class="">  354: Class method.  Convert an NWC duration name and dot count to a rational
-</span><span class="">  355: arrayref C&lt;[$num, $den]&gt; in quarter-note units.
-</span><span class="">  356: 
-</span><span class="">  357: =head3 Arguments
-</span><span class="">  358: 
-</span><span class="">  359: =over 4
-</span><span class="">  360: 
-</span><span class="">  361: =item C&lt;nwc_duration&gt; -- string such as C&lt;4th&gt;, C&lt;8th&gt;, C&lt;Half&gt; etc.
-</span><span class="">  362: 
-</span><span class="">  363: =item C&lt;dots&gt;         -- number of augmentation dots (0, 1, or 2).
-</span><span class="">  364: 
-</span><span class="">  365: =back
-</span><span class="">  366: 
-</span><span class="">  367: =head3 Returns
-</span><span class="">  368: 
-</span><span class="">  369: Arrayref C&lt;[$num, $den]&gt;.
-</span><span class="">  370: 
-</span><span class="">  371: =head3 API SPECIFICATION
-</span><span class="">  372: 
-</span><span class="">  373: =head4 Input
-</span><span class="">  374: 
-</span><span class="">  375:     nwc_duration : SCALAR (required)
-</span><span class="">  376:     dots         : SCALAR int &gt;= 0 (optional, default 0)
-</span><span class="">  377: 
-</span><span class="">  378: =head4 Output
-</span><span class="">  379: 
-</span><span class="">  380:     ARRAYREF [$num:int, $den:int]
-</span><span class="">  381: 
-</span><span class="">  382: =head3 FORMAL SPECIFICATION
-</span><span class="">  383: 
-</span><span class="">  384:  (placeholder)
-</span><span class="">  385: 
-</span><span class="">  386: =cut
-</span><span class="">  387: 
-</span><span class="">  388: sub rational_from_nwc_duration {
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">389 → 399 → 405</span></span>  389: 	my $class        = shift;
-</span><span class="">  390: 	my ($dur, $dots) = @_;
-</span><span class="">  391: 	$dots //= 0;
-</span><span class="">  392: 
-</span><span class="">  393: 	croak _fmt_msg(&#39;error_bad_duration&#39;, $dur)
-</span><span class="">  394: 		unless exists $DURATION_RATIONALS{$dur};
-</span><span class="">  395: 
-</span><span class="">  396: 	my $r      = $DURATION_RATIONALS{$dur};
-</span><span class="">  397: 	my $base_r = $r;   # preserve original: dot d adds base/2^d, not cur/2^d
-</span><span class="">  398: 
-</span><span class="">  399: 	for my $d (1 .. $dots) {
-</span><span class="">  400: 		my $add_num = $base_r-&gt;[0];
-</span><span class="">  401: 		my $add_den = $base_r-&gt;[1] * (2 ** $d);
-</span><span class="">  402: 		$r = _add_rationals($r, [$add_num, $add_den]);
-</span><span class="">  403: 	}
-</span><span class="">  404: 
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  405: 	return _reduce_rational($r);
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  406: }
-</span><span class="">  407: 
-</span><span class="">  408: =head2 rational_add
-</span><span class="">  409: 
-</span><span class="">  410: Class method.  Add two rational numbers.
-</span><span class="">  411: 
-</span><span class="">  412: =head3 Arguments
-</span><span class="">  413: 
-</span><span class="">  414: Two arrayrefs C&lt;[$n1,$d1]&gt; and C&lt;[$n2,$d2]&gt;.
-</span><span class="">  415: 
-</span><span class="">  416: =head3 Returns
-</span><span class="">  417: 
-</span><span class="">  418: Arrayref C&lt;[$num,$den]&gt; in lowest terms.
-</span><span class="">  419: 
-</span><span class="">  420: =cut
-</span><span class="">  421: 
-</span><span class="">  422: sub rational_add {
-</span><span class="">  423: 	my ($class, $r1, $r2) = @_;
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  424: 	return _reduce_rational(_add_rationals($r1, $r2));
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  425: }
-</span><span class="">  426: 
-</span><span class="">  427: =head2 rational_to_float
-</span><span class="">  428: 
-</span><span class="">  429: Class method.  Convert a rational to a floating-point number for display
-</span><span class="">  430: or approximate comparison only.  Never use the result for musical timing.
-</span><span class="">  431: 
-</span><span class="">  432: =cut
-</span><span class="">  433: 
-</span><span class="">  434: sub rational_to_float {
-</span><span class="">  435: 	my ($class, $r) = @_;
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  436: 	croak _fmt_msg(&#39;error_bad_rational&#39;) unless ref $r eq &#39;ARRAY&#39; &amp;&amp; @$r == 2 &amp;&amp; $r-&gt;[1];
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  437: 	return $r-&gt;[0] / $r-&gt;[1];
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  438: }
-</span><span class="">  439: 
-</span><span class="">  440: # ---------------------------------------------------------------------------
-</span><span class="">  441: # Private helpers
-</span><span class="">  442: # ---------------------------------------------------------------------------
-</span><span class="">  443: 
-</span><span class="">  444: sub _validate_rational {
-</span><span class="">  445: 	my ($r) = @_;
-</span><span class="">  446: 	croak _fmt_msg(&#39;error_bad_rational&#39;)
-</span><span class="">  447: 		unless ref $r eq &#39;ARRAY&#39;
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  448: 		&amp;&amp; @$r == 2
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  449: 		&amp;&amp; $r-&gt;[0] =~ /^\d+$/
-</span><span class="">  450: 		&amp;&amp; $r-&gt;[1] =~ /^[1-9]\d*$/;
-</span><span class="">  451: 	return;
-</span><span class="">  452: }
-</span><span class="">  453: 
-</span><span class="">  454: sub _add_rationals {
-</span><span class="">  455: 	my ($r1, $r2) = @_;
-</span><span class="">  456: 	my $num = $r1-&gt;[0] * $r2-&gt;[1] + $r2-&gt;[0] * $r1-&gt;[1];
-</span><span class="">  457: 	my $den = $r1-&gt;[1] * $r2-&gt;[1];
-</span><span class="">  458: 	return [$num, $den];
-</span><span class="">  459: }
-</span><span class="">  460: 
-</span><span class="">  461: sub _reduce_rational {
-</span><span class="">  462: 	my ($r) = @_;
-</span><span class="">  463: 	my $g = _gcd($r-&gt;[0], $r-&gt;[1]);
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  464: 	return $g ? [$r-&gt;[0] / $g, $r-&gt;[1] / $g] : [0, 1];
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  465: }
-</span><span class="">  466: 
-</span><span class="">  467: sub _gcd {
-</span><span class="">  468: 	my ($a, $b) = @_;
-</span><span class="">  469: 	($a, $b) = ($b, $a % $b) while $b;
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  470: 	return $a;
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  471: }
-</span><span class="">  472: 
-</span><span class="">  473: sub _fmt_msg {
-</span><span class="">  474: 	my ($key, @args) = @_;
-</span><span class="">  475: 	croak &quot;Unknown message key: $key&quot; unless exists $MESSAGES{$key};
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  476: 	return sprintf $MESSAGES{$key}, @args;
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  477: }
-</span><span class="">  478: 
-</span><span class="">  479: 1;
-</span><span class="">  480: 
-</span><span class="">  481: __END__
-</span><span class="">  482: 
-</span><span class="">  483: =head1 DIAGNOSTICS
-</span><span class="">  484: 
-</span><span class="">  485: =head3 MESSAGES
-</span><span class="">  486: 
-</span><span class="">  487: | Code                 | Meaning                              | Resolution                  |
-</span><span class="">  488: |----------------------|--------------------------------------|-----------------------------|
-</span><span class="">  489: | error_unknown_type   | Unrecognised event type              | Will be stored as UnsupportedEvent |
-</span><span class="">  490: | error_bad_duration   | NWC duration name not in lookup table| Check parser input          |
-</span><span class="">  491: | error_bad_rational   | Rational arrayref malformed          | Use [$non-neg-int, $pos-int] |
-</span><span class="">  492: 
-</span><span class="">  493: =head1 LIMITATIONS
-</span><span class="">  494: 
-</span><span class="">  495: =over 4
-</span><span class="">  496: 
-</span><span class="">  497: =item * Double-dotted notes supported; triple-dotted are not.
-</span><span class="">  498: 
-</span><span class="">  499: =item * Tuplet time-modification is not computed here; the parser applies it to each affected event.
-</span><span class="">  500: 
-</span><span class="">  501: =back
-</span><span class="">  502: 
-</span><span class="">  503: =head1 AUTHOR
-</span><span class="">  504: 
-</span><span class="">  505: Nigel Horne C&lt;&lt; &lt;nigel.horne@gmail.com&gt; &gt;&gt;
-</span><span class="">  506: 
-</span><span class="">  507: =head1 LICENSE
-</span><span class="">  508: 
-</span><span class="">  509: This library is free software; you can redistribute it and/or modify it
-</span><span class="">  510: under the same terms as Perl itself.
-</span><span class="">  511: 
-</span><span class="">  512: =cut
+<span class="">  309: 
+</span><span class="">  310: =head2 duration
+</span><span class="">  311: 
+</span><span class="">  312: Return the rational duration as an arrayref C&lt;[$num, $den]&gt;.
+</span><span class="">  313: 
+</span><span class="">  314: =cut
+</span><span class="">  315: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  316: sub duration   { return $_[0]-&gt;{_duration} }
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  317: 
+</span><span class="">  318: =head2 data
+</span><span class="">  319: 
+</span><span class="">  320: Return the type-specific payload hashref.
+</span><span class="">  321: 
+</span><span class="">  322: =cut
+</span><span class="">  323: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  324: sub data       { return $_[0]-&gt;{_data} }
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  325: 
+</span><span class="">  326: =head2 is_musical_event
+</span><span class="">  327: 
+</span><span class="">  328: Return true if this event contributes to the musical timeline (note, rest,
+</span><span class="">  329: chord, ...) as opposed to being a metadata record.
+</span><span class="">  330: 
+</span><span class="">  331: =cut
+</span><span class="">  332: 
+</span><span class="">  333: sub is_musical_event {
+</span><span class="">  334: 	my ($self) = @_;
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  335: 	return exists $MUSICAL_EVENT_TYPES{ $self-&gt;{_type} };
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  336: }
+</span><span class="">  337: 
+</span><span class="">  338: =head2 is_metadata
+</span><span class="">  339: 
+</span><span class="">  340: Return true if this record is score/staff metadata.
+</span><span class="">  341: 
+</span><span class="">  342: =cut
+</span><span class="">  343: 
+</span><span class="">  344: sub is_metadata {
+</span><span class="">  345: 	my ($self) = @_;
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  346: 	return exists $METADATA_EVENT_TYPES{ $self-&gt;{_type} };
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  347: }
+</span><span class="">  348: 
+</span><span class="">  349: # ---------------------------------------------------------------------------
+</span><span class="">  350: # Rational arithmetic helpers (class-level, not methods)
+</span><span class="">  351: # ---------------------------------------------------------------------------
+</span><span class="">  352: 
+</span><span class="">  353: =head2 rational_from_nwc_duration
+</span><span class="">  354: 
+</span><span class="">  355: Class method.  Convert an NWC duration name and dot count to a rational
+</span><span class="">  356: arrayref C&lt;[$num, $den]&gt; in quarter-note units.
+</span><span class="">  357: 
+</span><span class="">  358: =head3 Arguments
+</span><span class="">  359: 
+</span><span class="">  360: =over 4
+</span><span class="">  361: 
+</span><span class="">  362: =item C&lt;nwc_duration&gt; -- string such as C&lt;4th&gt;, C&lt;8th&gt;, C&lt;Half&gt; etc.
+</span><span class="">  363: 
+</span><span class="">  364: =item C&lt;dots&gt;         -- number of augmentation dots (0, 1, or 2).
+</span><span class="">  365: 
+</span><span class="">  366: =back
+</span><span class="">  367: 
+</span><span class="">  368: =head3 Returns
+</span><span class="">  369: 
+</span><span class="">  370: Arrayref C&lt;[$num, $den]&gt;.
+</span><span class="">  371: 
+</span><span class="">  372: =head3 API SPECIFICATION
+</span><span class="">  373: 
+</span><span class="">  374: =head4 Input
+</span><span class="">  375: 
+</span><span class="">  376:     nwc_duration : SCALAR (required)
+</span><span class="">  377:     dots         : SCALAR int &gt;= 0 (optional, default 0)
+</span><span class="">  378: 
+</span><span class="">  379: =head4 Output
+</span><span class="">  380: 
+</span><span class="">  381:     ARRAYREF [$num:int, $den:int]
+</span><span class="">  382: 
+</span><span class="">  383: =head3 FORMAL SPECIFICATION
+</span><span class="">  384: 
+</span><span class="">  385:  (placeholder)
+</span><span class="">  386: 
+</span><span class="">  387: =cut
+</span><span class="">  388: 
+</span><span class="">  389: sub rational_from_nwc_duration {
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">390 → 400 → 406</span></span>  390: 	my $class        = shift;
+</span><span class="">  391: 	my ($dur, $dots) = @_;
+</span><span class="">  392: 	$dots //= 0;
+</span><span class="">  393: 
+</span><span class="">  394: 	croak _fmt_msg(&#39;error_bad_duration&#39;, $dur // &#39;(undef)&#39;)
+</span><span class="">  395: 		unless defined $dur &amp;&amp; exists $DURATION_RATIONALS{$dur};
+</span><span class="">  396: 
+</span><span class="">  397: 	my $r      = $DURATION_RATIONALS{$dur};
+</span><span class="">  398: 	my $base_r = $r;   # preserve original: dot d adds base/2^d, not cur/2^d
+</span><span class="">  399: 
+</span><span class="">  400: 	for my $d (1 .. $dots) {
+</span><span class="">  401: 		my $add_num = $base_r-&gt;[0];
+</span><span class="">  402: 		my $add_den = $base_r-&gt;[1] * (2 ** $d);
+</span><span class="">  403: 		$r = _add_rationals($r, [$add_num, $add_den]);
+</span><span class="">  404: 	}
+</span><span class="">  405: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  406: 	return _reduce_rational($r);
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  407: }
+</span><span class="">  408: 
+</span><span class="">  409: =head2 rational_add
+</span><span class="">  410: 
+</span><span class="">  411: Class method.  Add two rational numbers.
+</span><span class="">  412: 
+</span><span class="">  413: =head3 Arguments
+</span><span class="">  414: 
+</span><span class="">  415: Two arrayrefs C&lt;[$n1,$d1]&gt; and C&lt;[$n2,$d2]&gt;.
+</span><span class="">  416: 
+</span><span class="">  417: =head3 Returns
+</span><span class="">  418: 
+</span><span class="">  419: Arrayref C&lt;[$num,$den]&gt; in lowest terms.
+</span><span class="">  420: 
+</span><span class="">  421: =cut
+</span><span class="">  422: 
+</span><span class="">  423: sub rational_add {
+</span><span class="">  424: 	my ($class, $r1, $r2) = @_;
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  425: 	return _reduce_rational(_add_rationals($r1, $r2));
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  426: }
+</span><span class="">  427: 
+</span><span class="">  428: =head2 rational_to_float
+</span><span class="">  429: 
+</span><span class="">  430: Class method.  Convert a rational to a floating-point number for display
+</span><span class="">  431: or approximate comparison only.  Never use the result for musical timing.
+</span><span class="">  432: 
+</span><span class="">  433: =cut
+</span><span class="">  434: 
+</span><span class="">  435: sub rational_to_float {
+</span><span class="">  436: 	my ($class, $r) = @_;
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  437: 	croak _fmt_msg(&#39;error_bad_rational&#39;) unless ref $r eq &#39;ARRAY&#39; &amp;&amp; @$r == 2 &amp;&amp; $r-&gt;[1];
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  438: 	return $r-&gt;[0] / $r-&gt;[1];
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  439: }
+</span><span class="">  440: 
+</span><span class="">  441: # ---------------------------------------------------------------------------
+</span><span class="">  442: # Private helpers
+</span><span class="">  443: # ---------------------------------------------------------------------------
+</span><span class="">  444: 
+</span><span class="">  445: sub _validate_rational {
+</span><span class="">  446: 	my ($r) = @_;
+</span><span class="">  447: 	croak _fmt_msg(&#39;error_bad_rational&#39;)
+</span><span class="">  448: 		unless ref $r eq &#39;ARRAY&#39;
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  449: 		&amp;&amp; @$r == 2
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  450: 		&amp;&amp; $r-&gt;[0] =~ /^\d+$/
+</span><span class="">  451: 		&amp;&amp; $r-&gt;[1] =~ /^[1-9]\d*$/;
+</span><span class="">  452: 	return;
+</span><span class="">  453: }
+</span><span class="">  454: 
+</span><span class="">  455: sub _add_rationals {
+</span><span class="">  456: 	my ($r1, $r2) = @_;
+</span><span class="">  457: 	my $num = $r1-&gt;[0] * $r2-&gt;[1] + $r2-&gt;[0] * $r1-&gt;[1];
+</span><span class="">  458: 	my $den = $r1-&gt;[1] * $r2-&gt;[1];
+</span><span class="">  459: 	return [$num, $den];
+</span><span class="">  460: }
+</span><span class="">  461: 
+</span><span class="">  462: sub _reduce_rational {
+</span><span class="">  463: 	my ($r) = @_;
+</span><span class="">  464: 	my $g = _gcd($r-&gt;[0], $r-&gt;[1]);
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  465: 	return $g ? [$r-&gt;[0] / $g, $r-&gt;[1] / $g] : [0, 1];
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  466: }
+</span><span class="">  467: 
+</span><span class="">  468: sub _gcd {
+</span><span class="">  469: 	my ($a, $b) = @_;
+</span><span class="">  470: 	($a, $b) = ($b, $a % $b) while $b;
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  471: 	return $a;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  472: }
+</span><span class="">  473: 
+</span><span class="">  474: sub _fmt_msg {
+</span><span class="">  475: 	my ($key, @args) = @_;
+</span><span class="">  476: 	croak &quot;Unknown message key: $key&quot; unless exists $MESSAGES{$key};
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  477: 	return sprintf $MESSAGES{$key}, @args;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  478: }
+</span><span class="">  479: 
+</span><span class="">  480: 1;
+</span><span class="">  481: 
+</span><span class="">  482: __END__
+</span><span class="">  483: 
+</span><span class="">  484: =head1 DIAGNOSTICS
+</span><span class="">  485: 
+</span><span class="">  486: =head3 MESSAGES
+</span><span class="">  487: 
+</span><span class="">  488: | Code                 | Meaning                              | Resolution                  |
+</span><span class="">  489: |----------------------|--------------------------------------|-----------------------------|
+</span><span class="">  490: | error_unknown_type   | Unrecognised event type              | Will be stored as UnsupportedEvent |
+</span><span class="">  491: | error_bad_duration   | NWC duration name not in lookup table| Check parser input          |
+</span><span class="">  492: | error_bad_rational   | Rational arrayref malformed          | Use [$non-neg-int, $pos-int] |
+</span><span class="">  493: 
+</span><span class="">  494: =head1 LIMITATIONS
+</span><span class="">  495: 
+</span><span class="">  496: =over 4
+</span><span class="">  497: 
+</span><span class="">  498: =item * Double-dotted notes supported; triple-dotted are not.
+</span><span class="">  499: 
+</span><span class="">  500: =item * Tuplet time-modification is not computed here; the parser applies it to each affected event.
+</span><span class="">  501: 
+</span><span class="">  502: =back
+</span><span class="">  503: 
+</span><span class="">  504: =head1 AUTHOR
+</span><span class="">  505: 
+</span><span class="">  506: Nigel Horne C&lt;&lt; &lt;nigel.horne@gmail.com&gt; &gt;&gt;
+</span><span class="">  507: 
+</span><span class="">  508: =head1 LICENSE
+</span><span class="">  509: 
+</span><span class="">  510: This library is free software; you can redistribute it and/or modify it
+</span><span class="">  511: under the same terms as Perl itself.
+</span><span class="">  512: 
+</span><span class="">  513: =cut
 </span></pre>
 
 <script>
