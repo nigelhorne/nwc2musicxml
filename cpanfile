@@ -10,7 +10,7 @@ requires 'File::Path';
 requires 'File::Spec';
 requires 'Getopt::Long';
 requires 'Params::Get';
-requires 'Params::Validate';
+requires 'Params::Validate::Strict';
 requires 'Pod::Usage';
 requires 'Readonly';
 requires 'autodie';
