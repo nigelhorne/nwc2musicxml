@@ -4,7 +4,7 @@ use ExtUtils::MakeMaker;
 
 WriteMakefile(
 	NAME             => 'Music::NWC2MusicXML',
-	AUTHOR           => 'Nigel Horne <nigel.horne@gmail.com>',
+	AUTHOR           => 'Nigel Horne <njh@nigelhorne.com>',
 	VERSION_FROM     => 'lib/Music/NWC2MusicXML.pm',
 	ABSTRACT_FROM    => 'lib/Music/NWC2MusicXML.pm',
 	LICENSE          => 'perl',

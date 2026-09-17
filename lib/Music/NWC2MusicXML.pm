@@ -598,11 +598,14 @@ internally; use an external validator with C<--validate>.
 
 =head1 AUTHOR
 
-Nigel Horne C<< <nigel.horne@gmail.com> >>
+Nigel Horne C<< <njh@nigelhorne.com> >>
 
 =head1 LICENSE
 
-This library is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+Copyright 2026 Nigel Horne.
+
+Usage is subject to the GPL2 licence terms.
+If you use it,
+please let me know.
 
 =cut
