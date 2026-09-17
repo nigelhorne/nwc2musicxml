@@ -30,14 +30,14 @@ use POSIX qw(ENOSPC);
 use Scalar::Util qw(blessed refaddr);
 
 use lib 'lib';
-use Music::NWC2MusicXML;
-use Music::NWC2MusicXML::NWC;
-use Music::NWC2MusicXML::Parser;
-use Music::NWC2MusicXML::MusicXML;
-use Music::NWC2MusicXML::Diagnostics;
-use Music::NWC2MusicXML::Score;
-use Music::NWC2MusicXML::Staff;
-use Music::NWC2MusicXML::Event;
+use_ok('Music::NWC2MusicXML');
+use_ok('Music::NWC2MusicXML::NWC');
+use_ok('Music::NWC2MusicXML::Parser');
+use_ok('Music::NWC2MusicXML::MusicXML');
+use_ok('Music::NWC2MusicXML::Diagnostics');
+use_ok('Music::NWC2MusicXML::Score');
+use_ok('Music::NWC2MusicXML::Staff');
+use_ok('Music::NWC2MusicXML::Event');
 
 # ---------------------------------------------------------------------------
 # Constants -- eliminate all magic values
@@ -1096,4 +1096,4 @@ subtest '_xml_escape: tab, newline, CR preserved (valid XML 1.0 whitespace)' => 
 	is $r, "a\tb\nc\rd", 'tab/LF/CR preserved (valid XML whitespace)';
 };
 
-done_testing;
+done_testing();

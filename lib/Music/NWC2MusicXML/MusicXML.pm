@@ -631,6 +631,10 @@ sub _compute_page_layout {
 	$ps //= {};
 
 	# Margins: NWC stores them in cm (Left/Top/Right/Bottom from PgMargins).
+	# TODO: Data Flow Anomaly - D~ from caller perspective: the keys Right, Top,
+	# and Bottom in $ps are never read here; all four margins are collapsed to a
+	# single symmetric value derived from Left only.  Correct when the score uses
+	# uniform margins; would need separate reads for asymmetric layout support.
 	my $margin_cm = $ps->{Left} // $DEFAULT_MARGIN_CM;
 	my $margin_mm = $margin_cm * 10;
 	my $margin_t  = $margin_mm * $TENTHS_PER_MM;
@@ -1114,6 +1118,12 @@ sub _annotate_events {
 		if ($has_slur) {
 			$ann{$key}{slur_start} = 1 unless $in_slur;
 			$in_slur      = 1;
+			# TODO: Data Flow Anomaly - D~ rolling window: when consecutive notes
+			# are slurred, each assignment to $last_slur_ev replaces the previous
+			# value without an intervening read (dead store of intermediate values).
+			# This is intentional: only the final slurred-note key matters for the
+			# slur_stop annotation.  The pattern is correct but triggers a strict
+			# DU-chain D~ flag.
 			$last_slur_ev = $key;
 		} else {
 			if ($in_slur) {

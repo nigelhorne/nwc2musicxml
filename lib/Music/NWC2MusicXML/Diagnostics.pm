@@ -109,11 +109,12 @@ sub new {
 	);
 	croak $@ unless defined $args;
 
-	croak _fmt_msg('error_internal', 'Unknown log level: ' . $args->{level})
-		unless exists $LOG_LEVEL_MAP{ $args->{level} };
+	my $level_key = $args->{level} // '';
+	croak _fmt_msg('error_internal', 'Unknown log level: ' . ($level_key || '(undef)'))
+		unless exists $LOG_LEVEL_MAP{$level_key};
 
 	my $self = bless {
-		_level       => $LOG_LEVEL_MAP{ $args->{level} },
+		_level       => $LOG_LEVEL_MAP{$level_key},
 		_warnings_fh => $warnings_fh,
 		_warnings    => [],
 		_counts      => { processed => 0, successful => 0, warnings => 0, failed => 0 },
