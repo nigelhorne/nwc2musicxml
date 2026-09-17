@@ -220,7 +220,7 @@ Reads from disk.  Croaks on any I/O or format error.
 sub read {
 	my ($proto, $filename) = @_;
 
-	croak _fmt_msg('error_not_a_file', $filename)
+	croak _fmt_msg('error_not_a_file', $filename // '(undef)')
 		unless defined $filename && length $filename;
 
 	croak _fmt_msg('error_not_a_file', $filename)

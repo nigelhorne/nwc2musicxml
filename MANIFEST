@@ -24,3 +24,4 @@ t/50-events.t
 t/function.t
 t/input/Pilgrim.nwc
 t/locales.t
+t/unit.t
