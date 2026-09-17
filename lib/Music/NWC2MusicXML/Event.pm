@@ -23,6 +23,7 @@ Readonly::Hash my %MUSICAL_EVENT_TYPES => map { $_ => 1 } qw(
 	TimeSig
 	Tempo
 	Dynamic
+	DynVariance
 	Text
 	Lyric
 	Bar

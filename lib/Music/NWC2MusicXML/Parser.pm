@@ -309,6 +309,7 @@ sub _dispatch_record {
 		Chord           => \&_handle_chord,
 		Bar             => \&_handle_bar,
 		Dynamic         => \&_handle_dynamic,
+		DynVariance     => \&_handle_dyn_variance,
 		Text            => \&_handle_text,
 		Lyric           => \&_handle_lyric,
 		Tie             => \&_handle_tie,
@@ -653,7 +654,22 @@ sub _handle_dynamic {
 	my $h = $self->_fields_to_hash($fields);
 	$self->_append_event(Music::NWC2MusicXML::Event->new(
 		type => 'Dynamic',
-		data => { marking => $h->{Style} // $h->{_positional} // '' },
+		data => {
+			marking   => $h->{Style} // $h->{_positional} // '',
+			placement => $h->{Placement} // '',
+		},
+	));
+}
+
+sub _handle_dyn_variance {
+	my ($self, $fields) = @_;
+	my $h = $self->_fields_to_hash($fields);
+	$self->_append_event(Music::NWC2MusicXML::Event->new(
+		type => 'DynVariance',
+		data => {
+			style     => $h->{Style} // $h->{_positional} // '',
+			placement => $h->{Placement} // '',
+		},
 	));
 }
 

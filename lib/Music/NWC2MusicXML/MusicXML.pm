@@ -506,6 +506,16 @@ sub _emit_measure {
 			$curr_key = $kd->{fifths} // 0;
 			push @out, $self->_emit_key_change($kd, $pad . $i);
 
+		} elsif ($type eq 'Dynamic') {
+			my $d = $event->data // {};
+			push @out, $self->_emit_dynamic(
+				$d->{marking}, $d->{placement}, $pad . $i);
+
+		} elsif ($type eq 'DynVariance') {
+			my $d = $event->data // {};
+			push @out, $self->_emit_wedge(
+				$d->{style}, $d->{placement}, $pad . $i);
+
 		} elsif ($type eq 'Note') {
 			push @out, $self->_emit_note_event(
 				$event, $curr_clef, $curr_key, $divisions, $pad . $i, 0, $ev_ann);
@@ -796,6 +806,55 @@ sub _key_alter_for_step {
 sub _rational_to_ticks {
 	my ($rational, $divisions) = @_;
 	return int($rational->[0] * $divisions / $rational->[1] + 0.5);
+}
+
+sub _emit_dynamic {
+	my ($self, $marking, $placement, $pad) = @_;
+	my $i = $self->{_indent};
+	$marking   //= '';
+	$placement //= '';
+
+	unless (exists $DYNAMIC_MAP{$marking}) {
+		carp _fmt_msg('warn_unknown_dynamic', $marking) if $marking ne '';
+		return ();
+	}
+
+	my $place = ($placement =~ /above/i) ? 'above' : 'below';
+	my @out;
+	push @out, "${pad}<direction placement=\"$place\">";
+	push @out, "${pad}${i}<direction-type>";
+	push @out, "${pad}${i}${i}<dynamics>";
+	push @out, "${pad}${i}${i}${i}<$marking/>";
+	push @out, "${pad}${i}${i}</dynamics>";
+	push @out, "${pad}${i}</direction-type>";
+	push @out, "${pad}</direction>";
+	return @out;
+}
+
+# Map NWC DynVariance style -> MusicXML wedge type
+Readonly::Hash my %WEDGE_MAP => (
+	Crescendo  => 'crescendo',
+	Diminuendo => 'diminuendo',
+	crescOff   => 'stop',
+);
+
+sub _emit_wedge {
+	my ($self, $style, $placement, $pad) = @_;
+	my $i = $self->{_indent};
+	$style     //= '';
+	$placement //= '';
+
+	my $wedge_type = $WEDGE_MAP{$style};
+	return () unless defined $wedge_type;
+
+	my $place = ($placement =~ /above/i) ? 'above' : 'below';
+	my @out;
+	push @out, "${pad}<direction placement=\"$place\">";
+	push @out, "${pad}${i}<direction-type>";
+	push @out, "${pad}${i}${i}<wedge type=\"$wedge_type\" number=\"1\"/>";
+	push @out, "${pad}${i}</direction-type>";
+	push @out, "${pad}</direction>";
+	return @out;
 }
 
 sub _emit_clef_change {
