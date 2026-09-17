@@ -2,6 +2,15 @@ use strict;
 use warnings;
 use ExtUtils::MakeMaker;
 
+my $dist = {
+	COMPRESS => 'gzip -9f',	# Compress tarball using gzip
+	SUFFIX => 'gz',	# File suffix for tarball
+};
+
+if($^O eq 'darwin') {
+	$dist->{'TAR'} = 'gtar';
+}
+
 WriteMakefile(
 	NAME             => 'Music::NWC2MusicXML',
 	AUTHOR           => 'Nigel Horne <njh@nigelhorne.com>',
@@ -10,7 +19,9 @@ WriteMakefile(
 	LICENSE          => 'gpl_2',
 	MIN_PERL_VERSION => '5.036',
 	EXE_FILES        => [ 'bin/nwc2musicxml' ],
-	PREREQ_PM        => {
+	CONFIGURE_REQUIRES => {
+		'ExtUtils::MakeMaker' => 6.64,	# Minimum version for TEST_REQUIRES
+	}, PREREQ_PM        => {
 		'strict'           => 0,
 		'warnings'         => 0,
 		'autodie'          => 0,
@@ -30,20 +41,24 @@ WriteMakefile(
 		'IPC::System::Simple' => 0,
 		'Test::Most' => 0,
 		'Test::Exception'  => 0,
-	},
-	META_MERGE => {
+		'XML::LibXML' => 0,
+	}, META_MERGE => {	# https://perldoc.perl.org/CPAN::Meta::Spec
 		'meta-spec' => { version => 2 },
 		resources   => {
+			homepage => 'https://metacpan.org/pod/Music::NWC2MusicXML',
 			repository => {
 				type => 'git',
 				url  => 'https://github.com/nigelhorne/NWC2MusicXML.git',
 				web  => 'https://github.com/nigelhorne/NWC2MusicXML',
 			},
 			bugtracker => {
-				web => 'https://github.com/nigelhorne/NWC2MusicXML/issues',
+				# web => 'https://github.com/nigelhorne/NWC2MusicXML/issues',
+				web => 'https://rt.cpan.org/Public/Dist/Display.html?Name=Music-NWC2MusicXML',
+				url => 'https://rt.cpan.org/Public/Dist/Display.html?Name=Music-NWC2MusicXML',
+				mailto => 'bug-Music-NWC2MusicXML@rt.cpan.org'
 			},
 		},
 	},
-	dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz' },
-	clean => { FILES    => 'Music-NWC2MusicXML-*' },
+	dist  => $dist,
+	clean => { FILES => 'Music-NWC2MusicXML-*' },
 );

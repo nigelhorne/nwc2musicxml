@@ -18,10 +18,15 @@ requires 'autodie';
 requires 'strict';
 requires 'warnings';
 
+on 'configure' => sub {
+	requires 'ExtUtils::MakeMaker', '6.64';   # Minimum version for TEST_REQUIRES
+};
+
 on 'test' => sub {
 	requires 'IPC::System::Simple';
 	requires 'Test::Exception';
 	requires 'Test::Most';
+	requires 'XML::LibXML';
 };
 
 on 'develop' => sub {
