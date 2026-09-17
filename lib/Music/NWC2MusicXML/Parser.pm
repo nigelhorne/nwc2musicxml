@@ -536,7 +536,10 @@ sub _handle_tempo {
 	my $h = $self->_fields_to_hash($fields);
 	$self->_append_event(Music::NWC2MusicXML::Event->new(
 		type => 'Tempo',
-		data => { bpm => $h->{Tempo} // 120 },
+		data => {
+			bpm  => $h->{Tempo} // 120,
+			base => $h->{Base}  // 'Quarter',
+		},
 	));
 }
 

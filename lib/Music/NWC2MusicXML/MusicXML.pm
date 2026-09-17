@@ -66,6 +66,23 @@ Readonly::Hash my %DYNAMIC_MAP => map { $_ => $_ }
 	qw(pppp ppp pp p mp mf f ff fff ffff);
 
 # ---------------------------------------------------------------------------
+# Tempo base unit: NWC Base field -> { unit, dot, quarter_factor }
+# quarter_factor converts noted BPM to quarter-note BPM for <sound tempo="..."/>
+# ---------------------------------------------------------------------------
+Readonly::Hash my %TEMPO_BASE_MAP => (
+	'Whole'              => { unit => 'whole',   dot => 0, factor => 4    },
+	'Half'               => { unit => 'half',    dot => 0, factor => 2    },
+	'Quarter'            => { unit => 'quarter', dot => 0, factor => 1    },
+	'Eighth'             => { unit => 'eighth',  dot => 0, factor => 0.5  },
+	'Sixteenth'          => { unit => '16th',    dot => 0, factor => 0.25 },
+	'Dotted Whole'       => { unit => 'whole',   dot => 1, factor => 6    },
+	'Dotted Half'        => { unit => 'half',    dot => 1, factor => 3    },
+	'Dotted Quarter'     => { unit => 'quarter', dot => 1, factor => 1.5  },
+	'Dotted Eighth'      => { unit => 'eighth',  dot => 1, factor => 0.75 },
+	'Dotted Sixteenth'   => { unit => '16th',    dot => 1, factor => 0.375 },
+);
+
+# ---------------------------------------------------------------------------
 # Barline style mapping
 # ---------------------------------------------------------------------------
 Readonly::Hash my %BARLINE_MAP => (
@@ -506,6 +523,11 @@ sub _emit_measure {
 			$curr_key = $kd->{fifths} // 0;
 			push @out, $self->_emit_key_change($kd, $pad . $i);
 
+		} elsif ($type eq 'Tempo') {
+			my $d = $event->data // {};
+			push @out, $self->_emit_tempo(
+				$d->{bpm}, $d->{base}, $pad . $i);
+
 		} elsif ($type eq 'Dynamic') {
 			my $d = $event->data // {};
 			push @out, $self->_emit_dynamic(
@@ -806,6 +828,31 @@ sub _key_alter_for_step {
 sub _rational_to_ticks {
 	my ($rational, $divisions) = @_;
 	return int($rational->[0] * $divisions / $rational->[1] + 0.5);
+}
+
+sub _emit_tempo {
+	my ($self, $bpm, $base, $pad) = @_;
+	my $i = $self->{_indent};
+	$bpm  //= 120;
+	$base //= 'Quarter';
+
+	my $map       = $TEMPO_BASE_MAP{$base} // $TEMPO_BASE_MAP{Quarter};
+	my $unit      = $map->{unit};
+	my $dot       = $map->{dot};
+	my $sound_bpm = int($bpm * $map->{factor} + 0.5);
+
+	my @out;
+	push @out, "${pad}<direction placement=\"above\">";
+	push @out, "${pad}${i}<direction-type>";
+	push @out, "${pad}${i}${i}<metronome parentheses=\"no\">";
+	push @out, "${pad}${i}${i}${i}<beat-unit>$unit</beat-unit>";
+	push @out, "${pad}${i}${i}${i}<beat-unit-dot/>" if $dot;
+	push @out, "${pad}${i}${i}${i}<per-minute>$bpm</per-minute>";
+	push @out, "${pad}${i}${i}</metronome>";
+	push @out, "${pad}${i}</direction-type>";
+	push @out, "${pad}${i}<sound tempo=\"$sound_bpm\"/>";
+	push @out, "${pad}</direction>";
+	return @out;
 }
 
 sub _emit_dynamic {
