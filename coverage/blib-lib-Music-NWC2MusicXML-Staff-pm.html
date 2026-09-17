@@ -20,25 +20,26 @@ https://pjcj.net
 <h1>File Coverage</h1>
 <table>
 <tr><td class="h" align="right">File:</td><td align="left">blib/lib/Music/NWC2MusicXML/Staff.pm</td></tr>
-<tr><td class="h" align="right">Coverage:</td><td align="left" class="c0">73.8%</td></tr>
+<tr><td class="h" align="right">Coverage:</td><td align="left" class="c2">96.3%</td></tr>
 </table>
 <div><br/></div>
 <table>
 <tr><th>line</th><th>stmt</th><th>bran</th><th>cond</th><th>sub</th><th>time</th><th>code</th></tr>
 <tr><td class="h">1</td><td></td><td></td><td></td><td></td><td></td><td class="s">package Music::NWC2MusicXML::Staff;</td></tr>
-<tr><td class="h">2</td><td colspan="6"></td></tr><tr><td class="h">3</td><td><div class="c3">6</div><div class="c3">6</div><div class="c3">6</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L3">6</a></div></td><td><div>8</div><div>9</div><div>54</div></td><td class="s">use strict;</td></tr>
-<tr><td class="h">4</td><td><div class="c3">6</div><div class="c3">6</div><div class="c3">6</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L4">6</a></div></td><td><div>6</div><div>3</div><div>124</div></td><td class="s">use warnings;</td></tr>
+<tr><td class="h">2</td><td colspan="6"></td></tr><tr><td class="h">3</td><td><div class="c3">7</div><div class="c3">7</div><div class="c3">7</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L3">7</a></div></td><td><div>4</div><div>4</div><div>26</div></td><td class="s">use strict;</td></tr>
+<tr><td class="h">4</td><td><div class="c3">7</div><div class="c3">7</div><div class="c3">7</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L4">7</a></div></td><td><div>4</div><div>3</div><div>72</div></td><td class="s">use warnings;</td></tr>
 <tr><td class="h">5</td><td colspan="6"></td></tr><tr><td class="h">6</td><td></td><td></td><td></td><td></td><td></td><td class="s">our $VERSION = &#39;0.01&#39;;</td></tr>
-<tr><td class="h">7</td><td colspan="6"></td></tr><tr><td class="h">8</td><td><div class="c3">6</div><div class="c3">6</div><div class="c3">6</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L8">6</a></div></td><td><div>8</div><div>8</div><div>88</div></td><td class="s">use Carp qw(croak carp);</td></tr>
-<tr><td class="h">9</td><td><div class="c3">6</div><div class="c3">6</div><div class="c3">6</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L9">6</a></div></td><td><div>7</div><div>6</div><div>82</div></td><td class="s">use Readonly;</td></tr>
-<tr><td class="h">10</td><td><div class="c3">6</div><div class="c3">6</div><div class="c3">6</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L10">6</a></div></td><td><div>6</div><div>3</div><div>69</div></td><td class="s">use Params::Validate::Strict qw(validate_strict);</td></tr>
-<tr><td class="h">11</td><td><div class="c3">6</div><div class="c3">6</div><div class="c3">6</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L11">6</a></div></td><td><div>7</div><div>7</div><div>54</div></td><td class="s">use Params::Get;</td></tr>
-<tr><td class="h">12</td><td><div class="c3">6</div><div class="c3">6</div><div class="c3">6</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L12">6</a></div></td><td><div>925</div><div>7</div><div>1978</div></td><td class="s">use Music::NWC2MusicXML::Event;</td></tr>
-<tr><td class="h">13</td><td colspan="6"></td></tr><tr><td class="h">14</td><td></td><td></td><td></td><td></td><td></td><td class="s">Readonly::Hash my %MESSAGES =&gt; (</td></tr>
-<tr><td class="h">15</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_bad_event&nbsp;&nbsp;=&gt; &#39;add_event: argument must be a Music::NWC2MusicXML::Event, got: %s&#39;,</td></tr>
-<tr><td class="h">16</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_internal&nbsp;&nbsp;&nbsp;=&gt; &#39;Internal error: %s&#39;,</td></tr>
-<tr><td class="h">17</td><td></td><td></td><td></td><td></td><td></td><td class="s">);</td></tr>
-<tr><td class="h">18</td><td colspan="6"></td></tr><tr><td class="h">19 - 50</td><td colspan="5"></td><td class="s"><pre>=head1 NAME
+<tr><td class="h">7</td><td colspan="6"></td></tr><tr><td class="h">8</td><td><div class="c3">7</div><div class="c3">7</div><div class="c3">7</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L8">7</a></div></td><td><div>3</div><div>2</div><div>57</div></td><td class="s">use Carp qw(croak carp);</td></tr>
+<tr><td class="h">9</td><td><div class="c3">7</div><div class="c3">7</div><div class="c3">7</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L9">7</a></div></td><td><div>9</div><div>4</div><div>248</div></td><td class="s">use Readonly;</td></tr>
+<tr><td class="h">10</td><td><div class="c3">7</div><div class="c3">7</div><div class="c3">7</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L10">7</a></div></td><td><div>4</div><div>4</div><div>45</div></td><td class="s">use Scalar::Util qw(blessed);</td></tr>
+<tr><td class="h">11</td><td><div class="c3">7</div><div class="c3">7</div><div class="c3">7</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L11">7</a></div></td><td><div>5</div><div>2</div><div>47</div></td><td class="s">use Params::Validate::Strict qw(validate_strict);</td></tr>
+<tr><td class="h">12</td><td><div class="c3">7</div><div class="c3">7</div><div class="c3">7</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L12">7</a></div></td><td><div>4</div><div>5</div><div>53</div></td><td class="s">use Params::Get;</td></tr>
+<tr><td class="h">13</td><td><div class="c3">7</div><div class="c3">7</div><div class="c3">7</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L13">7</a></div></td><td><div>631</div><div>5</div><div>1500</div></td><td class="s">use Music::NWC2MusicXML::Event;</td></tr>
+<tr><td class="h">14</td><td colspan="6"></td></tr><tr><td class="h">15</td><td></td><td></td><td></td><td></td><td></td><td class="s">Readonly::Hash my %MESSAGES =&gt; (</td></tr>
+<tr><td class="h">16</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_bad_event&nbsp;&nbsp;=&gt; &#39;add_event: argument must be a Music::NWC2MusicXML::Event, got: %s&#39;,</td></tr>
+<tr><td class="h">17</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_internal&nbsp;&nbsp;&nbsp;=&gt; &#39;Internal error: %s&#39;,</td></tr>
+<tr><td class="h">18</td><td></td><td></td><td></td><td></td><td></td><td class="s">);</td></tr>
+<tr><td class="h">19</td><td colspan="6"></td></tr><tr><td class="h">20 - 51</td><td colspan="5"></td><td class="s"><pre>=head1 NAME
 
 Music::NWC2MusicXML::Staff - Internal representation of a single NWC staff.
 
@@ -70,124 +71,124 @@ The event list is in parse order.&nbsp;&nbsp;MusicXML generation iterates over i
 to produce C&lt;&lt; &lt;measure&gt; &gt;&gt; elements.
 
 =cut</pre></td></tr>
-<tr><td class="h">51</td><td colspan="6"></td></tr><tr><td class="h">52</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub new {</td></tr>
-<tr><td class="h">53</td><td><div class="c3">43</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L53">43</a></div></td><td><div>11189</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($class, %input) = @_;</td></tr>
-<tr><td class="h">54</td><td><div class="c3">43</div></td><td></td><td></td><td></td><td><div>223</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my $args = validate_strict(</td></tr>
-<tr><td class="h">55</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;schema =&gt; {</td></tr>
-<tr><td class="h">56</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; { type =&gt; &#39;scalar&#39;,&nbsp;&nbsp;optional =&gt; 1, default&nbsp;&nbsp;=&gt; &#39;Staff&#39; },</td></tr>
-<tr><td class="h">57</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;group&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; { type =&gt; &#39;scalar&#39;,&nbsp;&nbsp;optional =&gt; 1, default&nbsp;&nbsp;=&gt; &#39;Standard&#39; },</td></tr>
-<tr><td class="h">58</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lines&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; { type =&gt; &#39;scalar&#39;,&nbsp;&nbsp;optional =&gt; 1, default&nbsp;&nbsp;=&gt; 5 },</td></tr>
-<tr><td class="h">59</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;visible&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; { type =&gt; &#39;scalar&#39;,&nbsp;&nbsp;optional =&gt; 1, default&nbsp;&nbsp;=&gt; 1 },</td></tr>
-<tr><td class="h">60</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ending_bar&nbsp;&nbsp;&nbsp;&nbsp;=&gt; { type =&gt; &#39;scalar&#39;,&nbsp;&nbsp;optional =&gt; 1 },</td></tr>
-<tr><td class="h">61</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;instrument&nbsp;&nbsp;&nbsp;&nbsp;=&gt; { type =&gt; &#39;hashref&#39;, optional =&gt; 1, default&nbsp;&nbsp;=&gt; {} },</td></tr>
-<tr><td class="h">62</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;initial_clef&nbsp;&nbsp;=&gt; { type =&gt; &#39;scalar&#39;,&nbsp;&nbsp;optional =&gt; 1 },</td></tr>
-<tr><td class="h">63</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;initial_key&nbsp;&nbsp;&nbsp;=&gt; { type =&gt; &#39;hashref&#39;, optional =&gt; 1 },</td></tr>
-<tr><td class="h">64</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;initial_timesig =&gt; { type =&gt; &#39;hashref&#39;, optional =&gt; 1 },</td></tr>
-<tr><td class="h">65</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},</td></tr>
-<tr><td class="h">66</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input =&gt; \%input,</td></tr>
-<tr><td class="h">67</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);</td></tr>
-<tr><td class="h">68</td><td><div class="c3">43</div></td><td><div class="c0" title="-/F"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--branch.html#L68">50</a></div></td><td></td><td></td><td><div>6961</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;croak $@ unless defined $args;</td></tr>
-<tr><td class="h">69</td><td colspan="6"></td></tr><tr><td class="h">70</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my $self = bless {</td></tr>
-<tr><td class="h">71</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; $args-&gt;{name},</td></tr>
-<tr><td class="h">72</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_group&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; $args-&gt;{group},</td></tr>
-<tr><td class="h">73</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_lines&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; $args-&gt;{lines},</td></tr>
-<tr><td class="h">74</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_visible&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; $args-&gt;{visible},</td></tr>
-<tr><td class="h">75</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_ending_bar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; $args-&gt;{ending_bar},</td></tr>
-<tr><td class="h">76</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_instrument&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; $args-&gt;{instrument},</td></tr>
-<tr><td class="h">77</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_initial_clef&nbsp;&nbsp;&nbsp;&nbsp;=&gt; $args-&gt;{initial_clef},</td></tr>
-<tr><td class="h">78</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_initial_key&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; $args-&gt;{initial_key},</td></tr>
-<tr><td class="h">79</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_initial_timesig =&gt; $args-&gt;{initial_timesig},</td></tr>
-<tr><td class="h">80</td><td><div class="c3">43</div></td><td></td><td></td><td></td><td><div>130</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_events&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; [],</td></tr>
-<tr><td class="h">81</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}, $class;</td></tr>
-<tr><td class="h">82</td><td colspan="6"></td></tr><tr><td class="h">83</td><td><div class="c3">43</div></td><td></td><td></td><td></td><td><div>54</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return $self;</td></tr>
-<tr><td class="h">84</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
-<tr><td class="h">85</td><td colspan="6"></td></tr><tr><td class="h">86</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
-<tr><td class="h">87</td><td></td><td></td><td></td><td></td><td></td><td class="s"># Accessors</td></tr>
-<tr><td class="h">88</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
-<tr><td class="h">89</td><td colspan="6"></td></tr><tr><td class="h">90 - 94</td><td colspan="5"></td><td class="s"><pre>=head2 name
+<tr><td class="h">52</td><td colspan="6"></td></tr><tr><td class="h">53</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub new {</td></tr>
+<tr><td class="h">54</td><td><div class="c3">79</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L54">79</a></div></td><td><div>22729</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($class, %input) = @_;</td></tr>
+<tr><td class="h">55</td><td><div class="c3">79</div></td><td></td><td></td><td></td><td><div>472</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my $args = validate_strict(</td></tr>
+<tr><td class="h">56</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;schema =&gt; {</td></tr>
+<tr><td class="h">57</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; { type =&gt; &#39;scalar&#39;,&nbsp;&nbsp;optional =&gt; 1, default&nbsp;&nbsp;=&gt; &#39;Staff&#39; },</td></tr>
+<tr><td class="h">58</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;group&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; { type =&gt; &#39;scalar&#39;,&nbsp;&nbsp;optional =&gt; 1, default&nbsp;&nbsp;=&gt; &#39;Standard&#39; },</td></tr>
+<tr><td class="h">59</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lines&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; { type =&gt; &#39;scalar&#39;,&nbsp;&nbsp;optional =&gt; 1, default&nbsp;&nbsp;=&gt; 5 },</td></tr>
+<tr><td class="h">60</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;visible&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; { type =&gt; &#39;scalar&#39;,&nbsp;&nbsp;optional =&gt; 1, default&nbsp;&nbsp;=&gt; 1 },</td></tr>
+<tr><td class="h">61</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ending_bar&nbsp;&nbsp;&nbsp;&nbsp;=&gt; { type =&gt; &#39;scalar&#39;,&nbsp;&nbsp;optional =&gt; 1 },</td></tr>
+<tr><td class="h">62</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;instrument&nbsp;&nbsp;&nbsp;&nbsp;=&gt; { type =&gt; &#39;hashref&#39;, optional =&gt; 1, default&nbsp;&nbsp;=&gt; {} },</td></tr>
+<tr><td class="h">63</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;initial_clef&nbsp;&nbsp;=&gt; { type =&gt; &#39;scalar&#39;,&nbsp;&nbsp;optional =&gt; 1 },</td></tr>
+<tr><td class="h">64</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;initial_key&nbsp;&nbsp;&nbsp;=&gt; { type =&gt; &#39;hashref&#39;, optional =&gt; 1 },</td></tr>
+<tr><td class="h">65</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;initial_timesig =&gt; { type =&gt; &#39;hashref&#39;, optional =&gt; 1 },</td></tr>
+<tr><td class="h">66</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},</td></tr>
+<tr><td class="h">67</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input =&gt; \%input,</td></tr>
+<tr><td class="h">68</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);</td></tr>
+<tr><td class="h">69</td><td><div class="c3">79</div></td><td><div class="c0" title="-/F"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--branch.html#L69">50</a></div></td><td></td><td></td><td><div>10636</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;croak $@ unless defined $args;</td></tr>
+<tr><td class="h">70</td><td colspan="6"></td></tr><tr><td class="h">71</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my $self = bless {</td></tr>
+<tr><td class="h">72</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; $args-&gt;{name},</td></tr>
+<tr><td class="h">73</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_group&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; $args-&gt;{group},</td></tr>
+<tr><td class="h">74</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_lines&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; $args-&gt;{lines},</td></tr>
+<tr><td class="h">75</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_visible&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; $args-&gt;{visible},</td></tr>
+<tr><td class="h">76</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_ending_bar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; $args-&gt;{ending_bar},</td></tr>
+<tr><td class="h">77</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_instrument&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; $args-&gt;{instrument},</td></tr>
+<tr><td class="h">78</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_initial_clef&nbsp;&nbsp;&nbsp;&nbsp;=&gt; $args-&gt;{initial_clef},</td></tr>
+<tr><td class="h">79</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_initial_key&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; $args-&gt;{initial_key},</td></tr>
+<tr><td class="h">80</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_initial_timesig =&gt; $args-&gt;{initial_timesig},</td></tr>
+<tr><td class="h">81</td><td><div class="c3">79</div></td><td></td><td></td><td></td><td><div>152</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_events&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; [],</td></tr>
+<tr><td class="h">82</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}, $class;</td></tr>
+<tr><td class="h">83</td><td colspan="6"></td></tr><tr><td class="h">84</td><td><div class="c3">79</div></td><td></td><td></td><td></td><td><div>89</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return $self;</td></tr>
+<tr><td class="h">85</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
+<tr><td class="h">86</td><td colspan="6"></td></tr><tr><td class="h">87</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
+<tr><td class="h">88</td><td></td><td></td><td></td><td></td><td></td><td class="s"># Accessors</td></tr>
+<tr><td class="h">89</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
+<tr><td class="h">90</td><td colspan="6"></td></tr><tr><td class="h">91 - 95</td><td colspan="5"></td><td class="s"><pre>=head2 name
 
 Return the staff name string.
 
 =cut</pre></td></tr>
-<tr><td class="h">95</td><td colspan="6"></td></tr><tr><td class="h">96</td><td><div class="c3">29</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L96">29</a></div></td><td><div>47</div></td><td class="s">sub name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ return $_[0]-&gt;{_name} }</td></tr>
-<tr><td class="h">97</td><td colspan="6"></td></tr><tr><td class="h">98 - 102</td><td colspan="5"></td><td class="s"><pre>=head2 group
+<tr><td class="h">96</td><td colspan="6"></td></tr><tr><td class="h">97</td><td><div class="c3">48</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L97">48</a></div></td><td><div>42</div></td><td class="s">sub name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ return $_[0]-&gt;{_name} }</td></tr>
+<tr><td class="h">98</td><td colspan="6"></td></tr><tr><td class="h">99 - 103</td><td colspan="5"></td><td class="s"><pre>=head2 group
 
 Return the group name string.
 
 =cut</pre></td></tr>
-<tr><td class="h">103</td><td colspan="6"></td></tr><tr><td class="h">104</td><td><div class="c0">0</div></td><td></td><td></td><td><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L104">0</a></div></td><td><div>0</div></td><td class="s">sub group&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ return $_[0]-&gt;{_group} }</td></tr>
-<tr><td class="h">105</td><td colspan="6"></td></tr><tr><td class="h">106 - 110</td><td colspan="5"></td><td class="s"><pre>=head2 lines
+<tr><td class="h">104</td><td colspan="6"></td></tr><tr><td class="h">105</td><td><div class="c3">2</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L105">2</a></div></td><td><div>2</div></td><td class="s">sub group&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ return $_[0]-&gt;{_group} }</td></tr>
+<tr><td class="h">106</td><td colspan="6"></td></tr><tr><td class="h">107 - 111</td><td colspan="5"></td><td class="s"><pre>=head2 lines
 
 Return the number of staff lines (usually 5).
 
 =cut</pre></td></tr>
-<tr><td class="h">111</td><td colspan="6"></td></tr><tr><td class="h">112</td><td><div class="c0">0</div></td><td></td><td></td><td><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L112">0</a></div></td><td><div>0</div></td><td class="s">sub lines&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ return $_[0]-&gt;{_lines} }</td></tr>
-<tr><td class="h">113</td><td colspan="6"></td></tr><tr><td class="h">114 - 118</td><td colspan="5"></td><td class="s"><pre>=head2 visible
+<tr><td class="h">112</td><td colspan="6"></td></tr><tr><td class="h">113</td><td><div class="c3">1</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L113">1</a></div></td><td><div>1</div></td><td class="s">sub lines&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ return $_[0]-&gt;{_lines} }</td></tr>
+<tr><td class="h">114</td><td colspan="6"></td></tr><tr><td class="h">115 - 119</td><td colspan="5"></td><td class="s"><pre>=head2 visible
 
 Return 1 if the staff is visible, 0 otherwise.
 
 =cut</pre></td></tr>
-<tr><td class="h">119</td><td colspan="6"></td></tr><tr><td class="h">120</td><td><div class="c0">0</div></td><td></td><td></td><td><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L120">0</a></div></td><td><div>0</div></td><td class="s">sub visible&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ return $_[0]-&gt;{_visible} }</td></tr>
-<tr><td class="h">121</td><td colspan="6"></td></tr><tr><td class="h">122 - 128</td><td colspan="5"></td><td class="s"><pre>=head2 instrument
+<tr><td class="h">120</td><td colspan="6"></td></tr><tr><td class="h">121</td><td><div class="c3">1</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L121">1</a></div></td><td><div>1</div></td><td class="s">sub visible&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ return $_[0]-&gt;{_visible} }</td></tr>
+<tr><td class="h">122</td><td colspan="6"></td></tr><tr><td class="h">123 - 129</td><td colspan="5"></td><td class="s"><pre>=head2 instrument
 
 Return the instrument information hashref.
 
 Keys: C&lt;name&gt; (string), C&lt;patch&gt; (MIDI patch number 0-127).
 
 =cut</pre></td></tr>
-<tr><td class="h">129</td><td colspan="6"></td></tr><tr><td class="h">130</td><td><div class="c3">33</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L130">33</a></div></td><td><div>24</div></td><td class="s">sub instrument&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ return $_[0]-&gt;{_instrument} }</td></tr>
-<tr><td class="h">131</td><td colspan="6"></td></tr><tr><td class="h">132 - 136</td><td colspan="5"></td><td class="s"><pre>=head2 initial_clef
+<tr><td class="h">130</td><td colspan="6"></td></tr><tr><td class="h">131</td><td><div class="c3">46</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L131">46</a></div></td><td><div>23</div></td><td class="s">sub instrument&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ return $_[0]-&gt;{_instrument} }</td></tr>
+<tr><td class="h">132</td><td colspan="6"></td></tr><tr><td class="h">133 - 137</td><td colspan="5"></td><td class="s"><pre>=head2 initial_clef
 
 Return the initial clef string (e.g. C&lt;Treble&gt;), or undef if none recorded.
 
 =cut</pre></td></tr>
-<tr><td class="h">137</td><td colspan="6"></td></tr><tr><td class="h">138</td><td><div class="c3">57</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L138">57</a></div></td><td><div>86</div></td><td class="s">sub initial_clef&nbsp;&nbsp;&nbsp;&nbsp;{ return $_[0]-&gt;{_initial_clef} }</td></tr>
-<tr><td class="h">139</td><td colspan="6"></td></tr><tr><td class="h">140 - 144</td><td colspan="5"></td><td class="s"><pre>=head2 set_initial_clef
+<tr><td class="h">138</td><td colspan="6"></td></tr><tr><td class="h">139</td><td><div class="c3">76</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L139">76</a></div></td><td><div>188</div></td><td class="s">sub initial_clef&nbsp;&nbsp;&nbsp;&nbsp;{ return $_[0]-&gt;{_initial_clef} }</td></tr>
+<tr><td class="h">140</td><td colspan="6"></td></tr><tr><td class="h">141 - 145</td><td colspan="5"></td><td class="s"><pre>=head2 set_initial_clef
 
 Set the initial clef.
 
 =cut</pre></td></tr>
-<tr><td class="h">145</td><td colspan="6"></td></tr><tr><td class="h">146</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub set_initial_clef {</td></tr>
-<tr><td class="h">147</td><td><div class="c3">39</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L147">39</a></div></td><td><div>47</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($self, $clef) = @_;</td></tr>
-<tr><td class="h">148</td><td><div class="c3">39</div></td><td></td><td></td><td></td><td><div>27</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$self-&gt;{_initial_clef} = $clef;</td></tr>
-<tr><td class="h">149</td><td><div class="c3">39</div></td><td></td><td></td><td></td><td><div>37</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return $self;</td></tr>
-<tr><td class="h">150</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
-<tr><td class="h">151</td><td colspan="6"></td></tr><tr><td class="h">152 - 156</td><td colspan="5"></td><td class="s"><pre>=head2 initial_key
+<tr><td class="h">146</td><td colspan="6"></td></tr><tr><td class="h">147</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub set_initial_clef {</td></tr>
+<tr><td class="h">148</td><td><div class="c3">51</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L148">51</a></div></td><td><div>157</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($self, $clef) = @_;</td></tr>
+<tr><td class="h">149</td><td><div class="c3">51</div></td><td></td><td></td><td></td><td><div>20</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$self-&gt;{_initial_clef} = $clef;</td></tr>
+<tr><td class="h">150</td><td><div class="c3">51</div></td><td></td><td></td><td></td><td><div>58</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return $self;</td></tr>
+<tr><td class="h">151</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
+<tr><td class="h">152</td><td colspan="6"></td></tr><tr><td class="h">153 - 157</td><td colspan="5"></td><td class="s"><pre>=head2 initial_key
 
 Return the initial key hashref (C&lt;signature&gt;, C&lt;tonic&gt;, C&lt;mode&gt;), or undef.
 
 =cut</pre></td></tr>
-<tr><td class="h">157</td><td colspan="6"></td></tr><tr><td class="h">158</td><td><div class="c3">57</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L158">57</a></div></td><td><div>61</div></td><td class="s">sub initial_key&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ return $_[0]-&gt;{_initial_key} }</td></tr>
-<tr><td class="h">159</td><td colspan="6"></td></tr><tr><td class="h">160 - 164</td><td colspan="5"></td><td class="s"><pre>=head2 set_initial_key
+<tr><td class="h">158</td><td colspan="6"></td></tr><tr><td class="h">159</td><td><div class="c3">75</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L159">75</a></div></td><td><div>77</div></td><td class="s">sub initial_key&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ return $_[0]-&gt;{_initial_key} }</td></tr>
+<tr><td class="h">160</td><td colspan="6"></td></tr><tr><td class="h">161 - 165</td><td colspan="5"></td><td class="s"><pre>=head2 set_initial_key
 
 Set the initial key.
 
 =cut</pre></td></tr>
-<tr><td class="h">165</td><td colspan="6"></td></tr><tr><td class="h">166</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub set_initial_key {</td></tr>
-<tr><td class="h">167</td><td><div class="c3">38</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L167">38</a></div></td><td><div>61</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($self, $key) = @_;</td></tr>
-<tr><td class="h">168</td><td><div class="c3">38</div></td><td></td><td></td><td></td><td><div>23</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$self-&gt;{_initial_key} = $key;</td></tr>
-<tr><td class="h">169</td><td><div class="c3">38</div></td><td></td><td></td><td></td><td><div>33</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return $self;</td></tr>
-<tr><td class="h">170</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
-<tr><td class="h">171</td><td colspan="6"></td></tr><tr><td class="h">172 - 176</td><td colspan="5"></td><td class="s"><pre>=head2 initial_timesig
+<tr><td class="h">166</td><td colspan="6"></td></tr><tr><td class="h">167</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub set_initial_key {</td></tr>
+<tr><td class="h">168</td><td><div class="c3">48</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L168">48</a></div></td><td><div>154</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($self, $key) = @_;</td></tr>
+<tr><td class="h">169</td><td><div class="c3">48</div></td><td></td><td></td><td></td><td><div>19</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$self-&gt;{_initial_key} = $key;</td></tr>
+<tr><td class="h">170</td><td><div class="c3">48</div></td><td></td><td></td><td></td><td><div>43</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return $self;</td></tr>
+<tr><td class="h">171</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
+<tr><td class="h">172</td><td colspan="6"></td></tr><tr><td class="h">173 - 177</td><td colspan="5"></td><td class="s"><pre>=head2 initial_timesig
 
 Return the initial time-signature hashref (C&lt;beats&gt;, C&lt;beat_type&gt;), or undef.
 
 =cut</pre></td></tr>
-<tr><td class="h">177</td><td colspan="6"></td></tr><tr><td class="h">178</td><td><div class="c3">30</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L178">30</a></div></td><td><div>31</div></td><td class="s">sub initial_timesig { return $_[0]-&gt;{_initial_timesig} }</td></tr>
-<tr><td class="h">179</td><td colspan="6"></td></tr><tr><td class="h">180 - 184</td><td colspan="5"></td><td class="s"><pre>=head2 set_initial_timesig
+<tr><td class="h">178</td><td colspan="6"></td></tr><tr><td class="h">179</td><td><div class="c3">40</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L179">40</a></div></td><td><div>30</div></td><td class="s">sub initial_timesig { return $_[0]-&gt;{_initial_timesig} }</td></tr>
+<tr><td class="h">180</td><td colspan="6"></td></tr><tr><td class="h">181 - 185</td><td colspan="5"></td><td class="s"><pre>=head2 set_initial_timesig
 
 Set the initial time signature.
 
 =cut</pre></td></tr>
-<tr><td class="h">185</td><td colspan="6"></td></tr><tr><td class="h">186</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub set_initial_timesig {</td></tr>
-<tr><td class="h">187</td><td><div class="c3">38</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L187">38</a></div></td><td><div>47</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($self, $ts) = @_;</td></tr>
-<tr><td class="h">188</td><td><div class="c3">38</div></td><td></td><td></td><td></td><td><div>19</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$self-&gt;{_initial_timesig} = $ts;</td></tr>
-<tr><td class="h">189</td><td><div class="c3">38</div></td><td></td><td></td><td></td><td><div>42</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return $self;</td></tr>
-<tr><td class="h">190</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
-<tr><td class="h">191</td><td colspan="6"></td></tr><tr><td class="h">192</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
-<tr><td class="h">193</td><td></td><td></td><td></td><td></td><td></td><td class="s"># Event management</td></tr>
-<tr><td class="h">194</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
-<tr><td class="h">195</td><td colspan="6"></td></tr><tr><td class="h">196 - 253</td><td colspan="5"></td><td class="s"><pre>=head2 add_event
+<tr><td class="h">186</td><td colspan="6"></td></tr><tr><td class="h">187</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub set_initial_timesig {</td></tr>
+<tr><td class="h">188</td><td><div class="c3">48</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L188">48</a></div></td><td><div>73</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($self, $ts) = @_;</td></tr>
+<tr><td class="h">189</td><td><div class="c3">48</div></td><td></td><td></td><td></td><td><div>23</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$self-&gt;{_initial_timesig} = $ts;</td></tr>
+<tr><td class="h">190</td><td><div class="c3">48</div></td><td></td><td></td><td></td><td><div>30</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return $self;</td></tr>
+<tr><td class="h">191</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
+<tr><td class="h">192</td><td colspan="6"></td></tr><tr><td class="h">193</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
+<tr><td class="h">194</td><td></td><td></td><td></td><td></td><td></td><td class="s"># Event management</td></tr>
+<tr><td class="h">195</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
+<tr><td class="h">196</td><td colspan="6"></td></tr><tr><td class="h">197 - 254</td><td colspan="5"></td><td class="s"><pre>=head2 add_event
 
 Append a C&lt;Music::NWC2MusicXML::Event&gt; to this staff&#39;s event list.
 
@@ -245,14 +246,14 @@ Appends to C&lt;_events&gt; array.
  (placeholder)
 
 =cut</pre></td></tr>
-<tr><td class="h">254</td><td colspan="6"></td></tr><tr><td class="h">255</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub add_event {</td></tr>
-<tr><td class="h">256</td><td><div class="c3">7034</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L256">7034</a></div></td><td><div>3138</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($self, $event) = @_;</td></tr>
-<tr><td class="h">257</td><td><div class="c3">7034</div></td><td><div class="c0" title="-/F"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--branch.html#L257">50</a></div></td><td><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--condition.html#L257">33</a></div><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--condition.html#L257">0</a></div></td><td></td><td><div>7200</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;croak _fmt_msg(&#39;error_bad_event&#39;, ref($event) // &#39;SCALAR&#39;)</td></tr>
-<tr><td class="h">258</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unless ref($event) &amp;&amp; $event-&gt;isa(&#39;Music::NWC2MusicXML::Event&#39;);</td></tr>
-<tr><td class="h">259</td><td><div class="c3">7034</div><div class="c3">7034</div></td><td></td><td></td><td></td><td><div>2761</div><div>3697</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;push @{ $self-&gt;{_events} }, $event;</td></tr>
-<tr><td class="h">260</td><td><div class="c3">7034</div></td><td></td><td></td><td></td><td><div>9629</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return $self;</td></tr>
-<tr><td class="h">261</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
-<tr><td class="h">262</td><td colspan="6"></td></tr><tr><td class="h">263 - 281</td><td colspan="5"></td><td class="s"><pre>=head2 events
+<tr><td class="h">255</td><td colspan="6"></td></tr><tr><td class="h">256</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub add_event {</td></tr>
+<tr><td class="h">257</td><td><div class="c3">7084</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L257">7084</a></div></td><td><div>2172</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($self, $event) = @_;</td></tr>
+<tr><td class="h">258</td><td><div class="c3">7084</div></td><td><div class="c3" title="T/F"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--branch.html#L258">100</a></div></td><td><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--condition.html#L258">67</a></div><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--condition.html#L258">50</a></div></td><td></td><td><div>4920</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;croak _fmt_msg(&#39;error_bad_event&#39;, ref($event) // &#39;SCALAR&#39;)</td></tr>
+<tr><td class="h">259</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unless blessed($event) &amp;&amp; $event-&gt;isa(&#39;Music::NWC2MusicXML::Event&#39;);</td></tr>
+<tr><td class="h">260</td><td><div class="c3">7082</div><div class="c3">7082</div></td><td></td><td></td><td></td><td><div>2004</div><div>2141</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;push @{ $self-&gt;{_events} }, $event;</td></tr>
+<tr><td class="h">261</td><td><div class="c3">7082</div></td><td></td><td></td><td></td><td><div>5211</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return $self;</td></tr>
+<tr><td class="h">262</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
+<tr><td class="h">263</td><td colspan="6"></td></tr><tr><td class="h">264 - 282</td><td colspan="5"></td><td class="s"><pre>=head2 events
 
 Return an arrayref of all C&lt;Music::NWC2MusicXML::Event&gt; objects in parse order.
 
@@ -271,52 +272,52 @@ Arrayref of C&lt;Music::NWC2MusicXML::Event&gt;.
 &nbsp;&nbsp;&nbsp;&nbsp;ARRAYREF of Music::NWC2MusicXML::Event
 
 =cut</pre></td></tr>
-<tr><td class="h">282</td><td colspan="6"></td></tr><tr><td class="h">283</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub events {</td></tr>
-<tr><td class="h">284</td><td><div class="c3">122</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L284">122</a></div></td><td><div>74</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($self) = @_;</td></tr>
-<tr><td class="h">285</td><td><div class="c3">122</div></td><td></td><td></td><td></td><td><div>134</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return $self-&gt;{_events};</td></tr>
-<tr><td class="h">286</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
-<tr><td class="h">287</td><td colspan="6"></td></tr><tr><td class="h">288 - 293</td><td colspan="5"></td><td class="s"><pre>=head2 musical_events
+<tr><td class="h">283</td><td colspan="6"></td></tr><tr><td class="h">284</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub events {</td></tr>
+<tr><td class="h">285</td><td><div class="c3">153</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L285">153</a></div></td><td><div>52</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($self) = @_;</td></tr>
+<tr><td class="h">286</td><td><div class="c3">153</div></td><td></td><td></td><td></td><td><div>167</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return $self-&gt;{_events};</td></tr>
+<tr><td class="h">287</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
+<tr><td class="h">288</td><td colspan="6"></td></tr><tr><td class="h">289 - 294</td><td colspan="5"></td><td class="s"><pre>=head2 musical_events
 
 Return an arrayref containing only the events where C&lt;is_musical_event&gt; is
 true.&nbsp;&nbsp;Metadata records are excluded.
 
 =cut</pre></td></tr>
-<tr><td class="h">294</td><td colspan="6"></td></tr><tr><td class="h">295</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub musical_events {</td></tr>
-<tr><td class="h">296</td><td><div class="c0">0</div></td><td></td><td></td><td><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L296">0</a></div></td><td><div>0</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($self) = @_;</td></tr>
-<tr><td class="h">297</td><td><div class="c0">0</div><div class="c0">0</div><div class="c0">0</div></td><td></td><td></td><td></td><td><div>0</div><div>0</div><div>0</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return [ grep { $_-&gt;is_musical_event } @{ $self-&gt;{_events} } ];</td></tr>
-<tr><td class="h">298</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
-<tr><td class="h">299</td><td colspan="6"></td></tr><tr><td class="h">300 - 304</td><td colspan="5"></td><td class="s"><pre>=head2 event_count
+<tr><td class="h">295</td><td colspan="6"></td></tr><tr><td class="h">296</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub musical_events {</td></tr>
+<tr><td class="h">297</td><td><div class="c3">2</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L297">2</a></div></td><td><div>115</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($self) = @_;</td></tr>
+<tr><td class="h">298</td><td><div class="c3">2</div><div class="c3">4</div><div class="c3">2</div></td><td></td><td></td><td></td><td><div>0</div><div>5</div><div>2</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return [ grep { $_-&gt;is_musical_event } @{ $self-&gt;{_events} } ];</td></tr>
+<tr><td class="h">299</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
+<tr><td class="h">300</td><td colspan="6"></td></tr><tr><td class="h">301 - 305</td><td colspan="5"></td><td class="s"><pre>=head2 event_count
 
 Return the total number of events (musical + metadata).
 
 =cut</pre></td></tr>
-<tr><td class="h">305</td><td colspan="6"></td></tr><tr><td class="h">306</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub event_count {</td></tr>
-<tr><td class="h">307</td><td><div class="c0">0</div></td><td></td><td></td><td><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L307">0</a></div></td><td><div>0</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($self) = @_;</td></tr>
-<tr><td class="h">308</td><td><div class="c0">0</div><div class="c0">0</div></td><td></td><td></td><td></td><td><div>0</div><div>0</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return scalar @{ $self-&gt;{_events} };</td></tr>
-<tr><td class="h">309</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
-<tr><td class="h">310</td><td colspan="6"></td></tr><tr><td class="h">311 - 317</td><td colspan="5"></td><td class="s"><pre>=head2 has_notes
+<tr><td class="h">306</td><td colspan="6"></td></tr><tr><td class="h">307</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub event_count {</td></tr>
+<tr><td class="h">308</td><td><div class="c3">3</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L308">3</a></div></td><td><div>293</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($self) = @_;</td></tr>
+<tr><td class="h">309</td><td><div class="c3">3</div><div class="c3">3</div></td><td></td><td></td><td></td><td><div>1</div><div>3</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return scalar @{ $self-&gt;{_events} };</td></tr>
+<tr><td class="h">310</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
+<tr><td class="h">311</td><td colspan="6"></td></tr><tr><td class="h">312 - 318</td><td colspan="5"></td><td class="s"><pre>=head2 has_notes
 
 Return true if any note, rest, chord, or bar event has been added to this
 staff.&nbsp;&nbsp;Used by the parser to distinguish staff-header records (before any
 sounding content) from mid-staff change records.
 
 =cut</pre></td></tr>
-<tr><td class="h">318</td><td colspan="6"></td></tr><tr><td class="h">319</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub has_notes {</td></tr>
-<tr><td class="h">320</td><td><div class="c3">153</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L320">153</a></div></td><td><div>96</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($self) = @_;</td></tr>
-<tr><td class="h">321</td><td><div class="c3">153</div><div class="c3">153</div></td><td></td><td></td><td></td><td><div>84</div><div>102</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for my $ev (@{ $self-&gt;{_events} }) {</td></tr>
-<tr><td class="h">322</td><td><div class="c3">161</div></td><td><div class="c3" title="T/F"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--branch.html#L322">100</a></div></td><td></td><td></td><td><div>101</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 1 if $ev-&gt;type =~ /^(?:Note|Rest|Chord|Bar)$/;</td></tr>
-<tr><td class="h">323</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</td></tr>
-<tr><td class="h">324</td><td><div class="c3">46</div></td><td></td><td></td><td></td><td><div>43</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 0;</td></tr>
-<tr><td class="h">325</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
-<tr><td class="h">326</td><td colspan="6"></td></tr><tr><td class="h">327</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
-<tr><td class="h">328</td><td></td><td></td><td></td><td></td><td></td><td class="s"># Private</td></tr>
-<tr><td class="h">329</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
-<tr><td class="h">330</td><td colspan="6"></td></tr><tr><td class="h">331</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub _fmt_msg {</td></tr>
-<tr><td class="h">332</td><td><div class="c0">0</div></td><td></td><td></td><td><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L332">0</a></div></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($key, @args) = @_;</td></tr>
-<tr><td class="h">333</td><td><div class="c0">0</div></td><td><div class="c0" title="-/-"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--branch.html#L333">0</a></div></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;croak &quot;Unknown message key: $key&quot; unless exists $MESSAGES{$key};</td></tr>
-<tr><td class="h">334</td><td><div class="c0">0</div></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return sprintf $MESSAGES{$key}, @args;</td></tr>
-<tr><td class="h">335</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
-<tr><td class="h">336</td><td colspan="6"></td></tr><tr><td class="h">337</td><td></td><td></td><td></td><td></td><td></td><td class="s">1;</td></tr>
-<tr><td class="h">338</td><td colspan="6"></td></tr></table>
+<tr><td class="h">319</td><td colspan="6"></td></tr><tr><td class="h">320</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub has_notes {</td></tr>
+<tr><td class="h">321</td><td><div class="c3">166</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L321">166</a></div></td><td><div>69</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($self) = @_;</td></tr>
+<tr><td class="h">322</td><td><div class="c3">166</div><div class="c3">166</div></td><td></td><td></td><td></td><td><div>46</div><div>67</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for my $ev (@{ $self-&gt;{_events} }) {</td></tr>
+<tr><td class="h">323</td><td><div class="c3">166</div></td><td><div class="c3" title="T/F"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--branch.html#L323">100</a></div></td><td></td><td></td><td><div>65</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 1 if $ev-&gt;type =~ /^(?:Note|Rest|Chord|Bar)$/;</td></tr>
+<tr><td class="h">324</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</td></tr>
+<tr><td class="h">325</td><td><div class="c3">56</div></td><td></td><td></td><td></td><td><div>46</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 0;</td></tr>
+<tr><td class="h">326</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
+<tr><td class="h">327</td><td colspan="6"></td></tr><tr><td class="h">328</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
+<tr><td class="h">329</td><td></td><td></td><td></td><td></td><td></td><td class="s"># Private</td></tr>
+<tr><td class="h">330</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
+<tr><td class="h">331</td><td colspan="6"></td></tr><tr><td class="h">332</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub _fmt_msg {</td></tr>
+<tr><td class="h">333</td><td><div class="c3">2</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--subroutine.html#L333">2</a></div></td><td><div>1</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($key, @args) = @_;</td></tr>
+<tr><td class="h">334</td><td><div class="c3">2</div></td><td><div class="c0" title="-/F"><a href="blib-lib-Music-NWC2MusicXML-Staff-pm--branch.html#L334">50</a></div></td><td></td><td></td><td><div>3</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;croak &quot;Unknown message key: $key&quot; unless exists $MESSAGES{$key};</td></tr>
+<tr><td class="h">335</td><td><div class="c3">2</div></td><td></td><td></td><td></td><td><div>5</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return sprintf $MESSAGES{$key}, @args;</td></tr>
+<tr><td class="h">336</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
+<tr><td class="h">337</td><td colspan="6"></td></tr><tr><td class="h">338</td><td></td><td></td><td></td><td></td><td></td><td class="s">1;</td></tr>
+<tr><td class="h">339</td><td colspan="6"></td></tr></table>
 </body>
 </html>
