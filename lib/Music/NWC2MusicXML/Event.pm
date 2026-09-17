@@ -250,11 +250,12 @@ sub new {
 
 	# Normalise unknown types to UnsupportedEvent rather than croaking;
 	# this preserves conversion continuity when new NWC versions add objects.
+	my $type_key = $args->{type} // '';
 	unless (
-		exists $MUSICAL_EVENT_TYPES{ $args->{type} }
-		|| exists $METADATA_EVENT_TYPES{ $args->{type} }
+		exists $MUSICAL_EVENT_TYPES{$type_key}
+		|| exists $METADATA_EVENT_TYPES{$type_key}
 	) {
-		carp _fmt_msg('error_unknown_type', $args->{type})
+		carp _fmt_msg('error_unknown_type', $type_key || '(undef)')
 			. ' -- storing as UnsupportedEvent';
 		$args->{nwc_label} //= $args->{type};
 		$args->{type} = 'UnsupportedEvent';
@@ -390,8 +391,8 @@ sub rational_from_nwc_duration {
 	my ($dur, $dots) = @_;
 	$dots //= 0;
 
-	croak _fmt_msg('error_bad_duration', $dur)
-		unless exists $DURATION_RATIONALS{$dur};
+	croak _fmt_msg('error_bad_duration', $dur // '(undef)')
+		unless defined $dur && exists $DURATION_RATIONALS{$dur};
 
 	my $r      = $DURATION_RATIONALS{$dur};
 	my $base_r = $r;   # preserve original: dot d adds base/2^d, not cur/2^d
