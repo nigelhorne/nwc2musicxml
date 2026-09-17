@@ -1,5 +1,6 @@
 bin/nwc2musicxml
 Changes
+cpanfile
 INSTALL
 lib/Music/NWC2MusicXML.pm
 lib/Music/NWC2MusicXML/Diagnostics.pm
