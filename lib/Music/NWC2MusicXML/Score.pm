@@ -2,7 +2,6 @@ package Music::NWC2MusicXML::Score;
 
 use strict;
 use warnings;
-use autodie qw(:all);
 
 our $VERSION = '0.01';
 

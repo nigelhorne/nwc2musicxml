@@ -98,18 +98,6 @@ None.
 |------|---------|------------|
 |      |         |            |
 
-### FORMAL SPECIFICATION
-
-    [ConverterInit]
-      log_level   : LogLevel
-      validate    : Boolean
-      diagnostics : Diagnostics
-      nwc_decoder : NWCDecoder
-      parser      : Parser
-      generator   : Generator
-
-    (placeholder -- populate with Z calculus as implementation matures)
-
 ## convert
 
 Convert a single `.nwc` file to MusicXML.
@@ -165,16 +153,6 @@ Croaks on fatal errors; non-fatal issues are issued as warnings.
 | error\_parse        | NWCTXT parsing stage failed          | See error detail              |
 | error\_generate     | MusicXML generation failed           | See error detail              |
 | error\_write        | Cannot write output file             | Check permissions / disk space|
-
-### FORMAL SPECIFICATION
-
-    [Convert]
-      input?  : FileName
-      output? : FileName
-      ----------
-      result! : FileName | Undef
-
-    (placeholder)
 
 ## batch\_convert
 
@@ -232,16 +210,6 @@ Does not croak on per-file failures.
 
     HASHREF { processed:int, successful:int, warnings:int, failed:int }
 
-### FORMAL SPECIFICATION
-
-    [BatchConvert]
-      inputs?     : seq FileName
-      output_dir? : DirName
-      ----------
-      summary!    : BatchSummary
-
-    (placeholder)
-
 ## diagnostics
 
 Return the `Music::NWC2MusicXML::Diagnostics` instance.
@@ -267,6 +235,40 @@ inputs must be passed explicitly.
 - Parallel batch processing is not implemented.
 - MusicXML validation against the official DTD/XSD is not performed
 internally; use an external validator with `--validate`.
+
+# FORMAL SPECIFICATION
+
+## new
+
+    [ConverterInit]
+      log_level   : LogLevel
+      validate    : Boolean
+      diagnostics : Diagnostics
+      nwc_decoder : NWCDecoder
+      parser      : Parser
+      generator   : Generator
+
+    (placeholder -- populate with Z calculus as implementation matures)
+
+## convert
+
+    [Convert]
+      input?  : FileName
+      output? : FileName
+      ----------
+      result! : FileName | Undef
+
+    (placeholder)
+
+## batchconvert
+
+    [BatchConvert]
+      inputs?     : seq FileName
+      output_dir? : DirName
+      ----------
+      summary!    : BatchSummary
+
+    (placeholder)
 
 # AUTHOR
 

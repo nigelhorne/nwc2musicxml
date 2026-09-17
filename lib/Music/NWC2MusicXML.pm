@@ -167,18 +167,6 @@ None.
 |------|---------|------------|
 |      |         |            |
 
-=head3 FORMAL SPECIFICATION
-
- [ConverterInit]
-   log_level   : LogLevel
-   validate    : Boolean
-   diagnostics : Diagnostics
-   nwc_decoder : NWCDecoder
-   parser      : Parser
-   generator   : Generator
-
- (placeholder -- populate with Z calculus as implementation matures)
-
 =cut
 
 sub new {
@@ -276,16 +264,6 @@ Croaks on fatal errors; non-fatal issues are issued as warnings.
 | error_parse        | NWCTXT parsing stage failed          | See error detail              |
 | error_generate     | MusicXML generation failed           | See error detail              |
 | error_write        | Cannot write output file             | Check permissions / disk space|
-
-=head3 FORMAL SPECIFICATION
-
- [Convert]
-   input?  : FileName
-   output? : FileName
-   ----------
-   result! : FileName | Undef
-
- (placeholder)
 
 =cut
 
@@ -387,16 +365,6 @@ Does not croak on per-file failures.
 
     HASHREF { processed:int, successful:int, warnings:int, failed:int }
 
-=head3 FORMAL SPECIFICATION
-
- [BatchConvert]
-   inputs?     : seq FileName
-   output_dir? : DirName
-   ----------
-   summary!    : BatchSummary
-
- (placeholder)
-
 =cut
 
 sub batch_convert {
@@ -415,6 +383,7 @@ sub batch_convert {
 
 	my $diag = $self->{_diagnostics};
 	my @results;
+	my %counts = (processed => 0, successful => 0, warnings => 0, failed => 0);
 
 	for my $file (@{ $args->{inputs} }) {
 		# Compute output path
@@ -424,6 +393,8 @@ sub batch_convert {
 			recursive  => $args->{recursive},
 			base_dir   => $args->{base_dir},
 		);
+
+		$counts{processed}++;
 
 		# A per-file failure must not abort the batch
 		my $ok = eval {
@@ -437,18 +408,20 @@ sub batch_convert {
 		if ($@) {
 			$diag->info(_fmt_msg('info_done', "FAILED: $file -- $@"));
 			$diag->count(outcome => 'failed');
+			$counts{failed}++;
 		} else {
 			$diag->count(outcome => 'successful');
+			$counts{successful}++;
 		}
 
 		push @results, { input => $file, output => $output, ok => !!$ok };
 	}
 
+	$counts{warnings} = scalar @{ $diag->warnings };
+
 	$diag->summary;
 
-	return {
-		results => \@results,
-	};
+	return { %counts, results => \@results };
 }
 
 =head2 diagnostics
@@ -598,6 +571,40 @@ inputs must be passed explicitly.
 internally; use an external validator with C<--validate>.
 
 =back
+
+=head1 FORMAL SPECIFICATION
+
+=head2 new
+
+ [ConverterInit]
+   log_level   : LogLevel
+   validate    : Boolean
+   diagnostics : Diagnostics
+   nwc_decoder : NWCDecoder
+   parser      : Parser
+   generator   : Generator
+
+ (placeholder -- populate with Z calculus as implementation matures)
+
+=head2 convert
+
+ [Convert]
+   input?  : FileName
+   output? : FileName
+   ----------
+   result! : FileName | Undef
+
+ (placeholder)
+
+=head2 batchconvert
+
+ [BatchConvert]
+   inputs?     : seq FileName
+   output_dir? : DirName
+   ----------
+   summary!    : BatchSummary
+
+ (placeholder)
 
 =head1 AUTHOR
 

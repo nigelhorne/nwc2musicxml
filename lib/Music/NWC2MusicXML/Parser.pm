@@ -277,6 +277,39 @@ sub parse {
 }
 
 # ---------------------------------------------------------------------------
+# Package-level dispatch table -- built once at module load, not per call.
+# Subs are compile-time symbols; Readonly ensures the table is never mutated.
+# ---------------------------------------------------------------------------
+Readonly::Hash my %DISPATCH => (
+	SongInfo        => \&_handle_song_info,
+	PgSetup         => \&_handle_pg_setup,
+	AddStaff        => \&_handle_add_staff,
+	StaffProperties => \&_handle_staff_properties,
+	StaffInstrument => \&_handle_staff_instrument,
+	Clef            => \&_handle_clef,
+	Key             => \&_handle_key,
+	TimeSig         => \&_handle_time_sig,
+	Tempo           => \&_handle_tempo,
+	Note            => \&_handle_note,
+	Rest            => \&_handle_rest,
+	Chord           => \&_handle_chord,
+	Bar             => \&_handle_bar,
+	Dynamic         => \&_handle_dynamic,
+	DynVariance     => \&_handle_dyn_variance,
+	Text            => \&_handle_text,
+	Lyric           => \&_handle_lyric,
+	Tie             => \&_handle_tie,
+	Slur            => \&_handle_slur,
+	Beam            => \&_handle_beam,
+	Tuplet          => \&_handle_tuplet,
+	Instrument      => \&_handle_instrument_change,
+	FlowControl     => \&_handle_flow_control,
+	TempoVariance   => \&_handle_tempo_variance,
+	Spacer          => \&_handle_spacer,
+	RestChord       => \&_handle_rest_chord,
+);
+
+# ---------------------------------------------------------------------------
 # Private: record dispatcher
 # ---------------------------------------------------------------------------
 
@@ -292,39 +325,8 @@ sub _dispatch_record {
 
 	my $type = shift @$fields;
 
-	# Dispatch table: metadata records update the score directly; musical
-	# events become Event objects appended to the current staff.
-	my %dispatch = (
-		SongInfo        => \&_handle_song_info,
-		PgSetup         => \&_handle_pg_setup,
-		AddStaff        => \&_handle_add_staff,
-		StaffProperties => \&_handle_staff_properties,
-		StaffInstrument => \&_handle_staff_instrument,
-		Clef            => \&_handle_clef,
-		Key             => \&_handle_key,
-		TimeSig         => \&_handle_time_sig,
-		Tempo           => \&_handle_tempo,
-		Note            => \&_handle_note,
-		Rest            => \&_handle_rest,
-		Chord           => \&_handle_chord,
-		Bar             => \&_handle_bar,
-		Dynamic         => \&_handle_dynamic,
-		DynVariance     => \&_handle_dyn_variance,
-		Text            => \&_handle_text,
-		Lyric           => \&_handle_lyric,
-		Tie             => \&_handle_tie,
-		Slur            => \&_handle_slur,
-		Beam            => \&_handle_beam,
-		Tuplet          => \&_handle_tuplet,
-		Instrument      => \&_handle_instrument_change,
-		FlowControl     => \&_handle_flow_control,
-		TempoVariance   => \&_handle_tempo_variance,
-		Spacer          => \&_handle_spacer,
-		RestChord       => \&_handle_rest_chord,
-	);
-
-	if (exists $dispatch{$type}) {
-		$dispatch{$type}->($self, $fields);
+	if (exists $DISPATCH{$type}) {
+		$DISPATCH{$type}->($self, $fields);
 	} else {
 		my $staff = $self->{_score}->current_staff;
 		if (defined $staff) {
@@ -423,8 +425,9 @@ sub _handle_song_info {
 
 sub _handle_pg_setup {
 	my ($self, $fields) = @_;
-	my $h = $self->_fields_to_hash($fields);
-	%{ $self->{_score}{_page_setup} } = (%{ $self->{_score}{_page_setup} }, %$h);
+	my $h  = $self->_fields_to_hash($fields);
+	my $ps = $self->{_score}->page_setup;
+	%$ps = (%$ps, %$h);
 }
 
 sub _handle_add_staff {
@@ -806,10 +809,6 @@ sub _current_staff_or_croak {
 sub _warn_unknown {
 	my ($self, $type) = @_;
 	carp _fmt_msg('warn_unknown_record', $type, $self->{_line_no});
-	if (defined $self->{_diagnostics}) {
-		# We have no file/staff context here; the caller should wrap this
-		# in a higher-level warn_unsupported call with full context.
-	}
 }
 
 sub _fifths_from_signature {

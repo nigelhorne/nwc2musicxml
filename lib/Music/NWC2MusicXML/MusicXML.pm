@@ -11,6 +11,7 @@ use Readonly;
 use Params::Validate::Strict qw(validate_strict);
 use Params::Get;
 use Music::NWC2MusicXML::Score;
+use Music::NWC2MusicXML::Event;
 
 # ---------------------------------------------------------------------------
 # MusicXML structural constants
@@ -748,19 +749,21 @@ sub _emit_chord_event {
 	return @out;
 }
 
-# Build a lightweight synthetic Note event for one member of a Chord.
+# Build a synthetic Note event for one pitch member of a Chord.
+# Uses Event->new so that validation, rational reduction and the
+# public accessor contract are all preserved.
 sub _chord_note_event {
 	my ($chord_event, $pos_str) = @_;
 	my $d = $chord_event->data;
-	return bless {
-		_type     => 'Note',
-		_duration => $chord_event->duration,
-		_data     => {
+	return Music::NWC2MusicXML::Event->new(
+		type     => 'Note',
+		duration => $chord_event->duration,
+		data     => {
 			nwc_pos  => $pos_str,
 			base_dur => $d->{base_dur},
-			dots     => $d->{dots},
+			dots     => $d->{dots} // 0,
 		},
-	}, ref($chord_event);
+	);
 }
 
 # ---------------------------------------------------------------------------
@@ -1072,17 +1075,17 @@ __END__
 
 =over 4
 
-=item * Individual note/rest XML emission is stubbed (Phase 3).
+=item * Tuplet C<< <time-modification> >> and C<< <tuplet> >> elements are not yet emitted.
 
-=item * Voice assignment for simultaneous events is stubbed (Phase 3).
+=item * Multi-voice staves (simultaneous events) assign all notes to voice 1; true voice
+splitting is deferred.
 
-=item * Tuplet C<< <time-modification> >> and C<< <tuplet> >> elements are stubbed (Phase 4).
+=item * Slur arcs spanning more than C<$MAX_SLUR_NUMBER> simultaneous open slurs will
+reuse number 1, which is incorrect.
 
-=item * Slur/tie number management is stubbed (Phase 4).
+=item * Lyric emission is not yet implemented.
 
-=item * Lyric emission is stubbed (Phase 4).
-
-=item * Flow-control (repeats, Coda, Segno, etc.) is stubbed (Phase 5).
+=item * Flow-control (Coda, Segno, DaCapo, etc.) produces no MusicXML output.
 
 =back
 

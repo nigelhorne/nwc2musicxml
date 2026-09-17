@@ -19,3 +19,8 @@ t/00-load.t
 t/10-nwc.t
 t/20-parser.t
 t/30-musicxml.t
+t/40-input.t
+t/50-events.t
+t/input/Pilgrim.musicxml
+t/input/Pilgrim.nwc
+t/locales.t
