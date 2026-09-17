@@ -20,74 +20,73 @@ https://pjcj.net
 <h1>File Coverage</h1>
 <table>
 <tr><td class="h" align="right">File:</td><td align="left">blib/lib/Music/NWC2MusicXML/Event.pm</td></tr>
-<tr><td class="h" align="right">Coverage:</td><td align="left" class="c0">67.5%</td></tr>
+<tr><td class="h" align="right">Coverage:</td><td align="left" class="c0">66.4%</td></tr>
 </table>
 <div><br/></div>
 <table>
 <tr><th>line</th><th>stmt</th><th>bran</th><th>cond</th><th>sub</th><th>time</th><th>code</th></tr>
 <tr><td class="h">1</td><td></td><td></td><td></td><td></td><td></td><td class="s">package Music::NWC2MusicXML::Event;</td></tr>
-<tr><td class="h">2</td><td colspan="6"></td></tr><tr><td class="h">3</td><td><div class="c3">4</div><div class="c3">4</div><div class="c3">4</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L3">4</a></div></td><td><div>3</div><div>1</div><div>16</div></td><td class="s">use strict;</td></tr>
-<tr><td class="h">4</td><td><div class="c3">4</div><div class="c3">4</div><div class="c3">4</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L4">4</a></div></td><td><div>3</div><div>1</div><div>34</div></td><td class="s">use warnings;</td></tr>
-<tr><td class="h">5</td><td><div class="c3">4</div><div class="c3">4</div><div class="c3">4</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L5">4</a></div></td><td><div>3</div><div>2</div><div>5</div></td><td class="s">use autodie qw(:all);</td></tr>
-<tr><td class="h">6</td><td colspan="6"></td></tr><tr><td class="h">7</td><td></td><td></td><td></td><td></td><td></td><td class="s">our $VERSION = &#39;0.01&#39;;</td></tr>
-<tr><td class="h">8</td><td colspan="6"></td></tr><tr><td class="h">9</td><td><div class="c3">4</div><div class="c3">4</div><div class="c3">4</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L9">4</a></div></td><td><div>4869</div><div>4</div><div>33</div></td><td class="s">use Carp qw(croak carp);</td></tr>
-<tr><td class="h">10</td><td><div class="c3">4</div><div class="c3">4</div><div class="c3">4</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L10">4</a></div></td><td><div>4</div><div>2</div><div>35</div></td><td class="s">use Readonly;</td></tr>
-<tr><td class="h">11</td><td><div class="c3">4</div><div class="c3">4</div><div class="c3">4</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L11">4</a></div></td><td><div>3</div><div>1</div><div>24</div></td><td class="s">use Params::Validate::Strict qw(validate_strict);</td></tr>
-<tr><td class="h">12</td><td><div class="c3">4</div><div class="c3">4</div><div class="c3">4</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L12">4</a></div></td><td><div>4</div><div>9</div><div>1325</div></td><td class="s">use Params::Get;</td></tr>
-<tr><td class="h">13</td><td colspan="6"></td></tr><tr><td class="h">14</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
-<tr><td class="h">15</td><td></td><td></td><td></td><td></td><td></td><td class="s"># Valid event types (both musical events and score/staff metadata markers)</td></tr>
-<tr><td class="h">16</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
-<tr><td class="h">17</td><td></td><td></td><td></td><td></td><td></td><td class="s">Readonly::Hash my %MUSICAL_EVENT_TYPES =&gt; map { $_ =&gt; 1 } qw(</td></tr>
-<tr><td class="h">18</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note</td></tr>
-<tr><td class="h">19</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rest</td></tr>
-<tr><td class="h">20</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Chord</td></tr>
-<tr><td class="h">21</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Clef</td></tr>
-<tr><td class="h">22</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Key</td></tr>
-<tr><td class="h">23</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TimeSig</td></tr>
-<tr><td class="h">24</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tempo</td></tr>
-<tr><td class="h">25</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dynamic</td></tr>
-<tr><td class="h">26</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DynVariance</td></tr>
-<tr><td class="h">27</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Text</td></tr>
-<tr><td class="h">28</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lyric</td></tr>
-<tr><td class="h">29</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bar</td></tr>
-<tr><td class="h">30</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tie</td></tr>
-<tr><td class="h">31</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Slur</td></tr>
-<tr><td class="h">32</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Beam</td></tr>
-<tr><td class="h">33</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tuplet</td></tr>
-<tr><td class="h">34</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Instrument</td></tr>
-<tr><td class="h">35</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FlowControl</td></tr>
-<tr><td class="h">36</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UnsupportedEvent</td></tr>
-<tr><td class="h">37</td><td></td><td></td><td></td><td></td><td></td><td class="s">);</td></tr>
-<tr><td class="h">38</td><td colspan="6"></td></tr><tr><td class="h">39</td><td></td><td></td><td></td><td></td><td></td><td class="s">Readonly::Hash my %METADATA_EVENT_TYPES =&gt; map { $_ =&gt; 1 } qw(</td></tr>
-<tr><td class="h">40</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SongInfo</td></tr>
-<tr><td class="h">41</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PgSetup</td></tr>
-<tr><td class="h">42</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AddStaff</td></tr>
-<tr><td class="h">43</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;StaffProperties</td></tr>
-<tr><td class="h">44</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;StaffInstrument</td></tr>
-<tr><td class="h">45</td><td></td><td></td><td></td><td></td><td></td><td class="s">);</td></tr>
-<tr><td class="h">46</td><td colspan="6"></td></tr><tr><td class="h">47</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
-<tr><td class="h">48</td><td></td><td></td><td></td><td></td><td></td><td class="s"># Duration map: NWC duration name -&gt; rational denominator (quarter = 1/1)</td></tr>
-<tr><td class="h">49</td><td></td><td></td><td></td><td></td><td></td><td class="s"># Using [numerator, denominator] pairs where the base unit is one quarter note.</td></tr>
-<tr><td class="h">50</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
-<tr><td class="h">51</td><td></td><td></td><td></td><td></td><td></td><td class="s">Readonly::Hash my %DURATION_RATIONALS =&gt; (</td></tr>
-<tr><td class="h">52</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#39;Whole&#39;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; [ 4, 1 ],</td></tr>
-<tr><td class="h">53</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#39;Half&#39;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; [ 2, 1 ],</td></tr>
-<tr><td class="h">54</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#39;4th&#39;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; [ 1, 1 ],</td></tr>
-<tr><td class="h">55</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#39;8th&#39;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; [ 1, 2 ],</td></tr>
-<tr><td class="h">56</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#39;16th&#39;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; [ 1, 4 ],</td></tr>
-<tr><td class="h">57</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#39;32nd&#39;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; [ 1, 8 ],</td></tr>
-<tr><td class="h">58</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#39;64th&#39;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; [ 1, 16 ],</td></tr>
-<tr><td class="h">59</td><td></td><td></td><td></td><td></td><td></td><td class="s">);</td></tr>
-<tr><td class="h">60</td><td colspan="6"></td></tr><tr><td class="h">61</td><td></td><td></td><td></td><td></td><td></td><td class="s"># Dotted note: multiply by 3/2; double-dotted: 7/4</td></tr>
-<tr><td class="h">62</td><td></td><td></td><td></td><td></td><td></td><td class="s">Readonly::Scalar my $DOT_NUMERATOR&nbsp;&nbsp;&nbsp;=&gt; 3;</td></tr>
-<tr><td class="h">63</td><td></td><td></td><td></td><td></td><td></td><td class="s">Readonly::Scalar my $DOT_DENOMINATOR =&gt; 2;</td></tr>
-<tr><td class="h">64</td><td colspan="6"></td></tr><tr><td class="h">65</td><td></td><td></td><td></td><td></td><td></td><td class="s">Readonly::Hash my %MESSAGES =&gt; (</td></tr>
-<tr><td class="h">66</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_unknown_type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; &#39;Unknown event type: %s&#39;,</td></tr>
-<tr><td class="h">67</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_bad_duration&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; &#39;Unrecognised NWC duration: %s&#39;,</td></tr>
-<tr><td class="h">68</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_bad_rational&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; &#39;Rational arguments must be positive integers&#39;,</td></tr>
-<tr><td class="h">69</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_internal&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; &#39;Internal error: %s&#39;,</td></tr>
-<tr><td class="h">70</td><td></td><td></td><td></td><td></td><td></td><td class="s">);</td></tr>
-<tr><td class="h">71</td><td colspan="6"></td></tr><tr><td class="h">72 - 118</td><td colspan="5"></td><td class="s"><pre>=head1 NAME
+<tr><td class="h">2</td><td colspan="6"></td></tr><tr><td class="h">3</td><td><div class="c3">6</div><div class="c3">6</div><div class="c3">6</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L3">6</a></div></td><td><div>12</div><div>5</div><div>72</div></td><td class="s">use strict;</td></tr>
+<tr><td class="h">4</td><td><div class="c3">6</div><div class="c3">6</div><div class="c3">6</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L4">6</a></div></td><td><div>10</div><div>5</div><div>139</div></td><td class="s">use warnings;</td></tr>
+<tr><td class="h">5</td><td colspan="6"></td></tr><tr><td class="h">6</td><td></td><td></td><td></td><td></td><td></td><td class="s">our $VERSION = &#39;0.01&#39;;</td></tr>
+<tr><td class="h">7</td><td colspan="6"></td></tr><tr><td class="h">8</td><td><div class="c3">6</div><div class="c3">6</div><div class="c3">6</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L8">6</a></div></td><td><div>8</div><div>5</div><div>116</div></td><td class="s">use Carp qw(croak carp);</td></tr>
+<tr><td class="h">9</td><td><div class="c3">6</div><div class="c3">6</div><div class="c3">6</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L9">6</a></div></td><td><div>7</div><div>4</div><div>101</div></td><td class="s">use Readonly;</td></tr>
+<tr><td class="h">10</td><td><div class="c3">6</div><div class="c3">6</div><div class="c3">6</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L10">6</a></div></td><td><div>8</div><div>6</div><div>80</div></td><td class="s">use Params::Validate::Strict qw(validate_strict);</td></tr>
+<tr><td class="h">11</td><td><div class="c3">6</div><div class="c3">6</div><div class="c3">6</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L11">6</a></div></td><td><div>9</div><div>2</div><div>2977</div></td><td class="s">use Params::Get;</td></tr>
+<tr><td class="h">12</td><td colspan="6"></td></tr><tr><td class="h">13</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
+<tr><td class="h">14</td><td></td><td></td><td></td><td></td><td></td><td class="s"># Valid event types (both musical events and score/staff metadata markers)</td></tr>
+<tr><td class="h">15</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
+<tr><td class="h">16</td><td></td><td></td><td></td><td></td><td></td><td class="s">Readonly::Hash my %MUSICAL_EVENT_TYPES =&gt; map { $_ =&gt; 1 } qw(</td></tr>
+<tr><td class="h">17</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note</td></tr>
+<tr><td class="h">18</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rest</td></tr>
+<tr><td class="h">19</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Chord</td></tr>
+<tr><td class="h">20</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Clef</td></tr>
+<tr><td class="h">21</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Key</td></tr>
+<tr><td class="h">22</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TimeSig</td></tr>
+<tr><td class="h">23</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tempo</td></tr>
+<tr><td class="h">24</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dynamic</td></tr>
+<tr><td class="h">25</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DynVariance</td></tr>
+<tr><td class="h">26</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Text</td></tr>
+<tr><td class="h">27</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lyric</td></tr>
+<tr><td class="h">28</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bar</td></tr>
+<tr><td class="h">29</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tie</td></tr>
+<tr><td class="h">30</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Slur</td></tr>
+<tr><td class="h">31</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Beam</td></tr>
+<tr><td class="h">32</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tuplet</td></tr>
+<tr><td class="h">33</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Instrument</td></tr>
+<tr><td class="h">34</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FlowControl</td></tr>
+<tr><td class="h">35</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UnsupportedEvent</td></tr>
+<tr><td class="h">36</td><td></td><td></td><td></td><td></td><td></td><td class="s">);</td></tr>
+<tr><td class="h">37</td><td colspan="6"></td></tr><tr><td class="h">38</td><td></td><td></td><td></td><td></td><td></td><td class="s">Readonly::Hash my %METADATA_EVENT_TYPES =&gt; map { $_ =&gt; 1 } qw(</td></tr>
+<tr><td class="h">39</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SongInfo</td></tr>
+<tr><td class="h">40</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PgSetup</td></tr>
+<tr><td class="h">41</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AddStaff</td></tr>
+<tr><td class="h">42</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;StaffProperties</td></tr>
+<tr><td class="h">43</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;StaffInstrument</td></tr>
+<tr><td class="h">44</td><td></td><td></td><td></td><td></td><td></td><td class="s">);</td></tr>
+<tr><td class="h">45</td><td colspan="6"></td></tr><tr><td class="h">46</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
+<tr><td class="h">47</td><td></td><td></td><td></td><td></td><td></td><td class="s"># Duration map: NWC duration name -&gt; rational denominator (quarter = 1/1)</td></tr>
+<tr><td class="h">48</td><td></td><td></td><td></td><td></td><td></td><td class="s"># Using [numerator, denominator] pairs where the base unit is one quarter note.</td></tr>
+<tr><td class="h">49</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
+<tr><td class="h">50</td><td></td><td></td><td></td><td></td><td></td><td class="s">Readonly::Hash my %DURATION_RATIONALS =&gt; (</td></tr>
+<tr><td class="h">51</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#39;Whole&#39;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; [ 4, 1 ],</td></tr>
+<tr><td class="h">52</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#39;Half&#39;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; [ 2, 1 ],</td></tr>
+<tr><td class="h">53</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#39;4th&#39;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; [ 1, 1 ],</td></tr>
+<tr><td class="h">54</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#39;8th&#39;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; [ 1, 2 ],</td></tr>
+<tr><td class="h">55</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#39;16th&#39;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; [ 1, 4 ],</td></tr>
+<tr><td class="h">56</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#39;32nd&#39;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; [ 1, 8 ],</td></tr>
+<tr><td class="h">57</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#39;64th&#39;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; [ 1, 16 ],</td></tr>
+<tr><td class="h">58</td><td></td><td></td><td></td><td></td><td></td><td class="s">);</td></tr>
+<tr><td class="h">59</td><td colspan="6"></td></tr><tr><td class="h">60</td><td></td><td></td><td></td><td></td><td></td><td class="s"># Dotted note: multiply by 3/2; double-dotted: 7/4</td></tr>
+<tr><td class="h">61</td><td></td><td></td><td></td><td></td><td></td><td class="s">Readonly::Scalar my $DOT_NUMERATOR&nbsp;&nbsp;&nbsp;=&gt; 3;</td></tr>
+<tr><td class="h">62</td><td></td><td></td><td></td><td></td><td></td><td class="s">Readonly::Scalar my $DOT_DENOMINATOR =&gt; 2;</td></tr>
+<tr><td class="h">63</td><td colspan="6"></td></tr><tr><td class="h">64</td><td></td><td></td><td></td><td></td><td></td><td class="s">Readonly::Hash my %MESSAGES =&gt; (</td></tr>
+<tr><td class="h">65</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_unknown_type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; &#39;Unknown event type: %s&#39;,</td></tr>
+<tr><td class="h">66</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_bad_duration&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; &#39;Unrecognised NWC duration: %s&#39;,</td></tr>
+<tr><td class="h">67</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_bad_rational&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; &#39;Rational arguments must be positive integers&#39;,</td></tr>
+<tr><td class="h">68</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error_internal&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; &#39;Internal error: %s&#39;,</td></tr>
+<tr><td class="h">69</td><td></td><td></td><td></td><td></td><td></td><td class="s">);</td></tr>
+<tr><td class="h">70</td><td colspan="6"></td></tr><tr><td class="h">71 - 117</td><td colspan="5"></td><td class="s"><pre>=head1 NAME
 
 Music::NWC2MusicXML::Event - Internal representation of a single NWC musical event
 or score metadata record.
@@ -134,10 +133,10 @@ Unknown NWC object types are stored as C&lt;UnsupportedEvent&gt; records so
 that conversion can continue rather than aborting.
 
 =cut</pre></td></tr>
-<tr><td class="h">119</td><td colspan="6"></td></tr><tr><td class="h">120</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
-<tr><td class="h">121</td><td></td><td></td><td></td><td></td><td></td><td class="s"># new</td></tr>
-<tr><td class="h">122</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
-<tr><td class="h">123</td><td colspan="6"></td></tr><tr><td class="h">124 - 235</td><td colspan="5"></td><td class="s"><pre>=head2 new
+<tr><td class="h">118</td><td colspan="6"></td></tr><tr><td class="h">119</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
+<tr><td class="h">120</td><td></td><td></td><td></td><td></td><td></td><td class="s"># new</td></tr>
+<tr><td class="h">121</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
+<tr><td class="h">122</td><td colspan="6"></td></tr><tr><td class="h">123 - 234</td><td colspan="5"></td><td class="s"><pre>=head2 new
 
 Construct a new Event.
 
@@ -249,45 +248,45 @@ None.
  (placeholder -- populate with Z calculus as implementation matures)
 
 =cut</pre></td></tr>
-<tr><td class="h">236</td><td colspan="6"></td></tr><tr><td class="h">237</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub new {</td></tr>
-<tr><td class="h">238</td><td><div class="c3">6985</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L238">6985</a></div></td><td><div>2631</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($class, %input) = @_;</td></tr>
-<tr><td class="h">239</td><td><div class="c3">6985</div></td><td></td><td></td><td></td><td><div>9724</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my $args = validate_strict(</td></tr>
-<tr><td class="h">240</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;schema =&gt; {</td></tr>
-<tr><td class="h">241</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; { type =&gt; &#39;scalar&#39; },</td></tr>
-<tr><td class="h">242</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nwc_label&nbsp;&nbsp;=&gt; { type =&gt; &#39;scalar&#39;,&nbsp;&nbsp;&nbsp;optional =&gt; 1 },</td></tr>
-<tr><td class="h">243</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start_time =&gt; { type =&gt; &#39;arrayref&#39;, optional =&gt; 1, default&nbsp;&nbsp;=&gt; [0, 1] },</td></tr>
-<tr><td class="h">244</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;duration&nbsp;&nbsp;&nbsp;=&gt; { type =&gt; &#39;arrayref&#39;, optional =&gt; 1, default&nbsp;&nbsp;=&gt; [0, 1] },</td></tr>
-<tr><td class="h">245</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; { type =&gt; &#39;hashref&#39;,&nbsp;&nbsp;optional =&gt; 1, default&nbsp;&nbsp;=&gt; {} },</td></tr>
-<tr><td class="h">246</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},</td></tr>
-<tr><td class="h">247</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input =&gt; \%input,</td></tr>
-<tr><td class="h">248</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);</td></tr>
-<tr><td class="h">249</td><td><div class="c3">6985</div></td><td><div class="c0" title="-/F"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--branch.html#L249">50</a></div></td><td></td><td></td><td><div>495962</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;croak $@ unless defined $args;</td></tr>
-<tr><td class="h">250</td><td colspan="6"></td></tr><tr><td class="h">251</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Normalise unknown types to UnsupportedEvent rather than croaking;</td></tr>
-<tr><td class="h">252</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# this preserves conversion continuity when new NWC versions add objects.</td></tr>
-<tr><td class="h">253</td><td><div class="c3">6985</div></td><td><div class="c0" title="-/F"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--branch.html#L253">50</a></div></td><td><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--condition.html#L253">33</a></div></td><td></td><td><div>3658</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unless (</td></tr>
-<tr><td class="h">254</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exists $MUSICAL_EVENT_TYPES{ $args-&gt;{type} }</td></tr>
-<tr><td class="h">255</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|| exists $METADATA_EVENT_TYPES{ $args-&gt;{type} }</td></tr>
-<tr><td class="h">256</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) {</td></tr>
-<tr><td class="h">257</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;carp _fmt_msg(&#39;error_unknown_type&#39;, $args-&gt;{type})</td></tr>
-<tr><td class="h">258</td><td><div class="c0">0</div></td><td></td><td></td><td></td><td><div>0</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;. &#39; -- storing as UnsupportedEvent&#39;;</td></tr>
-<tr><td class="h">259</td><td><div class="c0">0</div></td><td></td><td><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--condition.html#L259">0</a></div></td><td></td><td><div>0</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$args-&gt;{nwc_label} //= $args-&gt;{type};</td></tr>
-<tr><td class="h">260</td><td><div class="c0">0</div></td><td></td><td></td><td></td><td><div>0</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$args-&gt;{type} = &#39;UnsupportedEvent&#39;;</td></tr>
-<tr><td class="h">261</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</td></tr>
-<tr><td class="h">262</td><td colspan="6"></td></tr><tr><td class="h">263</td><td><div class="c3">6985</div></td><td></td><td></td><td></td><td><div>10300</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_validate_rational($args-&gt;{start_time});</td></tr>
-<tr><td class="h">264</td><td><div class="c3">6985</div></td><td></td><td></td><td></td><td><div>2394</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_validate_rational($args-&gt;{duration});</td></tr>
-<tr><td class="h">265</td><td colspan="6"></td></tr><tr><td class="h">266</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my $self = bless {</td></tr>
-<tr><td class="h">267</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; $args-&gt;{type},</td></tr>
-<tr><td class="h">268</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_nwc_label&nbsp;&nbsp;=&gt; $args-&gt;{nwc_label} // $args-&gt;{type},</td></tr>
-<tr><td class="h">269</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_start_time =&gt; _reduce_rational($args-&gt;{start_time}),</td></tr>
-<tr><td class="h">270</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_duration&nbsp;&nbsp;&nbsp;=&gt; _reduce_rational($args-&gt;{duration}),</td></tr>
-<tr><td class="h">271</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; $args-&gt;{data},</td></tr>
-<tr><td class="h">272</td><td><div class="c3">6985</div></td><td></td><td><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--condition.html#L272">67</a></div></td><td></td><td><div>3616</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}, $class;</td></tr>
-<tr><td class="h">273</td><td colspan="6"></td></tr><tr><td class="h">274</td><td><div class="c3">6985</div></td><td></td><td></td><td></td><td><div>4481</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return $self;</td></tr>
-<tr><td class="h">275</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
-<tr><td class="h">276</td><td colspan="6"></td></tr><tr><td class="h">277</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
-<tr><td class="h">278</td><td></td><td></td><td></td><td></td><td></td><td class="s"># Accessors</td></tr>
-<tr><td class="h">279</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
-<tr><td class="h">280</td><td colspan="6"></td></tr><tr><td class="h">281 - 289</td><td colspan="5"></td><td class="s"><pre>=head2 type
+<tr><td class="h">235</td><td colspan="6"></td></tr><tr><td class="h">236</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub new {</td></tr>
+<tr><td class="h">237</td><td><div class="c3">9061</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L237">9061</a></div></td><td><div>8119</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($class, %input) = @_;</td></tr>
+<tr><td class="h">238</td><td><div class="c3">9061</div></td><td></td><td></td><td></td><td><div>29658</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my $args = validate_strict(</td></tr>
+<tr><td class="h">239</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;schema =&gt; {</td></tr>
+<tr><td class="h">240</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; { type =&gt; &#39;scalar&#39; },</td></tr>
+<tr><td class="h">241</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nwc_label&nbsp;&nbsp;=&gt; { type =&gt; &#39;scalar&#39;,&nbsp;&nbsp;&nbsp;optional =&gt; 1 },</td></tr>
+<tr><td class="h">242</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start_time =&gt; { type =&gt; &#39;arrayref&#39;, optional =&gt; 1, default&nbsp;&nbsp;=&gt; [0, 1] },</td></tr>
+<tr><td class="h">243</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;duration&nbsp;&nbsp;&nbsp;=&gt; { type =&gt; &#39;arrayref&#39;, optional =&gt; 1, default&nbsp;&nbsp;=&gt; [0, 1] },</td></tr>
+<tr><td class="h">244</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; { type =&gt; &#39;hashref&#39;,&nbsp;&nbsp;optional =&gt; 1, default&nbsp;&nbsp;=&gt; {} },</td></tr>
+<tr><td class="h">245</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},</td></tr>
+<tr><td class="h">246</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input =&gt; \%input,</td></tr>
+<tr><td class="h">247</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);</td></tr>
+<tr><td class="h">248</td><td><div class="c3">9061</div></td><td><div class="c0" title="-/F"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--branch.html#L248">50</a></div></td><td></td><td></td><td><div>1126393</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;croak $@ unless defined $args;</td></tr>
+<tr><td class="h">249</td><td colspan="6"></td></tr><tr><td class="h">250</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Normalise unknown types to UnsupportedEvent rather than croaking;</td></tr>
+<tr><td class="h">251</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# this preserves conversion continuity when new NWC versions add objects.</td></tr>
+<tr><td class="h">252</td><td><div class="c3">9061</div></td><td><div class="c0" title="-/F"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--branch.html#L252">50</a></div></td><td><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--condition.html#L252">33</a></div></td><td></td><td><div>11805</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unless (</td></tr>
+<tr><td class="h">253</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exists $MUSICAL_EVENT_TYPES{ $args-&gt;{type} }</td></tr>
+<tr><td class="h">254</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|| exists $METADATA_EVENT_TYPES{ $args-&gt;{type} }</td></tr>
+<tr><td class="h">255</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) {</td></tr>
+<tr><td class="h">256</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;carp _fmt_msg(&#39;error_unknown_type&#39;, $args-&gt;{type})</td></tr>
+<tr><td class="h">257</td><td><div class="c0">0</div></td><td></td><td></td><td></td><td><div>0</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;. &#39; -- storing as UnsupportedEvent&#39;;</td></tr>
+<tr><td class="h">258</td><td><div class="c0">0</div></td><td></td><td><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--condition.html#L258">0</a></div></td><td></td><td><div>0</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$args-&gt;{nwc_label} //= $args-&gt;{type};</td></tr>
+<tr><td class="h">259</td><td><div class="c0">0</div></td><td></td><td></td><td></td><td><div>0</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$args-&gt;{type} = &#39;UnsupportedEvent&#39;;</td></tr>
+<tr><td class="h">260</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</td></tr>
+<tr><td class="h">261</td><td colspan="6"></td></tr><tr><td class="h">262</td><td><div class="c3">9061</div></td><td></td><td></td><td></td><td><div>26460</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_validate_rational($args-&gt;{start_time});</td></tr>
+<tr><td class="h">263</td><td><div class="c3">9061</div></td><td></td><td></td><td></td><td><div>6269</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_validate_rational($args-&gt;{duration});</td></tr>
+<tr><td class="h">264</td><td colspan="6"></td></tr><tr><td class="h">265</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my $self = bless {</td></tr>
+<tr><td class="h">266</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; $args-&gt;{type},</td></tr>
+<tr><td class="h">267</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_nwc_label&nbsp;&nbsp;=&gt; $args-&gt;{nwc_label} // $args-&gt;{type},</td></tr>
+<tr><td class="h">268</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_start_time =&gt; _reduce_rational($args-&gt;{start_time}),</td></tr>
+<tr><td class="h">269</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_duration&nbsp;&nbsp;&nbsp;=&gt; _reduce_rational($args-&gt;{duration}),</td></tr>
+<tr><td class="h">270</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; $args-&gt;{data},</td></tr>
+<tr><td class="h">271</td><td><div class="c3">9061</div></td><td></td><td><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--condition.html#L271">67</a></div></td><td></td><td><div>11041</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}, $class;</td></tr>
+<tr><td class="h">272</td><td colspan="6"></td></tr><tr><td class="h">273</td><td><div class="c3">9061</div></td><td></td><td></td><td></td><td><div>13936</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return $self;</td></tr>
+<tr><td class="h">274</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
+<tr><td class="h">275</td><td colspan="6"></td></tr><tr><td class="h">276</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
+<tr><td class="h">277</td><td></td><td></td><td></td><td></td><td></td><td class="s"># Accessors</td></tr>
+<tr><td class="h">278</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
+<tr><td class="h">279</td><td colspan="6"></td></tr><tr><td class="h">280 - 288</td><td colspan="5"></td><td class="s"><pre>=head2 type
 
 Return the event type string.
 
@@ -296,54 +295,54 @@ Return the event type string.
 Scalar string.
 
 =cut</pre></td></tr>
-<tr><td class="h">290</td><td colspan="6"></td></tr><tr><td class="h">291</td><td><div class="c3">26544</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L291">26544</a></div></td><td><div>14078</div></td><td class="s">sub type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ return $_[0]-&gt;{_type} }</td></tr>
-<tr><td class="h">292</td><td colspan="6"></td></tr><tr><td class="h">293 - 297</td><td colspan="5"></td><td class="s"><pre>=head2 nwc_label
+<tr><td class="h">289</td><td colspan="6"></td></tr><tr><td class="h">290</td><td><div class="c3">26606</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L290">26606</a></div></td><td><div>25145</div></td><td class="s">sub type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ return $_[0]-&gt;{_type} }</td></tr>
+<tr><td class="h">291</td><td colspan="6"></td></tr><tr><td class="h">292 - 296</td><td colspan="5"></td><td class="s"><pre>=head2 nwc_label
 
 Return the original NWC record label (especially useful for UnsupportedEvent).
 
 =cut</pre></td></tr>
-<tr><td class="h">298</td><td colspan="6"></td></tr><tr><td class="h">299</td><td><div class="c3">1</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L299">1</a></div></td><td><div>85</div></td><td class="s">sub nwc_label&nbsp;&nbsp;{ return $_[0]-&gt;{_nwc_label} }</td></tr>
-<tr><td class="h">300</td><td colspan="6"></td></tr><tr><td class="h">301 - 305</td><td colspan="5"></td><td class="s"><pre>=head2 start_time
+<tr><td class="h">297</td><td colspan="6"></td></tr><tr><td class="h">298</td><td><div class="c3">1</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L298">1</a></div></td><td><div>171</div></td><td class="s">sub nwc_label&nbsp;&nbsp;{ return $_[0]-&gt;{_nwc_label} }</td></tr>
+<tr><td class="h">299</td><td colspan="6"></td></tr><tr><td class="h">300 - 304</td><td colspan="5"></td><td class="s"><pre>=head2 start_time
 
 Return the rational start time as an arrayref C&lt;[$num, $den]&gt;.
 
 =cut</pre></td></tr>
-<tr><td class="h">306</td><td colspan="6"></td></tr><tr><td class="h">307</td><td><div class="c0">0</div></td><td></td><td></td><td><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L307">0</a></div></td><td><div>0</div></td><td class="s">sub start_time { return $_[0]-&gt;{_start_time} }</td></tr>
-<tr><td class="h">308</td><td colspan="6"></td></tr><tr><td class="h">309 - 313</td><td colspan="5"></td><td class="s"><pre>=head2 duration
+<tr><td class="h">305</td><td colspan="6"></td></tr><tr><td class="h">306</td><td><div class="c0">0</div></td><td></td><td></td><td><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L306">0</a></div></td><td><div>0</div></td><td class="s">sub start_time { return $_[0]-&gt;{_start_time} }</td></tr>
+<tr><td class="h">307</td><td colspan="6"></td></tr><tr><td class="h">308 - 312</td><td colspan="5"></td><td class="s"><pre>=head2 duration
 
 Return the rational duration as an arrayref C&lt;[$num, $den]&gt;.
 
 =cut</pre></td></tr>
-<tr><td class="h">314</td><td colspan="6"></td></tr><tr><td class="h">315</td><td><div class="c3">15431</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L315">15431</a></div></td><td><div>8150</div></td><td class="s">sub duration&nbsp;&nbsp;&nbsp;{ return $_[0]-&gt;{_duration} }</td></tr>
-<tr><td class="h">316</td><td colspan="6"></td></tr><tr><td class="h">317 - 321</td><td colspan="5"></td><td class="s"><pre>=head2 data
+<tr><td class="h">313</td><td colspan="6"></td></tr><tr><td class="h">314</td><td><div class="c3">15435</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L314">15435</a></div></td><td><div>14168</div></td><td class="s">sub duration&nbsp;&nbsp;&nbsp;{ return $_[0]-&gt;{_duration} }</td></tr>
+<tr><td class="h">315</td><td colspan="6"></td></tr><tr><td class="h">316 - 320</td><td colspan="5"></td><td class="s"><pre>=head2 data
 
 Return the type-specific payload hashref.
 
 =cut</pre></td></tr>
-<tr><td class="h">322</td><td colspan="6"></td></tr><tr><td class="h">323</td><td><div class="c3">19907</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L323">19907</a></div></td><td><div>12538</div></td><td class="s">sub data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ return $_[0]-&gt;{_data} }</td></tr>
-<tr><td class="h">324</td><td colspan="6"></td></tr><tr><td class="h">325 - 330</td><td colspan="5"></td><td class="s"><pre>=head2 is_musical_event
+<tr><td class="h">321</td><td colspan="6"></td></tr><tr><td class="h">322</td><td><div class="c3">19921</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L322">19921</a></div></td><td><div>19387</div></td><td class="s">sub data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ return $_[0]-&gt;{_data} }</td></tr>
+<tr><td class="h">323</td><td colspan="6"></td></tr><tr><td class="h">324 - 329</td><td colspan="5"></td><td class="s"><pre>=head2 is_musical_event
 
 Return true if this event contributes to the musical timeline (note, rest,
 chord, ...) as opposed to being a metadata record.
 
 =cut</pre></td></tr>
-<tr><td class="h">331</td><td colspan="6"></td></tr><tr><td class="h">332</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub is_musical_event {</td></tr>
-<tr><td class="h">333</td><td><div class="c0">0</div></td><td></td><td></td><td><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L333">0</a></div></td><td><div>0</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($self) = @_;</td></tr>
-<tr><td class="h">334</td><td><div class="c0">0</div></td><td></td><td></td><td></td><td><div>0</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return exists $MUSICAL_EVENT_TYPES{ $self-&gt;{_type} };</td></tr>
-<tr><td class="h">335</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
-<tr><td class="h">336</td><td colspan="6"></td></tr><tr><td class="h">337 - 341</td><td colspan="5"></td><td class="s"><pre>=head2 is_metadata
+<tr><td class="h">330</td><td colspan="6"></td></tr><tr><td class="h">331</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub is_musical_event {</td></tr>
+<tr><td class="h">332</td><td><div class="c0">0</div></td><td></td><td></td><td><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L332">0</a></div></td><td><div>0</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($self) = @_;</td></tr>
+<tr><td class="h">333</td><td><div class="c0">0</div></td><td></td><td></td><td></td><td><div>0</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return exists $MUSICAL_EVENT_TYPES{ $self-&gt;{_type} };</td></tr>
+<tr><td class="h">334</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
+<tr><td class="h">335</td><td colspan="6"></td></tr><tr><td class="h">336 - 340</td><td colspan="5"></td><td class="s"><pre>=head2 is_metadata
 
 Return true if this record is score/staff metadata.
 
 =cut</pre></td></tr>
-<tr><td class="h">342</td><td colspan="6"></td></tr><tr><td class="h">343</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub is_metadata {</td></tr>
-<tr><td class="h">344</td><td><div class="c0">0</div></td><td></td><td></td><td><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L344">0</a></div></td><td><div>0</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($self) = @_;</td></tr>
-<tr><td class="h">345</td><td><div class="c0">0</div></td><td></td><td></td><td></td><td><div>0</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return exists $METADATA_EVENT_TYPES{ $self-&gt;{_type} };</td></tr>
-<tr><td class="h">346</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
-<tr><td class="h">347</td><td colspan="6"></td></tr><tr><td class="h">348</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
-<tr><td class="h">349</td><td></td><td></td><td></td><td></td><td></td><td class="s"># Rational arithmetic helpers (class-level, not methods)</td></tr>
-<tr><td class="h">350</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
-<tr><td class="h">351</td><td colspan="6"></td></tr><tr><td class="h">352 - 386</td><td colspan="5"></td><td class="s"><pre>=head2 rational_from_nwc_duration
+<tr><td class="h">341</td><td colspan="6"></td></tr><tr><td class="h">342</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub is_metadata {</td></tr>
+<tr><td class="h">343</td><td><div class="c0">0</div></td><td></td><td></td><td><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L343">0</a></div></td><td><div>0</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($self) = @_;</td></tr>
+<tr><td class="h">344</td><td><div class="c0">0</div></td><td></td><td></td><td></td><td><div>0</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return exists $METADATA_EVENT_TYPES{ $self-&gt;{_type} };</td></tr>
+<tr><td class="h">345</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
+<tr><td class="h">346</td><td colspan="6"></td></tr><tr><td class="h">347</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
+<tr><td class="h">348</td><td></td><td></td><td></td><td></td><td></td><td class="s"># Rational arithmetic helpers (class-level, not methods)</td></tr>
+<tr><td class="h">349</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
+<tr><td class="h">350</td><td colspan="6"></td></tr><tr><td class="h">351 - 385</td><td colspan="5"></td><td class="s"><pre>=head2 rational_from_nwc_duration
 
 Class method.&nbsp;&nbsp;Convert an NWC duration name and dot count to a rational
 arrayref C&lt;[$num, $den]&gt; in quarter-note units.
@@ -378,23 +377,23 @@ Arrayref C&lt;[$num, $den]&gt;.
  (placeholder)
 
 =cut</pre></td></tr>
-<tr><td class="h">387</td><td colspan="6"></td></tr><tr><td class="h">388</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub rational_from_nwc_duration {</td></tr>
-<tr><td class="h">389</td><td><div class="c3">5216</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L389">5216</a></div></td><td><div>1884</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my $class&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= shift;</td></tr>
-<tr><td class="h">390</td><td><div class="c3">5216</div></td><td></td><td></td><td></td><td><div>1567</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($dur, $dots) = @_;</td></tr>
-<tr><td class="h">391</td><td><div class="c3">5216</div></td><td></td><td><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--condition.html#L391">50</a></div></td><td></td><td><div>1460</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$dots //= 0;</td></tr>
-<tr><td class="h">392</td><td colspan="6"></td></tr><tr><td class="h">393</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;croak _fmt_msg(&#39;error_bad_duration&#39;, $dur)</td></tr>
-<tr><td class="h">394</td><td><div class="c3">5216</div></td><td><div class="c0" title="-/F"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--branch.html#L394">50</a></div></td><td></td><td></td><td><div>2375</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unless exists $DURATION_RATIONALS{$dur};</td></tr>
-<tr><td class="h">395</td><td colspan="6"></td></tr><tr><td class="h">396</td><td><div class="c3">5216</div></td><td></td><td></td><td></td><td><div>7761</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my $r = $DURATION_RATIONALS{$dur};</td></tr>
-<tr><td class="h">397</td><td colspan="6"></td></tr><tr><td class="h">398</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Each dot adds half the preceding value: r * (2^(d+1)-1) / 2^d</td></tr>
-<tr><td class="h">399</td><td><div class="c3">5216</div></td><td></td><td></td><td></td><td><div>6323</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for my $d (1 .. $dots) {</td></tr>
-<tr><td class="h">400</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Add r * (1/2)^d -- implemented via rational addition</td></tr>
-<tr><td class="h">401</td><td><div class="c3">143</div></td><td></td><td></td><td></td><td><div>82</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my $add_num = $r-&gt;[0];</td></tr>
-<tr><td class="h">402</td><td><div class="c3">143</div></td><td></td><td></td><td></td><td><div>180</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my $add_den = $r-&gt;[1] * (2 ** $d);</td></tr>
-<tr><td class="h">403</td><td><div class="c3">143</div></td><td></td><td></td><td></td><td><div>234</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$r = _add_rationals($r, [$add_num, $add_den]);</td></tr>
-<tr><td class="h">404</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</td></tr>
-<tr><td class="h">405</td><td colspan="6"></td></tr><tr><td class="h">406</td><td><div class="c3">5216</div></td><td></td><td></td><td></td><td><div>1484</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return _reduce_rational($r);</td></tr>
-<tr><td class="h">407</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
-<tr><td class="h">408</td><td colspan="6"></td></tr><tr><td class="h">409 - 421</td><td colspan="5"></td><td class="s"><pre>=head2 rational_add
+<tr><td class="h">386</td><td colspan="6"></td></tr><tr><td class="h">387</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub rational_from_nwc_duration {</td></tr>
+<tr><td class="h">388</td><td><div class="c3">5224</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L388">5224</a></div></td><td><div>3508</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my $class&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= shift;</td></tr>
+<tr><td class="h">389</td><td><div class="c3">5224</div></td><td></td><td></td><td></td><td><div>2859</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($dur, $dots) = @_;</td></tr>
+<tr><td class="h">390</td><td><div class="c3">5224</div></td><td></td><td><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--condition.html#L390">50</a></div></td><td></td><td><div>2830</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$dots //= 0;</td></tr>
+<tr><td class="h">391</td><td colspan="6"></td></tr><tr><td class="h">392</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;croak _fmt_msg(&#39;error_bad_duration&#39;, $dur)</td></tr>
+<tr><td class="h">393</td><td><div class="c3">5224</div></td><td><div class="c0" title="-/F"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--branch.html#L393">50</a></div></td><td></td><td></td><td><div>4519</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unless exists $DURATION_RATIONALS{$dur};</td></tr>
+<tr><td class="h">394</td><td colspan="6"></td></tr><tr><td class="h">395</td><td><div class="c3">5224</div></td><td></td><td></td><td></td><td><div>14441</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my $r = $DURATION_RATIONALS{$dur};</td></tr>
+<tr><td class="h">396</td><td colspan="6"></td></tr><tr><td class="h">397</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Each dot adds half the preceding value: r * (2^(d+1)-1) / 2^d</td></tr>
+<tr><td class="h">398</td><td><div class="c3">5224</div></td><td></td><td></td><td></td><td><div>12162</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for my $d (1 .. $dots) {</td></tr>
+<tr><td class="h">399</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Add r * (1/2)^d -- implemented via rational addition</td></tr>
+<tr><td class="h">400</td><td><div class="c3">143</div></td><td></td><td></td><td></td><td><div>147</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my $add_num = $r-&gt;[0];</td></tr>
+<tr><td class="h">401</td><td><div class="c3">143</div></td><td></td><td></td><td></td><td><div>352</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my $add_den = $r-&gt;[1] * (2 ** $d);</td></tr>
+<tr><td class="h">402</td><td><div class="c3">143</div></td><td></td><td></td><td></td><td><div>415</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$r = _add_rationals($r, [$add_num, $add_den]);</td></tr>
+<tr><td class="h">403</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</td></tr>
+<tr><td class="h">404</td><td colspan="6"></td></tr><tr><td class="h">405</td><td><div class="c3">5224</div></td><td></td><td></td><td></td><td><div>3276</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return _reduce_rational($r);</td></tr>
+<tr><td class="h">406</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
+<tr><td class="h">407</td><td colspan="6"></td></tr><tr><td class="h">408 - 420</td><td colspan="5"></td><td class="s"><pre>=head2 rational_add
 
 Class method.&nbsp;&nbsp;Add two rational numbers.
 
@@ -407,54 +406,54 @@ Two arrayrefs C&lt;[$n1,$d1]&gt; and C&lt;[$n2,$d2]&gt;.
 Arrayref C&lt;[$num,$den]&gt; in lowest terms.
 
 =cut</pre></td></tr>
-<tr><td class="h">422</td><td colspan="6"></td></tr><tr><td class="h">423</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub rational_add {</td></tr>
-<tr><td class="h">424</td><td><div class="c0">0</div></td><td></td><td></td><td><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L424">0</a></div></td><td><div>0</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($class, $r1, $r2) = @_;</td></tr>
-<tr><td class="h">425</td><td><div class="c0">0</div></td><td></td><td></td><td></td><td><div>0</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return _reduce_rational(_add_rationals($r1, $r2));</td></tr>
-<tr><td class="h">426</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
-<tr><td class="h">427</td><td colspan="6"></td></tr><tr><td class="h">428 - 433</td><td colspan="5"></td><td class="s"><pre>=head2 rational_to_float
+<tr><td class="h">421</td><td colspan="6"></td></tr><tr><td class="h">422</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub rational_add {</td></tr>
+<tr><td class="h">423</td><td><div class="c0">0</div></td><td></td><td></td><td><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L423">0</a></div></td><td><div>0</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($class, $r1, $r2) = @_;</td></tr>
+<tr><td class="h">424</td><td><div class="c0">0</div></td><td></td><td></td><td></td><td><div>0</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return _reduce_rational(_add_rationals($r1, $r2));</td></tr>
+<tr><td class="h">425</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
+<tr><td class="h">426</td><td colspan="6"></td></tr><tr><td class="h">427 - 432</td><td colspan="5"></td><td class="s"><pre>=head2 rational_to_float
 
 Class method.&nbsp;&nbsp;Convert a rational to a floating-point number for display
 or approximate comparison only.&nbsp;&nbsp;Never use the result for musical timing.
 
 =cut</pre></td></tr>
-<tr><td class="h">434</td><td colspan="6"></td></tr><tr><td class="h">435</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub rational_to_float {</td></tr>
-<tr><td class="h">436</td><td><div class="c0">0</div></td><td></td><td></td><td><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L436">0</a></div></td><td><div>0</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($class, $r) = @_;</td></tr>
-<tr><td class="h">437</td><td><div class="c0">0</div></td><td></td><td></td><td></td><td><div>0</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return $r-&gt;[0] / $r-&gt;[1];</td></tr>
-<tr><td class="h">438</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
-<tr><td class="h">439</td><td colspan="6"></td></tr><tr><td class="h">440</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
-<tr><td class="h">441</td><td></td><td></td><td></td><td></td><td></td><td class="s"># Private helpers</td></tr>
-<tr><td class="h">442</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
-<tr><td class="h">443</td><td colspan="6"></td></tr><tr><td class="h">444</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub _validate_rational {</td></tr>
-<tr><td class="h">445</td><td><div class="c3">13970</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L445">13970</a></div></td><td><div>3339</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($r) = @_;</td></tr>
-<tr><td class="h">446</td><td><div class="c3">13970</div></td><td><div class="c0" title="-/F"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--branch.html#L446">50</a></div></td><td><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--condition.html#L446">20</a></div></td><td></td><td><div>17687</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;croak _fmt_msg(&#39;error_bad_rational&#39;)</td></tr>
-<tr><td class="h">447</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unless ref $r eq &#39;ARRAY&#39;</td></tr>
-<tr><td class="h">448</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;&amp; @$r == 2</td></tr>
-<tr><td class="h">449</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;&amp; $r-&gt;[0] =~ /^\d+$/</td></tr>
-<tr><td class="h">450</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;&amp; $r-&gt;[1] =~ /^[1-9]\d*$/;</td></tr>
-<tr><td class="h">451</td><td><div class="c3">13970</div></td><td></td><td></td><td></td><td><div>3777</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;</td></tr>
-<tr><td class="h">452</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
-<tr><td class="h">453</td><td colspan="6"></td></tr><tr><td class="h">454</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub _add_rationals {</td></tr>
-<tr><td class="h">455</td><td><div class="c3">143</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L455">143</a></div></td><td><div>70</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($r1, $r2) = @_;</td></tr>
-<tr><td class="h">456</td><td><div class="c3">143</div></td><td></td><td></td><td></td><td><div>55</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my $num = $r1-&gt;[0] * $r2-&gt;[1] + $r2-&gt;[0] * $r1-&gt;[1];</td></tr>
-<tr><td class="h">457</td><td><div class="c3">143</div></td><td></td><td></td><td></td><td><div>322</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my $den = $r1-&gt;[1] * $r2-&gt;[1];</td></tr>
-<tr><td class="h">458</td><td><div class="c3">143</div></td><td></td><td></td><td></td><td><div>228</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return [$num, $den];</td></tr>
-<tr><td class="h">459</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
-<tr><td class="h">460</td><td colspan="6"></td></tr><tr><td class="h">461</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub _reduce_rational {</td></tr>
-<tr><td class="h">462</td><td><div class="c3">19186</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L462">19186</a></div></td><td><div>4970</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($r) = @_;</td></tr>
-<tr><td class="h">463</td><td><div class="c3">19186</div></td><td></td><td></td><td></td><td><div>5878</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my $g = _gcd($r-&gt;[0], $r-&gt;[1]);</td></tr>
-<tr><td class="h">464</td><td><div class="c3">19186</div></td><td><div class="c0" title="T/-"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--branch.html#L464">50</a></div></td><td></td><td></td><td><div>11418</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return $g ? [$r-&gt;[0] / $g, $r-&gt;[1] / $g] : [0, 1];</td></tr>
-<tr><td class="h">465</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
-<tr><td class="h">466</td><td colspan="6"></td></tr><tr><td class="h">467</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub _gcd {</td></tr>
-<tr><td class="h">468</td><td><div class="c3">19186</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L468">19186</a></div></td><td><div>5562</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($a, $b) = @_;</td></tr>
-<tr><td class="h">469</td><td><div class="c3">19186</div></td><td></td><td></td><td></td><td><div>18105</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;($a, $b) = ($b, $a % $b) while $b;</td></tr>
-<tr><td class="h">470</td><td><div class="c3">19186</div></td><td></td><td></td><td></td><td><div>5723</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return $a;</td></tr>
-<tr><td class="h">471</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
-<tr><td class="h">472</td><td colspan="6"></td></tr><tr><td class="h">473</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub _fmt_msg {</td></tr>
-<tr><td class="h">474</td><td><div class="c0">0</div></td><td></td><td></td><td><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L474">0</a></div></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($key, @args) = @_;</td></tr>
-<tr><td class="h">475</td><td><div class="c0">0</div></td><td><div class="c0" title="-/-"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--branch.html#L475">0</a></div></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;croak &quot;Unknown message key: $key&quot; unless exists $MESSAGES{$key};</td></tr>
-<tr><td class="h">476</td><td><div class="c0">0</div></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return sprintf $MESSAGES{$key}, @args;</td></tr>
-<tr><td class="h">477</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
-<tr><td class="h">478</td><td colspan="6"></td></tr><tr><td class="h">479</td><td></td><td></td><td></td><td></td><td></td><td class="s">1;</td></tr>
-<tr><td class="h">480</td><td colspan="6"></td></tr></table>
+<tr><td class="h">433</td><td colspan="6"></td></tr><tr><td class="h">434</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub rational_to_float {</td></tr>
+<tr><td class="h">435</td><td><div class="c0">0</div></td><td></td><td></td><td><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L435">0</a></div></td><td><div>0</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($class, $r) = @_;</td></tr>
+<tr><td class="h">436</td><td><div class="c0">0</div></td><td></td><td></td><td></td><td><div>0</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return $r-&gt;[0] / $r-&gt;[1];</td></tr>
+<tr><td class="h">437</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
+<tr><td class="h">438</td><td colspan="6"></td></tr><tr><td class="h">439</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
+<tr><td class="h">440</td><td></td><td></td><td></td><td></td><td></td><td class="s"># Private helpers</td></tr>
+<tr><td class="h">441</td><td></td><td></td><td></td><td></td><td></td><td class="s"># ---------------------------------------------------------------------------</td></tr>
+<tr><td class="h">442</td><td colspan="6"></td></tr><tr><td class="h">443</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub _validate_rational {</td></tr>
+<tr><td class="h">444</td><td><div class="c3">18122</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L444">18122</a></div></td><td><div>9140</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($r) = @_;</td></tr>
+<tr><td class="h">445</td><td><div class="c3">18122</div></td><td><div class="c0" title="-/F"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--branch.html#L445">50</a></div></td><td><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--condition.html#L445">20</a></div></td><td></td><td><div>47211</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;croak _fmt_msg(&#39;error_bad_rational&#39;)</td></tr>
+<tr><td class="h">446</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unless ref $r eq &#39;ARRAY&#39;</td></tr>
+<tr><td class="h">447</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;&amp; @$r == 2</td></tr>
+<tr><td class="h">448</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;&amp; $r-&gt;[0] =~ /^\d+$/</td></tr>
+<tr><td class="h">449</td><td></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;&amp; $r-&gt;[1] =~ /^[1-9]\d*$/;</td></tr>
+<tr><td class="h">450</td><td><div class="c3">18122</div></td><td></td><td></td><td></td><td><div>8118</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;</td></tr>
+<tr><td class="h">451</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
+<tr><td class="h">452</td><td colspan="6"></td></tr><tr><td class="h">453</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub _add_rationals {</td></tr>
+<tr><td class="h">454</td><td><div class="c3">143</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L454">143</a></div></td><td><div>107</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($r1, $r2) = @_;</td></tr>
+<tr><td class="h">455</td><td><div class="c3">143</div></td><td></td><td></td><td></td><td><div>124</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my $num = $r1-&gt;[0] * $r2-&gt;[1] + $r2-&gt;[0] * $r1-&gt;[1];</td></tr>
+<tr><td class="h">456</td><td><div class="c3">143</div></td><td></td><td></td><td></td><td><div>605</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my $den = $r1-&gt;[1] * $r2-&gt;[1];</td></tr>
+<tr><td class="h">457</td><td><div class="c3">143</div></td><td></td><td></td><td></td><td><div>368</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return [$num, $den];</td></tr>
+<tr><td class="h">458</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
+<tr><td class="h">459</td><td colspan="6"></td></tr><tr><td class="h">460</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub _reduce_rational {</td></tr>
+<tr><td class="h">461</td><td><div class="c3">23346</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L461">23346</a></div></td><td><div>11751</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($r) = @_;</td></tr>
+<tr><td class="h">462</td><td><div class="c3">23346</div></td><td></td><td></td><td></td><td><div>14362</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my $g = _gcd($r-&gt;[0], $r-&gt;[1]);</td></tr>
+<tr><td class="h">463</td><td><div class="c3">23346</div></td><td><div class="c0" title="T/-"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--branch.html#L463">50</a></div></td><td></td><td></td><td><div>31852</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return $g ? [$r-&gt;[0] / $g, $r-&gt;[1] / $g] : [0, 1];</td></tr>
+<tr><td class="h">464</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
+<tr><td class="h">465</td><td colspan="6"></td></tr><tr><td class="h">466</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub _gcd {</td></tr>
+<tr><td class="h">467</td><td><div class="c3">23346</div></td><td></td><td></td><td><div class="c3"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L467">23346</a></div></td><td><div>14203</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($a, $b) = @_;</td></tr>
+<tr><td class="h">468</td><td><div class="c3">23346</div></td><td></td><td></td><td></td><td><div>37787</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;($a, $b) = ($b, $a % $b) while $b;</td></tr>
+<tr><td class="h">469</td><td><div class="c3">23346</div></td><td></td><td></td><td></td><td><div>13086</div></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return $a;</td></tr>
+<tr><td class="h">470</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
+<tr><td class="h">471</td><td colspan="6"></td></tr><tr><td class="h">472</td><td></td><td></td><td></td><td></td><td></td><td class="s">sub _fmt_msg {</td></tr>
+<tr><td class="h">473</td><td><div class="c0">0</div></td><td></td><td></td><td><div class="c0"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--subroutine.html#L473">0</a></div></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($key, @args) = @_;</td></tr>
+<tr><td class="h">474</td><td><div class="c0">0</div></td><td><div class="c0" title="-/-"><a href="blib-lib-Music-NWC2MusicXML-Event-pm--branch.html#L474">0</a></div></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;croak &quot;Unknown message key: $key&quot; unless exists $MESSAGES{$key};</td></tr>
+<tr><td class="h">475</td><td><div class="c0">0</div></td><td></td><td></td><td></td><td></td><td class="s">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return sprintf $MESSAGES{$key}, @args;</td></tr>
+<tr><td class="h">476</td><td></td><td></td><td></td><td></td><td></td><td class="s">}</td></tr>
+<tr><td class="h">477</td><td colspan="6"></td></tr><tr><td class="h">478</td><td></td><td></td><td></td><td></td><td></td><td class="s">1;</td></tr>
+<tr><td class="h">479</td><td colspan="6"></td></tr></table>
 </body>
 </html>
