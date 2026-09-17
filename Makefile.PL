@@ -39,9 +39,12 @@ WriteMakefile(
 		'Pod::Usage'       => 0,
 	}, TEST_REQUIRES => {
 		'IPC::System::Simple' => 0,
-		'Test::Most' => 0,
 		'Test::Exception'  => 0,
-		'XML::PP' => 0,	# Use this rather than XML::PP for ease of installation on Windows
+		'Test::Memory::Cycle' => 0,
+		'Test::Mockingbird' => 0,
+		'Test::Most' => 0,
+		'Test::Returns' => 0,
+		'XML::PP' => 0	# Use this rather than XML::PP for ease of installation on Windows
 	}, META_MERGE => {	# https://perldoc.perl.org/CPAN::Meta::Spec
 		'meta-spec' => { version => 2 },
 		resources   => {

@@ -393,13 +393,12 @@ sub rational_from_nwc_duration {
 	croak _fmt_msg('error_bad_duration', $dur)
 		unless exists $DURATION_RATIONALS{$dur};
 
-	my $r = $DURATION_RATIONALS{$dur};
+	my $r      = $DURATION_RATIONALS{$dur};
+	my $base_r = $r;   # preserve original: dot d adds base/2^d, not cur/2^d
 
-	# Each dot adds half the preceding value: r * (2^(d+1)-1) / 2^d
 	for my $d (1 .. $dots) {
-		# Add r * (1/2)^d -- implemented via rational addition
-		my $add_num = $r->[0];
-		my $add_den = $r->[1] * (2 ** $d);
+		my $add_num = $base_r->[0];
+		my $add_den = $base_r->[1] * (2 ** $d);
 		$r = _add_rationals($r, [$add_num, $add_den]);
 	}
 

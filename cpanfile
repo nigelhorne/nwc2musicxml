@@ -25,7 +25,10 @@ on 'configure' => sub {
 on 'test' => sub {
 	requires 'IPC::System::Simple';
 	requires 'Test::Exception';
+	requires 'Test::Memory::Cycle';
+	requires 'Test::Mockingbird';
 	requires 'Test::Most';
+	requires 'Test::Returns';
 	requires 'XML::PP';   # Use this rather than XML::PP for ease of installation on Windows
 };
 

@@ -72,10 +72,6 @@ STDERR in the `Diagnostics` object).
 
 Blessed `Music::NWC2MusicXML` object.
 
-### Side Effects
-
-None.
-
 ### Usage Example
 
     my $c = Music::NWC2MusicXML->new(log_level => 'verbose', validate => 1);

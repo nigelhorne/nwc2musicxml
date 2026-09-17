@@ -7,6 +7,7 @@ our $VERSION = '0.01';
 
 use Carp qw(croak carp);
 use Readonly;
+use Scalar::Util qw(blessed);
 use Params::Validate::Strict qw(validate_strict);
 use Params::Get;
 use Music::NWC2MusicXML::Event;
@@ -255,7 +256,7 @@ Appends to C<_events> array.
 sub add_event {
 	my ($self, $event) = @_;
 	croak _fmt_msg('error_bad_event', ref($event) // 'SCALAR')
-		unless ref($event) && $event->isa('Music::NWC2MusicXML::Event');
+		unless blessed($event) && $event->isa('Music::NWC2MusicXML::Event');
 	push @{ $self->{_events} }, $event;
 	return $self;
 }

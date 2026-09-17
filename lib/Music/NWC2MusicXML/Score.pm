@@ -7,6 +7,7 @@ our $VERSION = '0.01';
 
 use Carp qw(croak carp);
 use Readonly;
+use Scalar::Util qw(blessed);
 use Params::Validate::Strict qw(validate_strict);
 use Params::Get;
 use Music::NWC2MusicXML::Staff;
@@ -231,7 +232,7 @@ Appends to C<_staves>.
 sub add_staff {
 	my ($self, $staff) = @_;
 	croak _fmt_msg('error_bad_staff', ref($staff) // 'SCALAR')
-		unless ref($staff) && $staff->isa('Music::NWC2MusicXML::Staff');
+		unless blessed($staff) && $staff->isa('Music::NWC2MusicXML::Staff');
 	push @{ $self->{_staves} }, $staff;
 	return $self;
 }

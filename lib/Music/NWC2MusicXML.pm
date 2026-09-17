@@ -141,10 +141,6 @@ STDERR in the C<Diagnostics> object).
 
 Blessed C<Music::NWC2MusicXML> object.
 
-=head3 Side Effects
-
-None.
-
 =head3 Usage Example
 
     my $c = Music::NWC2MusicXML->new(log_level => 'verbose', validate => 1);
@@ -188,15 +184,13 @@ sub new {
 		(defined $warnings_fh ? (warnings_fh => $warnings_fh) : ()),
 	);
 
-	my $self = bless {
+	return bless {
 		_diagnostics => $diag,
 		_validate    => $args->{validate},
-		_decoder     => Music::NWC2MusicXML::NWC->new(    diagnostics => $diag ),
-		_parser      => Music::NWC2MusicXML::Parser->new( diagnostics => $diag ),
-		_generator   => Music::NWC2MusicXML::MusicXML->new( diagnostics => $diag ),
+		_decoder     => Music::NWC2MusicXML::NWC->new(diagnostics => $diag),
+		_parser      => Music::NWC2MusicXML::Parser->new(diagnostics => $diag),
+		_generator   => Music::NWC2MusicXML::MusicXML->new(diagnostics => $diag),
 	}, $class;
-
-	return $self;
 }
 
 # ---------------------------------------------------------------------------
