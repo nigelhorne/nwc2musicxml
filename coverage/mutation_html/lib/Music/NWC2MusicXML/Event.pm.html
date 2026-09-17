@@ -644,7 +644,7 @@ Approximate LCSAJ segments: 13<br>
 </span><span class="">  303: 
 </span><span class="">  304: =cut
 </span><span class="">  305: 
-</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  306: sub start_time { return $_[0]-&gt;{_start_time} }
+</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  306: sub start_time { return $_[0]-&gt;{_start_time} }
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
@@ -724,7 +724,7 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </span><span class="">  341: 
 </span><span class="">  342: sub is_metadata {
 </span><span class="">  343: 	my ($self) = @_;
-</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  344: 	return exists $METADATA_EVENT_TYPES{ $self-&gt;{_type} };
+</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  344: 	return exists $METADATA_EVENT_TYPES{ $self-&gt;{_type} };
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
@@ -825,7 +825,7 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </span><span class="">  421: 
 </span><span class="">  422: sub rational_add {
 </span><span class="">  423: 	my ($class, $r1, $r2) = @_;
-</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  424: 	return _reduce_rational(_add_rationals($r1, $r2));
+</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  424: 	return _reduce_rational(_add_rationals($r1, $r2));
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
@@ -858,7 +858,7 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </span><span class="">  433: 
 </span><span class="">  434: sub rational_to_float {
 </span><span class="">  435: 	my ($class, $r) = @_;
-</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  436: 	return $r-&gt;[0] / $r-&gt;[1];
+</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  436: 	return $r-&gt;[0] / $r-&gt;[1];
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
@@ -918,7 +918,7 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </span><span class="">  472: sub _fmt_msg {
 </span><span class="">  473: 	my ($key, @args) = @_;
 </span><span class="">  474: 	croak &quot;Unknown message key: $key&quot; unless exists $MESSAGES{$key};
-</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  475: 	return sprintf $MESSAGES{$key}, @args;
+</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  475: 	return sprintf $MESSAGES{$key}, @args;
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
