@@ -20,7 +20,7 @@ https://pjcj.net
 <h1>Branch Coverage</h1>
 <table>
 <tr><td class="h" align="right">File:</td><td align="left">blib/lib/Music/NWC2MusicXML/Parser.pm</td></tr>
-<tr><td class="h" align="right">Coverage:</td><td align="left" class="c1">77.0%</td></tr>
+<tr><td class="h" align="right">Coverage:</td><td align="left" class="c1">76.3%</td></tr>
 </table>
 <div><br/></div>
 <table>
@@ -55,13 +55,14 @@ https://pjcj.net
 <tr><td class="h"></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">elsif ($tok eq &#39;Grace&#39;) { }</td></tr>
 <tr><td class="h"><a id="L648">648</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $opts_str and length $opts_str</td></tr>
 <tr><td class="h"><a id="L651">651</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($opt =~ /^(\w+)=(.*)$/) { }</td></tr>
-<tr><td class="h"><a id="L805">805</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless defined $staff</td></tr>
-<tr><td class="h"><a id="L816">816</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless defined $sig and length $sig</td></tr>
-<tr><td class="h"><a id="L817">817</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $sig eq $KEY_SIG_NATURAL</td></tr>
-<tr><td class="h"><a id="L822">822</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless @acc</td></tr>
-<tr><td class="h"><a id="L824">824</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($acc[0] =~ /#/) { }</td></tr>
+<tr><td class="h"><a id="L758">758</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">$pos &gt;= 0 ? :</td></tr>
+<tr><td class="h"><a id="L802">802</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless defined $staff</td></tr>
+<tr><td class="h"><a id="L813">813</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless defined $sig and length $sig</td></tr>
+<tr><td class="h"><a id="L814">814</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $sig eq $KEY_SIG_NATURAL</td></tr>
+<tr><td class="h"><a id="L819">819</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless @acc</td></tr>
+<tr><td class="h"><a id="L821">821</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($acc[0] =~ /#/) { }</td></tr>
 <tr><td class="h"></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">elsif ($acc[0] =~ /b$/) { }</td></tr>
-<tr><td class="h"><a id="L834">834</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless exists $MESSAGES{$key}</td></tr>
+<tr><td class="h"><a id="L831">831</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless exists $MESSAGES{$key}</td></tr>
 </table>
 </body>
 </html>
