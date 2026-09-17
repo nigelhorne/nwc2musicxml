@@ -514,7 +514,10 @@ sub _emit_measure {
 		my $type   = $event->type;
 		my $ev_ann = $ann->{"$event"} // {};
 
-		if ($type eq 'Clef') {
+		if ($type eq 'TimeSig') {
+			push @out, $self->_emit_time_change($event->data // {}, $pad . $i);
+
+		} elsif ($type eq 'Clef') {
 			$curr_clef = $event->data->{nwc_clef} // $curr_clef;
 			push @out, $self->_emit_clef_change($curr_clef, $pad . $i);
 
@@ -901,6 +904,22 @@ sub _emit_wedge {
 	push @out, "${pad}${i}${i}<wedge type=\"$wedge_type\" number=\"1\"/>";
 	push @out, "${pad}${i}</direction-type>";
 	push @out, "${pad}</direction>";
+	return @out;
+}
+
+sub _emit_time_change {
+	my ($self, $ts_data, $pad) = @_;
+	my @out;
+	my $i = $self->{_indent};
+	my $beats     = $ts_data->{beats}     // 4;
+	my $beat_type = $ts_data->{beat_type} // 4;
+
+	push @out, "${pad}<attributes>";
+	push @out, "${pad}${i}<time>";
+	push @out, "${pad}${i}${i}<beats>$beats</beats>";
+	push @out, "${pad}${i}${i}<beat-type>$beat_type</beat-type>";
+	push @out, "${pad}${i}</time>";
+	push @out, "${pad}</attributes>";
 	return @out;
 }
 
