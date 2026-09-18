@@ -9,6 +9,7 @@ our $VERSION = '0.01';
 use Carp qw(croak carp);
 use POSIX qw(floor);
 use Readonly;
+use List::Util qw(any);
 use Scalar::Util qw(blessed);
 use Params::Validate::Strict qw(validate_strict);
 use Params::Get;
@@ -1127,7 +1128,7 @@ sub _annotate_events {
 		# but don't carry the arc endpoint markers)
 		next if $type eq 'Rest';
 
-		my $has_slur = grep { $_ eq 'Slur' } @{$ev->data->{articulations} // []};
+		my $has_slur = any { $_ eq 'Slur' } @{$ev->data->{articulations} // []};
 
 		if ($has_slur) {
 			$ann{$key}{slur_start} = 1 unless $in_slur;
@@ -1619,16 +1620,17 @@ sub _emit_attributes {
 sub _calculate_divisions {
 	my ($self, $score) = @_;
 
-	my @denoms;
+	my %seen_denoms;
 	for my $staff (@{ $score->staves }) {
 		for my $event (@{ $staff->events }) {
-			my $dur = $event->duration;
-			push @denoms, $dur->[1] if $dur->[1] > 0;
+			my $d = $event->duration->[1];
+			$seen_denoms{$d} = 1 if $d > 0;
 		}
 	}
 
-	return $DEFAULT_DIVISIONS unless @denoms;
+	return $DEFAULT_DIVISIONS unless %seen_denoms;
 
+	my @denoms = keys %seen_denoms;
 	my $lcm = $denoms[0];
 	for my $d (@denoms[1..$#denoms]) {
 		$lcm = _lcm($lcm, $d);
