@@ -20,57 +20,57 @@ https://pjcj.net
 <h1>Branch Coverage</h1>
 <table>
 <tr><td class="h" align="right">File:</td><td align="left">blib/lib/Music/NWC2MusicXML/MusicXML.pm</td></tr>
-<tr><td class="h" align="right">Coverage:</td><td align="left" class="c1">84.2%</td></tr>
+<tr><td class="h" align="right">Coverage:</td><td align="left" class="c1">85.6%</td></tr>
 </table>
 <div><br/></div>
 <table>
 <tr><th>line</th><th>%</th><th colspan="2">coverage</th><th>branch</th></tr>
-<tr><td class="h"><a id="L487">487</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless defined $args</td></tr>
-<tr><td class="h"><a id="L611">611</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless &amp;blessed($score) and $score-&gt;isa(&quot;Music::NWC2MusicXML::Score&quot;)</td></tr>
-<tr><td class="h"><a id="L614">614</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless $score-&gt;staff_count &gt; 0</td></tr>
-<tr><td class="h"><a id="L721">721</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless length($font-&gt;{&#39;typeface&#39;} // &quot;&quot;)</td></tr>
-<tr><td class="h"><a id="L723">723</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($style eq &#39;StaffLyric&#39; and not defined $lyric_font) { }</td></tr>
+<tr><td class="h"><a id="L475">475</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless defined $args</td></tr>
+<tr><td class="h"><a id="L599">599</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless &amp;blessed($score) and $score-&gt;isa(&quot;Music::NWC2MusicXML::Score&quot;)</td></tr>
+<tr><td class="h"><a id="L602">602</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless $score-&gt;staff_count &gt; 0</td></tr>
+<tr><td class="h"><a id="L709">709</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless length($font-&gt;{&#39;typeface&#39;} // &quot;&quot;)</td></tr>
+<tr><td class="h"><a id="L711">711</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($style eq &#39;StaffLyric&#39; and not defined $lyric_font) { }</td></tr>
 <tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif ($style =~ /\AStaff/i and not defined $word_font) { }</td></tr>
-<tr><td class="h"><a id="L731">731</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $font</td></tr>
-<tr><td class="h"><a id="L733">733</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">$font-&gt;{&#39;size&#39;} ? :</td></tr>
-<tr><td class="h"><a id="L734">734</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">$font-&gt;{&#39;bold&#39;} ? :</td></tr>
-<tr><td class="h"><a id="L735">735</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">$font-&gt;{&#39;italic&#39;} ? :</td></tr>
-<tr><td class="h"><a id="L753">753</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $meta-&gt;{&#39;Title&#39;}</td></tr>
-<tr><td class="h"><a id="L765">765</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $meta-&gt;{&#39;Author&#39;}</td></tr>
-<tr><td class="h"><a id="L768">768</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if $meta-&gt;{&#39;Lyricist&#39;}</td></tr>
-<tr><td class="h"><a id="L772">772</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (defined $meta-&gt;{&#39;Copyright1&#39;} or defined $meta-&gt;{&#39;Copyright2&#39;}) { }</td></tr>
+<tr><td class="h"><a id="L719">719</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $font</td></tr>
+<tr><td class="h"><a id="L721">721</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">$font-&gt;{&#39;size&#39;} ? :</td></tr>
+<tr><td class="h"><a id="L722">722</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">$font-&gt;{&#39;bold&#39;} ? :</td></tr>
+<tr><td class="h"><a id="L723">723</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">$font-&gt;{&#39;italic&#39;} ? :</td></tr>
+<tr><td class="h"><a id="L741">741</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $meta-&gt;{&#39;Title&#39;}</td></tr>
+<tr><td class="h"><a id="L753">753</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $meta-&gt;{&#39;Author&#39;}</td></tr>
+<tr><td class="h"><a id="L756">756</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if $meta-&gt;{&#39;Lyricist&#39;}</td></tr>
+<tr><td class="h"><a id="L760">760</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (defined $meta-&gt;{&#39;Copyright1&#39;} or defined $meta-&gt;{&#39;Copyright2&#39;}) { }</td></tr>
 <tr><td class="h"></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">elsif (defined $meta-&gt;{&#39;Copyright&#39;} and length $meta-&gt;{&#39;Copyright&#39;}) { }</td></tr>
-<tr><td class="h"><a id="L774">774</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if defined $meta-&gt;{&#39;Copyright1&#39;} and length $meta-&gt;{&#39;Copyright1&#39;}</td></tr>
-<tr><td class="h"><a id="L776">776</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if defined $meta-&gt;{&#39;Copyright2&#39;} and length $meta-&gt;{&#39;Copyright2&#39;}</td></tr>
-<tr><td class="h"><a id="L780">780</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if @cr_lines</td></tr>
-<tr><td class="h"><a id="L785">785</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if (defined $meta-&gt;{&#39;Comments&#39;} and length($meta-&gt;{&#39;Comments&#39;} // &quot;&quot;))</td></tr>
-<tr><td class="h"><a id="L807">807</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (defined $meta-&gt;{&#39;Title&#39;} and length $meta-&gt;{&#39;Title&#39;})</td></tr>
-<tr><td class="h"><a id="L819">819</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (defined $meta-&gt;{&#39;Author&#39;} and length $meta-&gt;{&#39;Author&#39;})</td></tr>
-<tr><td class="h"><a id="L834">834</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (defined $meta-&gt;{&#39;Copyright1&#39;} or defined $meta-&gt;{&#39;Copyright2&#39;}) { }</td></tr>
+<tr><td class="h"><a id="L762">762</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if defined $meta-&gt;{&#39;Copyright1&#39;} and length $meta-&gt;{&#39;Copyright1&#39;}</td></tr>
+<tr><td class="h"><a id="L764">764</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if defined $meta-&gt;{&#39;Copyright2&#39;} and length $meta-&gt;{&#39;Copyright2&#39;}</td></tr>
+<tr><td class="h"><a id="L768">768</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if @cr_lines</td></tr>
+<tr><td class="h"><a id="L773">773</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if (defined $meta-&gt;{&#39;Comments&#39;} and length($meta-&gt;{&#39;Comments&#39;} // &quot;&quot;))</td></tr>
+<tr><td class="h"><a id="L795">795</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (defined $meta-&gt;{&#39;Title&#39;} and length $meta-&gt;{&#39;Title&#39;})</td></tr>
+<tr><td class="h"><a id="L807">807</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (defined $meta-&gt;{&#39;Author&#39;} and length $meta-&gt;{&#39;Author&#39;})</td></tr>
+<tr><td class="h"><a id="L822">822</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (defined $meta-&gt;{&#39;Copyright1&#39;} or defined $meta-&gt;{&#39;Copyright2&#39;}) { }</td></tr>
 <tr><td class="h"></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">elsif (defined $meta-&gt;{&#39;Copyright&#39;} and length $meta-&gt;{&#39;Copyright&#39;}) { }</td></tr>
-<tr><td class="h"><a id="L836">836</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if defined $meta-&gt;{&#39;Copyright1&#39;} and length $meta-&gt;{&#39;Copyright1&#39;}</td></tr>
-<tr><td class="h"><a id="L838">838</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if defined $meta-&gt;{&#39;Copyright2&#39;} and length $meta-&gt;{&#39;Copyright2&#39;}</td></tr>
-<tr><td class="h"><a id="L886">886</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">$staff-&gt;{&#39;_visible&#39;} // 1 ? :</td></tr>
-<tr><td class="h"><a id="L889">889</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($instr and $instr-&gt;{&#39;name&#39;})</td></tr>
-<tr><td class="h"><a id="L894">894</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (defined $instr-&gt;{&#39;patch&#39;})</td></tr>
-<tr><td class="h"><a id="L930">930</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($flags{$sym}) { }</td></tr>
-<tr><td class="h"><a id="L932">932</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">$flags{&#39;ConnectBars&#39;} ? :</td></tr>
-<tr><td class="h"><a id="L937">937</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless $cf{$sym}</td></tr>
-<tr><td class="h"><a id="L940">940</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if $i &gt; $start</td></tr>
-<tr><td class="h"><a id="L986">986</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">$freq{$cand} &gt; 1 ? :</td></tr>
-<tr><td class="h"><a id="L1000">1000</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if length $name and not $name =~ /^Staff(?:-\d+)?$/i</td></tr>
-<tr><td class="h"><a id="L1005">1005</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if defined $instr-&gt;{&#39;name&#39;} and length $instr-&gt;{&#39;name&#39;}</td></tr>
-<tr><td class="h"><a id="L1054">1054</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($type eq &#39;Bar&#39;) { }</td></tr>
+<tr><td class="h"><a id="L824">824</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if defined $meta-&gt;{&#39;Copyright1&#39;} and length $meta-&gt;{&#39;Copyright1&#39;}</td></tr>
+<tr><td class="h"><a id="L826">826</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if defined $meta-&gt;{&#39;Copyright2&#39;} and length $meta-&gt;{&#39;Copyright2&#39;}</td></tr>
+<tr><td class="h"><a id="L874">874</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">$staff-&gt;{&#39;_visible&#39;} // 1 ? :</td></tr>
+<tr><td class="h"><a id="L877">877</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($instr and $instr-&gt;{&#39;name&#39;})</td></tr>
+<tr><td class="h"><a id="L882">882</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (defined $instr-&gt;{&#39;patch&#39;})</td></tr>
+<tr><td class="h"><a id="L918">918</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($flags{$sym}) { }</td></tr>
+<tr><td class="h"><a id="L920">920</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">$flags{&#39;ConnectBars&#39;} ? :</td></tr>
+<tr><td class="h"><a id="L925">925</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless $cf{$sym}</td></tr>
+<tr><td class="h"><a id="L928">928</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if $i &gt; $start</td></tr>
+<tr><td class="h"><a id="L974">974</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">$freq{$cand} &gt; 1 ? :</td></tr>
+<tr><td class="h"><a id="L988">988</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if length $name and not $name =~ /^Staff(?:-\d+)?$/i</td></tr>
+<tr><td class="h"><a id="L993">993</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if defined $instr-&gt;{&#39;name&#39;} and length $instr-&gt;{&#39;name&#39;}</td></tr>
+<tr><td class="h"><a id="L1042">1042</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($type eq &#39;Bar&#39;) { }</td></tr>
 <tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif ($type eq &#39;Clef&#39;) { }</td></tr>
 <tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif ($type eq &#39;Key&#39;) { }</td></tr>
-<tr><td class="h"><a id="L1079">1079</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (@pending or $measure_no == 1)</td></tr>
-<tr><td class="h"><a id="L1108">1108</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($prev_bar eq &quot;MasterRepeatOpen&quot; or $prev_bar eq &quot;LocalRepeatOpen&quot;)</td></tr>
-<tr><td class="h"><a id="L1115">1115</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($is_first)</td></tr>
-<tr><td class="h"><a id="L1119">1119</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (defined $vol or defined $pan)</td></tr>
-<tr><td class="h"><a id="L1121">1121</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if defined $vol</td></tr>
-<tr><td class="h"><a id="L1122">1122</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if defined $pan</td></tr>
-<tr><td class="h"><a id="L1123">1123</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if @sa</td></tr>
-<tr><td class="h"><a id="L1131">1131</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($type eq &#39;TimeSig&#39;) { }</td></tr>
+<tr><td class="h"><a id="L1067">1067</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (@pending or $measure_no == 1)</td></tr>
+<tr><td class="h"><a id="L1096">1096</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($prev_bar eq &quot;MasterRepeatOpen&quot; or $prev_bar eq &quot;LocalRepeatOpen&quot;)</td></tr>
+<tr><td class="h"><a id="L1103">1103</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($is_first)</td></tr>
+<tr><td class="h"><a id="L1107">1107</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (defined $vol or defined $pan)</td></tr>
+<tr><td class="h"><a id="L1109">1109</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if defined $vol</td></tr>
+<tr><td class="h"><a id="L1110">1110</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if defined $pan</td></tr>
+<tr><td class="h"><a id="L1111">1111</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if @sa</td></tr>
+<tr><td class="h"><a id="L1119">1119</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($type eq &#39;TimeSig&#39;) { }</td></tr>
 <tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif ($type eq &#39;Clef&#39;) { }</td></tr>
 <tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif ($type eq &#39;Key&#39;) { }</td></tr>
 <tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif ($type eq &#39;Tempo&#39;) { }</td></tr>
@@ -83,90 +83,90 @@ https://pjcj.net
 <tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif ($type eq &#39;Note&#39;) { }</td></tr>
 <tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif ($type eq &#39;Rest&#39;) { }</td></tr>
 <tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif ($type eq &#39;Chord&#39;) { }</td></tr>
-<tr><td class="h"><a id="L1179">1179</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $ev_ann-&gt;{&#39;wedge_start&#39;}</td></tr>
-<tr><td class="h"><a id="L1183">1183</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $ev_ann-&gt;{&#39;wedge_stop_after&#39;}</td></tr>
-<tr><td class="h"><a id="L1186">1186</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if $ev_ann-&gt;{&#39;wedge_start&#39;}</td></tr>
-<tr><td class="h"><a id="L1189">1189</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if $ev_ann-&gt;{&#39;wedge_stop_after&#39;}</td></tr>
-<tr><td class="h"><a id="L1192">1192</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $ev_ann-&gt;{&#39;wedge_start&#39;}</td></tr>
-<tr><td class="h"><a id="L1196">1196</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $ev_ann-&gt;{&#39;wedge_stop_after&#39;}</td></tr>
-<tr><td class="h"><a id="L1200">1200</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($bar_style eq &#39;MasterRepeatClose&#39;) { }</td></tr>
+<tr><td class="h"><a id="L1167">1167</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $ev_ann-&gt;{&#39;wedge_start&#39;}</td></tr>
+<tr><td class="h"><a id="L1171">1171</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $ev_ann-&gt;{&#39;wedge_stop_after&#39;}</td></tr>
+<tr><td class="h"><a id="L1174">1174</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if $ev_ann-&gt;{&#39;wedge_start&#39;}</td></tr>
+<tr><td class="h"><a id="L1177">1177</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if $ev_ann-&gt;{&#39;wedge_stop_after&#39;}</td></tr>
+<tr><td class="h"><a id="L1180">1180</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $ev_ann-&gt;{&#39;wedge_start&#39;}</td></tr>
+<tr><td class="h"><a id="L1184">1184</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $ev_ann-&gt;{&#39;wedge_stop_after&#39;}</td></tr>
+<tr><td class="h"><a id="L1188">1188</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($bar_style eq &#39;MasterRepeatClose&#39;) { }</td></tr>
 <tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif ($bar_style eq &#39;Double&#39;) { }</td></tr>
-<tr><td class="h"></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">elsif ($bar_style eq &#39;SectionClose&#39; or $bar_style eq &#39;LocalRepeatClose&#39;) { }</td></tr>
-<tr><td class="h"><a id="L1246">1246</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless $type eq &quot;Note&quot; or $type eq &quot;Chord&quot; or $type eq &quot;Rest&quot;</td></tr>
-<tr><td class="h"><a id="L1251">1251</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless ($type eq &quot;Rest&quot;)</td></tr>
-<tr><td class="h"><a id="L1254">1254</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">$type eq &#39;Chord&#39; ? :</td></tr>
-<tr><td class="h"><a id="L1259">1259</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (delete $pending_tie{$pk})</td></tr>
-<tr><td class="h"><a id="L1262">1262</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($ps =~ /\^\z/)</td></tr>
-<tr><td class="h"><a id="L1271">1271</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $type eq &quot;Rest&quot;</td></tr>
-<tr><td class="h"><a id="L1275">1275</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($has_slur) { }</td></tr>
-<tr><td class="h"><a id="L1276">1276</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless ($in_slur)</td></tr>
-<tr><td class="h"><a id="L1286">1286</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($in_slur)</td></tr>
-<tr><td class="h"><a id="L1295">1295</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $in_slur and defined $last_slur_ev</td></tr>
-<tr><td class="h"><a id="L1309">1309</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($type eq &#39;Note&#39; or $type eq &#39;Chord&#39;) { }</td></tr>
+<tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif ($bar_style eq &#39;SectionClose&#39; or $bar_style eq &#39;LocalRepeatClose&#39;) { }</td></tr>
+<tr><td class="h"><a id="L1234">1234</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless $type eq &quot;Note&quot; or $type eq &quot;Chord&quot; or $type eq &quot;Rest&quot;</td></tr>
+<tr><td class="h"><a id="L1239">1239</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless ($type eq &quot;Rest&quot;)</td></tr>
+<tr><td class="h"><a id="L1242">1242</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">$type eq &#39;Chord&#39; ? :</td></tr>
+<tr><td class="h"><a id="L1247">1247</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (delete $pending_tie{$pk})</td></tr>
+<tr><td class="h"><a id="L1250">1250</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($ps =~ /\^\z/)</td></tr>
+<tr><td class="h"><a id="L1259">1259</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $type eq &quot;Rest&quot;</td></tr>
+<tr><td class="h"><a id="L1263">1263</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($has_slur) { }</td></tr>
+<tr><td class="h"><a id="L1264">1264</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless ($in_slur)</td></tr>
+<tr><td class="h"><a id="L1274">1274</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($in_slur)</td></tr>
+<tr><td class="h"><a id="L1283">1283</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $in_slur and defined $last_slur_ev</td></tr>
+<tr><td class="h"><a id="L1297">1297</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($type eq &#39;Note&#39; or $type eq &#39;Chord&#39;) { }</td></tr>
 <tr><td class="h"></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">elsif ($type eq &#39;Lyric&#39; and defined $last_note_key) { }</td></tr>
-<tr><td class="h"><a id="L1337">1337</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless $type eq &quot;Note&quot; or $type eq &quot;Rest&quot; or $type eq &quot;Chord&quot;</td></tr>
-<tr><td class="h"><a id="L1342">1342</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">$opts-&gt;{&#39;Diminuendo&#39;} ? :</td></tr>
+<tr><td class="h"><a id="L1325">1325</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless $type eq &quot;Note&quot; or $type eq &quot;Rest&quot; or $type eq &quot;Chord&quot;</td></tr>
+<tr><td class="h"><a id="L1330">1330</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">$opts-&gt;{&#39;Diminuendo&#39;} ? :</td></tr>
 <tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">$opts-&gt;{&#39;Crescendo&#39;} ? :</td></tr>
-<tr><td class="h"><a id="L1345">1345</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (defined $wedge_now and !defined($ev_wedge) || $ev_wedge ne $wedge_now)</td></tr>
-<tr><td class="h"><a id="L1346">1346</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if defined $prev_wedge_key</td></tr>
-<tr><td class="h"><a id="L1349">1349</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (not defined $wedge_now and defined $ev_wedge)</td></tr>
-<tr><td class="h"><a id="L1354">1354</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">defined $ev_wedge ? :</td></tr>
-<tr><td class="h"><a id="L1358">1358</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if defined $wedge_now and defined $prev_wedge_key</td></tr>
-<tr><td class="h"><a id="L1381">1381</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (defined $pitch-&gt;{&#39;accidental&#39;}) { }</td></tr>
+<tr><td class="h"><a id="L1333">1333</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (defined $wedge_now and !defined($ev_wedge) || $ev_wedge ne $wedge_now)</td></tr>
+<tr><td class="h"><a id="L1334">1334</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if defined $prev_wedge_key</td></tr>
+<tr><td class="h"><a id="L1337">1337</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (not defined $wedge_now and defined $ev_wedge)</td></tr>
+<tr><td class="h"><a id="L1342">1342</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">defined $ev_wedge ? :</td></tr>
+<tr><td class="h"><a id="L1346">1346</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if defined $wedge_now and defined $prev_wedge_key</td></tr>
+<tr><td class="h"><a id="L1369">1369</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (defined $pitch-&gt;{&#39;accidental&#39;}) { }</td></tr>
 <tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif (exists $bar_accidentals-&gt;{$pitch_key}) { }</td></tr>
-<tr><td class="h"><a id="L1399">1399</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $is_chord_member</td></tr>
-<tr><td class="h"><a id="L1400">1400</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if $d-&gt;{&#39;is_grace&#39;}</td></tr>
-<tr><td class="h"><a id="L1403">1403</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $pitch-&gt;{&#39;alter&#39;}</td></tr>
-<tr><td class="h"><a id="L1406">1406</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">unless ($d-&gt;{&#39;is_grace&#39;})</td></tr>
-<tr><td class="h"><a id="L1409">1409</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $tie_stop</td></tr>
-<tr><td class="h"><a id="L1410">1410</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $tie_start</td></tr>
-<tr><td class="h"><a id="L1416">1416</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $pitch-&gt;{&#39;accidental&#39;}</td></tr>
-<tr><td class="h"><a id="L1420">1420</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $tie_stop</td></tr>
-<tr><td class="h"><a id="L1421">1421</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $tie_start</td></tr>
-<tr><td class="h"><a id="L1422">1422</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $slur_stop</td></tr>
-<tr><td class="h"><a id="L1423">1423</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $slur_start</td></tr>
-<tr><td class="h"><a id="L1427">1427</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">!$is_chord_member ? :</td></tr>
-<tr><td class="h"><a id="L1429">1429</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (@artic_tokens)</td></tr>
-<tr><td class="h"><a id="L1433">1433</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless (defined $map)</td></tr>
-<tr><td class="h"><a id="L1437">1437</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($map-&gt;{&#39;group&#39;} eq &#39;articulations&#39;) { }</td></tr>
+<tr><td class="h"><a id="L1387">1387</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $is_chord_member</td></tr>
+<tr><td class="h"><a id="L1388">1388</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $d-&gt;{&#39;is_grace&#39;}</td></tr>
+<tr><td class="h"><a id="L1391">1391</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $pitch-&gt;{&#39;alter&#39;}</td></tr>
+<tr><td class="h"><a id="L1394">1394</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless ($d-&gt;{&#39;is_grace&#39;})</td></tr>
+<tr><td class="h"><a id="L1397">1397</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $tie_stop</td></tr>
+<tr><td class="h"><a id="L1398">1398</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $tie_start</td></tr>
+<tr><td class="h"><a id="L1404">1404</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $pitch-&gt;{&#39;accidental&#39;}</td></tr>
+<tr><td class="h"><a id="L1408">1408</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $tie_stop</td></tr>
+<tr><td class="h"><a id="L1409">1409</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $tie_start</td></tr>
+<tr><td class="h"><a id="L1410">1410</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $slur_stop</td></tr>
+<tr><td class="h"><a id="L1411">1411</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $slur_start</td></tr>
+<tr><td class="h"><a id="L1415">1415</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">!$is_chord_member ? :</td></tr>
+<tr><td class="h"><a id="L1417">1417</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (@artic_tokens)</td></tr>
+<tr><td class="h"><a id="L1421">1421</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless (defined $map)</td></tr>
+<tr><td class="h"><a id="L1425">1425</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($map-&gt;{&#39;group&#39;} eq &#39;articulations&#39;) { }</td></tr>
 <tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif ($map-&gt;{&#39;group&#39;} eq &#39;ornaments&#39;) { }</td></tr>
-<tr><td class="h"><a id="L1441">1441</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (@artic_els)</td></tr>
-<tr><td class="h"><a id="L1446">1446</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (@ornament_els)</td></tr>
-<tr><td class="h"><a id="L1454">1454</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (@nots)</td></tr>
-<tr><td class="h"><a id="L1461">1461</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless ($is_chord_member)</td></tr>
-<tr><td class="h"><a id="L1518">1518</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">$first ? :</td></tr>
-<tr><td class="h"><a id="L1566">1566</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if ($pos_str =~ /\A([#bnx]*)(-?\d+)\^?\z/)</td></tr>
-<tr><td class="h"><a id="L1581">1581</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (my $acc = $ACCIDENTAL_MAP{$acc_prefix}) { }</td></tr>
-<tr><td class="h"><a id="L1593">1593</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless $key_fifths</td></tr>
-<tr><td class="h"><a id="L1596">1596</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">$key_fifths &gt; 0 ? :</td></tr>
-<tr><td class="h"><a id="L1599">1599</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">abs $key_fifths &gt; 7 ? :</td></tr>
-<tr><td class="h"><a id="L1601">1601</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $steps-&gt;[$k] == $step_i</td></tr>
-<tr><td class="h"><a id="L1627">1627</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $dot</td></tr>
-<tr><td class="h"><a id="L1642">1642</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless (exists $DYNAMIC_MAP{$marking})</td></tr>
-<tr><td class="h"><a id="L1643">1643</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $marking ne &quot;&quot;</td></tr>
-<tr><td class="h"><a id="L1647">1647</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">lc $placement eq &#39;above&#39; ? :</td></tr>
-<tr><td class="h"><a id="L1656">1656</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (defined $dyn_vel and defined $dyn_vel-&gt;{$marking})</td></tr>
-<tr><td class="h"><a id="L1678">1678</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $wedge_type</td></tr>
-<tr><td class="h"><a id="L1680">1680</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">lc $placement eq &#39;above&#39; ? :</td></tr>
-<tr><td class="h"><a id="L1707">1707</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless length $text</td></tr>
-<tr><td class="h"><a id="L1709">1709</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">lc $placement eq &#39;above&#39; ? :</td></tr>
-<tr><td class="h"><a id="L1723">1723</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">unless length $text</td></tr>
-<tr><td class="h"><a id="L1725">1725</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">lc $placement eq &#39;above&#39; ? :</td></tr>
-<tr><td class="h"><a id="L1739">1739</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">unless defined $map</td></tr>
-<tr><td class="h"><a id="L1743">1743</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if (defined $map-&gt;{&#39;element&#39;})</td></tr>
-<tr><td class="h"><a id="L1748">1748</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if (defined $map-&gt;{&#39;words&#39;})</td></tr>
-<tr><td class="h"><a id="L1762">1762</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">$name ? :</td></tr>
-<tr><td class="h"><a id="L1798">1798</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if defined $clef-&gt;{&#39;line&#39;}</td></tr>
-<tr><td class="h"><a id="L1826">1826</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (my $key = $staff-&gt;initial_key)</td></tr>
-<tr><td class="h"><a id="L1832">1832</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (my $ts = $staff-&gt;initial_timesig)</td></tr>
-<tr><td class="h"><a id="L1839">1839</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (my $clef_name = $staff-&gt;initial_clef)</td></tr>
-<tr><td class="h"><a id="L1842">1842</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless (defined $clef)</td></tr>
-<tr><td class="h"><a id="L1848">1848</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if defined $clef-&gt;{&#39;line&#39;}</td></tr>
-<tr><td class="h"><a id="L1853">1853</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if ($trans)</td></tr>
-<tr><td class="h"><a id="L1878">1878</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if $d &gt; 0</td></tr>
-<tr><td class="h"><a id="L1882">1882</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless %seen_denoms</td></tr>
-<tr><td class="h"><a id="L1909">1909</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $s</td></tr>
-<tr><td class="h"><a id="L1930">1930</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless exists $MESSAGES{$key}</td></tr>
+<tr><td class="h"><a id="L1429">1429</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (@artic_els)</td></tr>
+<tr><td class="h"><a id="L1434">1434</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (@ornament_els)</td></tr>
+<tr><td class="h"><a id="L1442">1442</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (@nots)</td></tr>
+<tr><td class="h"><a id="L1449">1449</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless ($is_chord_member)</td></tr>
+<tr><td class="h"><a id="L1506">1506</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">$first ? :</td></tr>
+<tr><td class="h"><a id="L1554">1554</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if ($pos_str =~ /\A([#bnx]*)(-?\d+)\^?\z/)</td></tr>
+<tr><td class="h"><a id="L1569">1569</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (my $acc = $ACCIDENTAL_MAP{$acc_prefix}) { }</td></tr>
+<tr><td class="h"><a id="L1581">1581</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless $key_fifths</td></tr>
+<tr><td class="h"><a id="L1584">1584</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">$key_fifths &gt; 0 ? :</td></tr>
+<tr><td class="h"><a id="L1587">1587</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">abs $key_fifths &gt; 7 ? :</td></tr>
+<tr><td class="h"><a id="L1589">1589</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $steps-&gt;[$k] == $step_i</td></tr>
+<tr><td class="h"><a id="L1615">1615</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $dot</td></tr>
+<tr><td class="h"><a id="L1630">1630</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless (exists $DYNAMIC_MAP{$marking})</td></tr>
+<tr><td class="h"><a id="L1631">1631</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $marking ne &quot;&quot;</td></tr>
+<tr><td class="h"><a id="L1635">1635</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">lc $placement eq &#39;above&#39; ? :</td></tr>
+<tr><td class="h"><a id="L1644">1644</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (defined $dyn_vel and defined $dyn_vel-&gt;{$marking})</td></tr>
+<tr><td class="h"><a id="L1666">1666</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $wedge_type</td></tr>
+<tr><td class="h"><a id="L1668">1668</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">lc $placement eq &#39;above&#39; ? :</td></tr>
+<tr><td class="h"><a id="L1695">1695</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless length $text</td></tr>
+<tr><td class="h"><a id="L1697">1697</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">lc $placement eq &#39;above&#39; ? :</td></tr>
+<tr><td class="h"><a id="L1711">1711</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">unless length $text</td></tr>
+<tr><td class="h"><a id="L1713">1713</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">lc $placement eq &#39;above&#39; ? :</td></tr>
+<tr><td class="h"><a id="L1727">1727</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">unless defined $map</td></tr>
+<tr><td class="h"><a id="L1731">1731</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if (defined $map-&gt;{&#39;element&#39;})</td></tr>
+<tr><td class="h"><a id="L1736">1736</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if (defined $map-&gt;{&#39;words&#39;})</td></tr>
+<tr><td class="h"><a id="L1750">1750</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">$name ? :</td></tr>
+<tr><td class="h"><a id="L1786">1786</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if defined $clef-&gt;{&#39;line&#39;}</td></tr>
+<tr><td class="h"><a id="L1814">1814</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (my $key = $staff-&gt;initial_key)</td></tr>
+<tr><td class="h"><a id="L1820">1820</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (my $ts = $staff-&gt;initial_timesig)</td></tr>
+<tr><td class="h"><a id="L1827">1827</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (my $clef_name = $staff-&gt;initial_clef)</td></tr>
+<tr><td class="h"><a id="L1830">1830</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless (defined $clef)</td></tr>
+<tr><td class="h"><a id="L1836">1836</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if defined $clef-&gt;{&#39;line&#39;}</td></tr>
+<tr><td class="h"><a id="L1841">1841</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if ($trans)</td></tr>
+<tr><td class="h"><a id="L1866">1866</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if $d &gt; 0</td></tr>
+<tr><td class="h"><a id="L1870">1870</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless %seen_denoms</td></tr>
+<tr><td class="h"><a id="L1897">1897</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $s</td></tr>
+<tr><td class="h"><a id="L1918">1918</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless exists $MESSAGES{$key}</td></tr>
 </table>
 </body>
 </html>
