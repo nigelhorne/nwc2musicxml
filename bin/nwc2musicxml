@@ -100,8 +100,8 @@ my ($explicit_output, @inputs);
 
 if (	@ARGV == 2
 	&& !-d $ARGV[0]
-	&& $ARGV[0] =~ /\.nwc$/i
-	&& $ARGV[1] !~ /\.nwc$/i
+	&& $ARGV[0] =~ /\.nwc\z/i
+	&& $ARGV[1] !~ /\.nwc\z/i
 	&& !defined $opt{output_dir}
 ) {
 	@inputs          = ($ARGV[0]);
@@ -109,17 +109,24 @@ if (	@ARGV == 2
 } else {
 	for my $arg (@ARGV) {
 		if (-d $arg) {
-			# Directory passed: collect .nwc files within it
+			# Directory passed: collect .nwc files within it.
+			# opendir/readdir avoids glob-metachar expansion on hostile dir names.
 			if ($opt{recursive}) {
 				find(
 					sub {
 						push @inputs, $File::Find::name
-							if /\.nwc$/i && -f $File::Find::name;
+							if /\.nwc\z/i && -f $File::Find::name;
 					},
 					$arg,
 				);
 			} else {
-				push @inputs, glob(File::Spec->catfile($arg, '*.nwc'));
+				opendir(my $dh, $arg)
+					or croak "Cannot open directory '$arg': $!";
+				push @inputs,
+					map  { File::Spec->catfile($arg, $_) }
+					grep { /\.nwc\z/i && -f File::Spec->catfile($arg, $_) }
+					readdir($dh);
+				closedir($dh);
 			}
 		} else {
 			push @inputs, $arg;

@@ -126,13 +126,6 @@ Blessed C<Music::NWC2MusicXML::NWC> object.
 
     Music::NWC2MusicXML::NWC object
 
-=head3 FORMAL SPECIFICATION
-
- [NWCDecoderInit]
-   diagnostics : Diagnostics
-
- (placeholder -- populate with Z calculus as implementation matures)
-
 =cut
 
 sub new {
@@ -211,15 +204,6 @@ Reads from disk.  Croaks on any I/O or format error.
 | error_not_nwc       | File does not begin with NWC magic  | Verify file is a real .nwc     |
 | error_truncated     | File too short to be valid          | File may be corrupt            |
 
-=head3 FORMAL SPECIFICATION
-
- [ReadFile]
-   filename? : FileName
-   ----------
-   result! : NWCTXT
-
- (placeholder)
-
 =cut
 
 sub read {
@@ -245,18 +229,12 @@ sub read {
 	return $self->decode($data, $filename);
 }
 
-# ---------------------------------------------------------------------------
-# Public: decode
-# ---------------------------------------------------------------------------
-
 =head2 decode
 
 Decode a binary NWC payload (already loaded into a scalar) and return its
 NWCTXT representation.
 
 Can be called as a class method or instance method.
-
-=head3 Purpose
 
 Separates decompression logic from file I/O; enables unit testing with
 in-memory test vectors.
@@ -311,16 +289,6 @@ None (no I/O).  Croaks on any format or decompression error.
 | error_decomp_too_large | Decompressed size exceeds safety limit  | Reject; may be a zip bomb         |
 | error_no_nwctxt_marker | NWCTXT marker absent after decompression| File structure unexpected         |
 | error_bad_utf8         | Decompressed text is not valid UTF-8    | NWC file may use a legacy encoding|
-
-=head3 FORMAL SPECIFICATION
-
- [Decode]
-   data?     : BinaryData
-   filename? : FileName
-   ----------
-   nwctxt!   : NWCTXT
-
- (placeholder)
 
 =cut
 
@@ -474,9 +442,37 @@ safety.  Legitimate scores should not approach this limit.
 
 =back
 
+=head1 FORMAL SPECIFICATION
+
+=head2 new
+
+ [NWCDecoderInit]
+   diagnostics : Diagnostics
+
+ (placeholder -- populate with Z calculus as implementation matures)
+
+=head2 read
+
+ [ReadFile]
+   filename? : FileName
+   ----------
+   result! : NWCTXT
+
+ (placeholder)
+
+=head2 decode
+
+ [Decode]
+   data?     : BinaryData
+   filename? : FileName
+   ----------
+   nwctxt!   : NWCTXT
+
+ (placeholder)
+
 =head1 AUTHOR
 
-Nigel Horne C<< <nigel.horne@gmail.com> >>
+Nigel Horne C<< <njh@nigelhorne.com> >>
 
 =head1 LICENSE
 

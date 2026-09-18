@@ -17,6 +17,10 @@ Readonly::Hash my %MESSAGES => (
 	error_internal   => 'Internal error: %s',
 );
 
+# Event types that constitute a sounding (or structurally significant) event
+# for the purpose of has_notes().  Hash lookup is O(1); avoids regex in a loop.
+Readonly::Hash my %SOUNDING_EVENT_TYPES => map { $_ => 1 } qw(Note Rest Chord Bar);
+
 =head1 NAME
 
 Music::NWC2MusicXML::Staff - Internal representation of a single NWC staff.
@@ -320,7 +324,7 @@ sounding content) from mid-staff change records.
 sub has_notes {
 	my ($self) = @_;
 	for my $ev (@{ $self->{_events} }) {
-		return 1 if $ev->type =~ /^(?:Note|Rest|Chord|Bar)$/;
+		return 1 if $SOUNDING_EVENT_TYPES{ $ev->type };
 	}
 	return 0;
 }

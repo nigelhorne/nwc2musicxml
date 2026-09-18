@@ -263,20 +263,20 @@ sub parse {
 		&& index($header, $HEADER_PREFIX) == 0;
 
 	# Extract version string from header: !NoteWorthyComposer(2.751)
-	my ($version) = $header =~ /\Q$HEADER_PREFIX\E([^)]+)/;
+	my ($version) = $header =~ /\A\Q$HEADER_PREFIX\E([^)]+)/;
 	$self->{_score}{_nwc_version} = $version;
 
 	# Main parsing loop
 	for my $line (@lines) {
 		$self->{_line_no}++;
 		next unless defined $line && length $line;
-		next if $line =~ /^\s*$/;    # blank lines are legal
+		next if $line =~ /\A\s*\z/;    # blank lines are legal
 
 		croak _fmt_msg('error_too_many_records', $MAX_RECORDS)
 			if ++$self->{_record_count} > $MAX_RECORDS;
 
 		# All NWCTXT records begin with '|'
-		next unless $line =~ /^\|/;
+		next unless $line =~ /\A\|/;
 
 		$self->_dispatch_record($line);
 	}
@@ -410,7 +410,7 @@ sub _fields_to_hash {
 	my ($self, $fields_ref) = @_;
 	my %h;
 	for my $field (@$fields_ref) {
-		if ($field =~ /^([^:]+):(.*)$/s) {
+		if ($field =~ /\A([^:]+):(.*)\z/) {
 			$h{$1} = $2;
 		} else {
 			$h{_positional} = $field;
@@ -520,7 +520,7 @@ sub _handle_time_sig {
 	my $h   = $self->_fields_to_hash($fields);
 	my $sig = $h->{Signature} // '4/4';
 
-	my ($beats, $beat_type) = $sig =~ m{^(\d+)/(\d+)$};
+	my ($beats, $beat_type) = $sig =~ m{\A(\d+)/(\d+)\z};
 	unless (defined $beats && defined $beat_type) {
 		carp _fmt_msg('warn_bad_value', 'TimeSig.Signature', $sig, $self->{_line_no});
 		($beats, $beat_type) = (4, 4);
@@ -644,7 +644,7 @@ sub _parse_dur_tokens {
 	for my $tok (@tokens) {
 		if    ($tok eq 'Dotted')              { $dots = 1 }
 		elsif ($tok eq 'DblDotted')           { $dots = 2 }
-		elsif ($tok =~ /^Triplet(?:=(.+))?$/) { $triplet = $1 // 'Middle' }
+		elsif ($tok =~ /\ATriplet(?:=(.+))?\z/) { $triplet = $1 // 'Middle' }
 		elsif ($tok eq 'Grace')               { }   # grace notes: Phase 4
 		else                                  { push @artic, $tok }
 	}
@@ -657,7 +657,7 @@ sub _parse_opts {
 	return {} unless defined $opts_str && length $opts_str;
 	my %opts;
 	for my $opt (split /,/, $opts_str) {
-		if ($opt =~ /^(\w+)=(.*)$/) { $opts{$1} = $2 }
+		if ($opt =~ /\A(\w+)=(.*)\z/) { $opts{$1} = $2 }
 		else                        { $opts{$opt} = 1 }
 	}
 	return \%opts;
@@ -827,9 +827,9 @@ sub _fifths_from_signature {
 	my @acc = split /,/, $sig;
 	return 0 unless @acc;
 
-	if ($acc[0] =~ /#/) {
+	if (index($acc[0], '#') >= 0) {
 		return scalar @acc;       # positive = sharps
-	} elsif ($acc[0] =~ /b$/) {
+	} elsif (substr($acc[0], -1, 1) eq 'b') {
 		return -(scalar @acc);    # negative = flats
 	}
 	return 0;

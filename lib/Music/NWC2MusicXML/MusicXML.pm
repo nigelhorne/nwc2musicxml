@@ -1112,12 +1112,12 @@ sub _annotate_events {
 				: ($ev->data->{nwc_pos} // '0');
 
 			for my $ps (@pos_strs) {
-				(my $pk = $ps) =~ s/\^$//;   # strip tie marker to get the key
+				(my $pk = $ps) =~ s/\^\z//;   # strip tie marker to get the key
 
 				if (delete $pending_tie{$pk}) {
 					$ann{$key}{tie_stop_keys}{$pk} = 1;
 				}
-				if ($ps =~ /\^$/) {
+				if ($ps =~ /\^\z/) {
 					$ann{$key}{tie_start_keys}{$pk} = 1;
 					$pending_tie{$pk} = 1;
 				}
@@ -1222,7 +1222,7 @@ sub _emit_note_event {
 	my $type  = $NWC_TYPE_MAP{ $d->{base_dur} // '4th' } // 'quarter';
 
 	# Tie flags for this specific position key
-	(my $pk = $d->{nwc_pos} // '0') =~ s/\^$//;
+	(my $pk = $d->{nwc_pos} // '0') =~ s/\^\z//;
 	my $tie_stop  = ($ev_ann->{tie_stop_keys}  // {})->{$pk};
 	my $tie_start = ($ev_ann->{tie_start_keys} // {})->{$pk};
 
@@ -1326,7 +1326,7 @@ sub _emit_chord_event {
 	for my $pos_str (@$positions) {
 		# Build a per-position annotation that inherits slur flags (first note only)
 		# and picks the tie flags for this specific position key.
-		(my $pk = $pos_str) =~ s/\^$//;
+		(my $pk = $pos_str) =~ s/\^\z//;
 		my %pos_ann = (
 			tie_stop_keys  => { $pk => ($ev_ann->{tie_stop_keys}  // {})->{$pk} // 0 },
 			tie_start_keys => { $pk => ($ev_ann->{tie_start_keys} // {})->{$pk} // 0 },
@@ -1377,7 +1377,7 @@ sub _pos_to_pitch {
 
 	# Parse: optional accidental prefix + signed integer + optional tie marker
 	my ($acc_prefix, $pos_num) = ('', 0);
-	if ($pos_str =~ /^([#bnx]*)(-?\d+)\^?$/) {
+	if ($pos_str =~ /\A([#bnx]*)(-?\d+)\^?\z/) {
 		($acc_prefix, $pos_num) = ($1, $2 + 0);
 	}
 
@@ -1458,7 +1458,7 @@ sub _emit_dynamic {
 		return ();
 	}
 
-	my $place = ($placement =~ /above/i) ? 'above' : 'below';
+	my $place = (lc($placement) eq 'above') ? 'above' : 'below';
 	my @out;
 	push @out, "${pad}<direction placement=\"$place\">";
 	push @out, "${pad}${i}<direction-type>";
@@ -1486,7 +1486,7 @@ sub _emit_wedge {
 	my $wedge_type = $WEDGE_MAP{$style};
 	return () unless defined $wedge_type;
 
-	my $place = ($placement =~ /above/i) ? 'above' : 'below';
+	my $place = (lc($placement) eq 'above') ? 'above' : 'below';
 	my @out;
 	push @out, "${pad}<direction placement=\"$place\">";
 	push @out, "${pad}${i}<direction-type>";
@@ -1512,10 +1512,10 @@ sub _emit_tempo_variance {
 	$placement //= 'above';
 	my $i = $self->{_indent};
 
-	my $text = $TEMPO_VARIANCE_TEXT{$style} // $style;
+	my $text = _xml_escape($TEMPO_VARIANCE_TEXT{$style} // $style);
 	return () unless length $text;
 
-	my $place = ($placement =~ /above/i) ? 'above' : 'below';
+	my $place = (lc($placement) eq 'above') ? 'above' : 'below';
 	my @out;
 	push @out, "${pad}<direction placement=\"$place\">";
 	push @out, "${pad}${i}<direction-type>";
@@ -1643,18 +1643,23 @@ sub _calculate_divisions {
 # Private: XML helpers
 # ---------------------------------------------------------------------------
 
+# Pre-built table for single-pass XML character escaping.
+# Covers the five XML-special ASCII chars; non-ASCII get numeric char refs.
+Readonly::Hash my %XML_ESCAPE_MAP => (
+	'&'  => '&amp;',
+	'<'  => '&lt;',
+	'>'  => '&gt;',
+	'"'  => '&quot;',
+	"'"  => '&apos;',
+);
+
 sub _xml_escape {
 	my ($s) = @_;
 	return '' unless defined $s;
-	# Strip XML 1.0 illegal control characters (all controls except tab/LF/CR).
-	# These bytes cannot be represented even as numeric character references.
+	# Pass 1: strip XML 1.0 illegal control bytes (cannot appear even as &#N;).
 	$s =~ s/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]//g;
-	$s =~ s/&/&amp;/g;
-	$s =~ s/</&lt;/g;
-	$s =~ s/>/&gt;/g;
-	$s =~ s/"/&quot;/g;
-	$s =~ s/'/&apos;/g;
-	$s =~ s/([^\x00-\x7F])/sprintf "&#%d;", ord($1)/ge;
+	# Pass 2: escape XML specials and numeric-ref non-ASCII in a single scan.
+	$s =~ s/([&<>"']|[^\x00-\x7F])/$XML_ESCAPE_MAP{$1} \/\/ sprintf "&#%d;", ord($1)/ge;
 	return $s;
 }
 

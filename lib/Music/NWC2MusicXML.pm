@@ -483,12 +483,11 @@ sub _single_convert {
 sub _write_output {
 	my ($self, $output, $xml, $source) = @_;
 
-	# Ensure parent directory exists
+	# Ensure parent directory exists. make_path is idempotent (no error if dir
+	# already exists), so no -d pre-check is needed and the TOCTOU race is closed.
 	my $dir = dirname($output);
-	unless (-d $dir) {
-		eval { make_path($dir) };
-		croak _fmt_msg('error_mkdir', $dir, $@) if $@;
-	}
+	eval { make_path($dir) };
+	croak _fmt_msg('error_mkdir', $dir, $@) if $@;
 
 	open my $fh, '>:encoding(UTF-8)', $output
 		or croak _fmt_msg('error_write', $output, $!);
@@ -500,7 +499,7 @@ sub _write_output {
 
 sub _default_output {
 	my ($input) = @_;
-	(my $base = $input) =~ s/\Q$INPUT_EXT\E$//i;
+	(my $base = $input) =~ s/\Q$INPUT_EXT\E\z//i;
 	return $base . $OUTPUT_EXT;
 }
 
@@ -518,7 +517,7 @@ sub _batch_output_path {
 	croak $@ unless defined $args;
 
 	my $out_name = basename($args->{input});
-	$out_name =~ s/\Q$INPUT_EXT\E$//i;
+	$out_name =~ s/\Q$INPUT_EXT\E\z//i;
 	$out_name .= $OUTPUT_EXT;
 
 	unless (defined $args->{output_dir}) {

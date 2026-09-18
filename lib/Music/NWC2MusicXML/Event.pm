@@ -481,8 +481,8 @@ sub _validate_rational {
 	croak _fmt_msg('error_bad_rational')
 		unless ref $r eq 'ARRAY'
 		&& @$r == 2
-		&& $r->[0] =~ /^\d+$/
-		&& $r->[1] =~ /^[1-9]\d*$/;
+		&& $r->[0] =~ /\A\d+\z/
+		&& $r->[1] =~ /\A[1-9]\d*\z/;
 	return;
 }
 
