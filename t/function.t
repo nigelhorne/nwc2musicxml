@@ -811,16 +811,15 @@ subtest 'MusicXML::_compute_page_layout -- custom margin' => sub {
 
 subtest 'MusicXML::_pos_to_pitch -- Treble clef reference' => sub {
 	my $gen = Music::NWC2MusicXML::MusicXML->new;
-	# Pos 0 on Treble = top of staff = F5 (ref: oct=3, step=5 => index=3*7+5=26 => oct=3,step=5 => F5 but...)
-	# Actually: index = ref_oct*7 + ref_step + pos_num = 3*7+5+0 = 26; oct=int(26/7)=3; step=26-21=5 -> A?
-	# Wait let me use the documented verified values from CLAUDE.md:
-	# Treble pos -9 = D4 (tonic of 'To a Pilgrim'), Bass pos -7 = A2
+	# NWC pos is relative to the middle line (3rd line from bottom) of the staff.
+	# Treble middle line = B4 (ref [6,4], index=34). pos -9 -> index 25 -> G3.
+	# Bass middle line = D3 (ref [1,3], index=22). pos -7 -> index 15 -> D2.
 	my $p = $gen->_pos_to_pitch('-9', $TREBLE, 0);
-	is $p->{step},   'D', 'Treble pos -9 -> step D';
-	is $p->{octave}, 4,   'Treble pos -9 -> octave 4';
+	is $p->{step},   'G', 'Treble pos -9 -> step G';
+	is $p->{octave}, 3,   'Treble pos -9 -> octave 3';
 
 	my $p2 = $gen->_pos_to_pitch('-7', $BASS, 0);
-	is $p2->{step},   'A', 'Bass pos -7 -> step A';
+	is $p2->{step},   'D', 'Bass pos -7 -> step D';
 	is $p2->{octave}, 2,   'Bass pos -7 -> octave 2';
 };
 
@@ -828,7 +827,7 @@ subtest 'MusicXML::_pos_to_pitch -- accidental prefixes' => sub {
 	my $gen = Music::NWC2MusicXML::MusicXML->new;
 
 	my $p = $gen->_pos_to_pitch('#-9', $TREBLE, 0);
-	is $p->{step},        'D',     'sharp: step unchanged';
+	is $p->{step},        'G',     'sharp: step unchanged';
 	is $p->{alter},       1,       'sharp: alter = 1';
 	is $p->{accidental},  'sharp', 'sharp: accidental = sharp';
 
@@ -853,13 +852,12 @@ subtest 'MusicXML::_pos_to_pitch -- tie suffix stripped' => sub {
 subtest 'MusicXML::_pos_to_pitch -- key signature alters' => sub {
 	my $gen = Music::NWC2MusicXML::MusicXML->new;
 	# With 2 sharps (D major): F and C are sharp.
-	# Step index 3 = F. In D major this should carry alter=1.
-	# NWC pos for F on treble: ref=3*7+5=26; F5 is index 26 -> step_i=5 -> A
-	# Let's test with a position that lands on F in treble clef.
-	# F5 is pos 0 (ref note). In D major, alter for F should be 1.
-	my $p = $gen->_pos_to_pitch('0', $TREBLE, 2);   # D major, 2 sharps
-	# pos 0 = F5; F# is the first sharp in D major
-	is $p->{alter}, 1, 'F in D major gets alter=1 from key sig';
+	# Treble middle line = B4 (ref [6,4], index=34).
+	# F4 is step_i=3, octave=4: index = 4*7+3 = 31. pos = 31 - 34 = -3.
+	# So pos=-3 on Treble -> F4. In D major, F# -> alter=1.
+	my $p = $gen->_pos_to_pitch('-3', $TREBLE, 2);   # D major, 2 sharps
+	is $p->{step},  'F', 'pos -3 on Treble -> step F';
+	is $p->{alter}, 1,   'F in D major gets alter=1 from key sig';
 	ok !defined $p->{accidental}, 'no explicit accidental (from key)';
 };
 

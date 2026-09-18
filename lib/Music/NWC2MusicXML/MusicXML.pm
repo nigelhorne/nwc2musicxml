@@ -104,12 +104,12 @@ Readonly::Hash my %BARLINE_MAP => (
 # Step indices: C=0, D=1, E=2, F=3, G=4, A=5, B=6
 # Verified against Pilgrim.nwc: Bass pos -7 = A2 (A-drone), Treble pos -9 = D4 (tonic).
 Readonly::Hash my %CLEF_REF => (
-	Treble     => [ 3, 5 ],   # F5
-	Bass       => [ 5, 3 ],   # A3
-	Alto       => [ 4, 4 ],   # G4
-	Tenor      => [ 2, 4 ],   # E4
-	Percussion => [ 3, 5 ],   # F5 (treat as treble)
-	Tab        => [ 3, 5 ],   # F5 (treat as treble)
+	Treble     => [ 6, 4 ],   # B4 (middle line)
+	Bass       => [ 1, 3 ],   # D3 (middle line)
+	Alto       => [ 0, 4 ],   # C4 (middle line)
+	Tenor      => [ 5, 3 ],   # A3 (middle line)
+	Percussion => [ 6, 4 ],   # B4 (treat as treble)
+	Tab        => [ 6, 4 ],   # B4 (treat as treble)
 );
 
 # Diatonic step names indexed 0-6

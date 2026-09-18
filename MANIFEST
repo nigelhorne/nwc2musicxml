@@ -28,4 +28,5 @@ t/function.t
 t/input/Pilgrim.nwc
 t/integration.t
 t/locales.t
+t/path.t
 t/unit.t
