@@ -20,7 +20,7 @@ https://pjcj.net
 <h1>Branch Coverage</h1>
 <table>
 <tr><td class="h" align="right">File:</td><td align="left">blib/lib/Music/NWC2MusicXML/NWC.pm</td></tr>
-<tr><td class="h" align="right">Coverage:</td><td align="left" class="c1">81.2%</td></tr>
+<tr><td class="h" align="right">Coverage:</td><td align="left" class="c1">84.4%</td></tr>
 </table>
 <div><br/></div>
 <table>
@@ -34,7 +34,7 @@ https://pjcj.net
 <tr><td class="h"><a id="L334">334</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if not defined $data or length $data &lt; $MIN_FILE_BYTES</td></tr>
 <tr><td class="h"><a id="L338">338</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless substr($data, 0, $NWC_MAGIC_LEN) eq $NWC_MAGIC</td></tr>
 <tr><td class="h"><a id="L357">357</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $marker_pos &lt; 0</td></tr>
-<tr><td class="h"><a id="L365">365</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless (utf8::decode($nwctxt))</td></tr>
+<tr><td class="h"><a id="L365">365</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless (utf8::decode($nwctxt))</td></tr>
 <tr><td class="h"><a id="L397">397</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless $cmf == $ZLIB_CMF</td></tr>
 <tr><td class="h"><a id="L398">398</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless ($cmf * 256 + $flg) % 31 == 0</td></tr>
 <tr><td class="h"><a id="L419">419</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $raw</td></tr>
