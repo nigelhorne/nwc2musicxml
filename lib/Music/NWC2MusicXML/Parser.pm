@@ -292,6 +292,7 @@ Readonly::Hash my %DISPATCH => (
 	SongInfo        => \&_handle_song_info,
 	PgSetup         => \&_handle_pg_setup,
 	PgMargins       => \&_handle_pg_setup,
+	Font            => \&_handle_font,
 	AddStaff        => \&_handle_add_staff,
 	StaffProperties => \&_handle_staff_properties,
 	StaffInstrument => \&_handle_staff_instrument,
@@ -423,6 +424,18 @@ sub _fields_to_hash {
 # Private: metadata handlers
 # ---------------------------------------------------------------------------
 
+sub _handle_font {
+	my ($self, $fields) = @_;
+	my $h = $self->_fields_to_hash($fields);
+	push @{ $self->{_score}{_fonts} }, {
+		style    => $h->{Style}    // '',
+		typeface => $h->{Typeface} // '',
+		size     => defined $h->{Size} ? $h->{Size} + 0 : 0,
+		bold     => ($h->{Bold}   // 'N') eq 'Y' ? 1 : 0,
+		italic   => ($h->{Italic} // 'N') eq 'Y' ? 1 : 0,
+	};
+}
+
 sub _handle_song_info {
 	my ($self, $fields) = @_;
 	my $h = $self->_fields_to_hash($fields);
@@ -465,13 +478,22 @@ sub _handle_staff_properties {
 
 sub _handle_staff_instrument {
 	my ($self, $fields) = @_;
-	my $h = $self->_fields_to_hash($fields);
+	my $h     = $self->_fields_to_hash($fields);
 	my $staff = $self->_current_staff_or_croak('StaffInstrument');
 	$staff->{_instrument} = {
 		name  => $h->{Name}  // '',
 		patch => $h->{Patch} // 0,
 		trans => $h->{Trans} // 0,
 	};
+	if (defined $h->{DynVel} && length $h->{DynVel}) {
+		my @keys = qw(ppp pp p mp mf f ff fff);
+		my @vels = split /,/, $h->{DynVel};
+		if (@vels == @keys) {
+			my %vel_map;
+			@vel_map{@keys} = map { $_ + 0 } @vels;
+			$staff->{_dyn_vel} = \%vel_map;
+		}
+	}
 }
 
 # ---------------------------------------------------------------------------
@@ -564,7 +586,7 @@ sub _handle_note {
 	my ($self, $fields) = @_;
 	my $h = $self->_fields_to_hash($fields);
 
-	my ($base_dur, $dots, $triplet, $artic) = _parse_dur_tokens($h->{Dur} // '4th');
+	my ($base_dur, $dots, $triplet, $artic, $is_grace) = _parse_dur_tokens($h->{Dur} // '4th');
 	my $rational = Music::NWC2MusicXML::Event->rational_from_nwc_duration($base_dur, $dots);
 
 	$self->_append_event(Music::NWC2MusicXML::Event->new(
@@ -576,6 +598,7 @@ sub _handle_note {
 			dots          => $dots,
 			triplet       => $triplet,
 			articulations => $artic,
+			is_grace      => $is_grace,
 			opts          => _parse_opts($h->{Opts}),
 		},
 	));
@@ -603,7 +626,7 @@ sub _handle_chord {
 	my ($self, $fields) = @_;
 	my $h = $self->_fields_to_hash($fields);
 
-	my ($base_dur, $dots, $triplet, $artic) = _parse_dur_tokens($h->{Dur} // '4th');
+	my ($base_dur, $dots, $triplet, $artic, $is_grace) = _parse_dur_tokens($h->{Dur} // '4th');
 	my $rational = Music::NWC2MusicXML::Event->rational_from_nwc_duration($base_dur, $dots);
 
 	# Pos field contains a comma-separated list of position strings.
@@ -619,6 +642,7 @@ sub _handle_chord {
 			dots          => $dots,
 			triplet       => $triplet,
 			articulations => $artic,
+			is_grace      => $is_grace,
 			opts          => _parse_opts($h->{Opts}),
 		},
 	));
@@ -643,18 +667,18 @@ sub _parse_dur_tokens {
 	my ($dur_str) = @_;
 	my @tokens   = split /,/, ($dur_str // '4th');
 	my $base     = shift(@tokens) // '4th';
-	my ($dots, $triplet) = (0, undef);
+	my ($dots, $triplet, $is_grace) = (0, undef, 0);
 	my @artic;
 
 	for my $tok (@tokens) {
-		if    ($tok eq 'Dotted')              { $dots = 1 }
-		elsif ($tok eq 'DblDotted')           { $dots = 2 }
-		elsif ($tok =~ /\ATriplet(?:=(.+))?\z/) { $triplet = $1 // 'Middle' }
-		elsif ($tok eq 'Grace')               { }   # grace notes: Phase 4
-		else                                  { push @artic, $tok }
+		if    ($tok eq 'Dotted')                { $dots     = 1 }
+		elsif ($tok eq 'DblDotted')             { $dots     = 2 }
+		elsif ($tok =~ /\ATriplet(?:=(.+))?\z/) { $triplet  = $1 // 'Middle' }
+		elsif ($tok eq 'Grace')                 { $is_grace = 1 }
+		else                                    { push @artic, $tok }
 	}
 
-	return ($base, $dots, $triplet, \@artic);
+	return ($base, $dots, $triplet, \@artic, $is_grace);
 }
 
 sub _parse_opts {

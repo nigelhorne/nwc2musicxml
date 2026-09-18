@@ -628,7 +628,7 @@ sub generate {
 
 	push @out, $self->_emit_work($score->metadata);
 	push @out, $self->_emit_identification($score->metadata);
-	push @out, $self->_emit_defaults($layout);
+	push @out, $self->_emit_defaults($layout, $score->fonts);
 	push @out, $self->_emit_credits($score->metadata, $layout);
 	push @out, $self->_emit_part_list($score->staves);
 	push @out, $self->_emit_parts($score->staves, $divisions);
@@ -653,19 +653,23 @@ Readonly::Scalar my $DEFAULT_PAGE_H_MM => 297.0;
 Readonly::Scalar my $DEFAULT_MARGIN_CM => 1.27;   # standard NWC default
 
 # Derive page geometry in tenths from PgSetup/PgMargins fields (cm margins).
-# Returns a hashref: page_height, page_width, margin_t, center_x, right_x.
+# Returns a hashref: page_height, page_width, margin_l, margin_r, margin_t,
+# margin_b, center_x, right_x.
 sub _compute_page_layout {
 	my ($ps) = @_;
 	$ps //= {};
 
 	# Margins: NWC stores them in cm (Left/Top/Right/Bottom from PgMargins).
-	# TODO: Data Flow Anomaly - D~ from caller perspective: the keys Right, Top,
-	# and Bottom in $ps are never read here; all four margins are collapsed to a
-	# single symmetric value derived from Left only.  Correct when the score uses
-	# uniform margins; would need separate reads for asymmetric layout support.
-	my $margin_cm = $ps->{Left} // $DEFAULT_MARGIN_CM;
-	my $margin_mm = $margin_cm * 10;
-	my $margin_t  = $margin_mm * $TENTHS_PER_MM;
+	# When a side is absent, fall back to Left, then the hardcoded default.
+	my $left   = $ps->{Left}   // $DEFAULT_MARGIN_CM;
+	my $right  = $ps->{Right}  // $left;
+	my $top    = $ps->{Top}    // $left;
+	my $bottom = $ps->{Bottom} // $left;
+
+	my $margin_l = $left   * 10 * $TENTHS_PER_MM;
+	my $margin_r = $right  * 10 * $TENTHS_PER_MM;
+	my $margin_t = $top    * 10 * $TENTHS_PER_MM;
+	my $margin_b = $bottom * 10 * $TENTHS_PER_MM;
 
 	my $page_h = $DEFAULT_PAGE_H_MM * $TENTHS_PER_MM;
 	my $page_w = $DEFAULT_PAGE_W_MM * $TENTHS_PER_MM;
@@ -673,20 +677,27 @@ sub _compute_page_layout {
 	return {
 		page_height => $page_h,
 		page_width  => $page_w,
+		margin_l    => $margin_l,
+		margin_r    => $margin_r,
 		margin_t    => $margin_t,
+		margin_b    => $margin_b,
 		center_x    => $page_w / 2,
-		right_x     => $page_w - $margin_t,
+		right_x     => $page_w - $margin_r,
 	};
 }
 
 sub _emit_defaults {
-	my ($self, $layout) = @_;
+	my ($self, $layout, $fonts) = @_;
+	$fonts //= [];
 	my @out;
 	my $i = $self->{_indent};
 
 	my $ph = sprintf '%.2f', $layout->{page_height};
 	my $pw = sprintf '%.2f', $layout->{page_width};
-	my $mg = sprintf '%.2f', $layout->{margin_t};
+	my $ml = sprintf '%.2f', $layout->{margin_l};
+	my $mr = sprintf '%.2f', $layout->{margin_r};
+	my $mt = sprintf '%.2f', $layout->{margin_t};
+	my $mb = sprintf '%.2f', $layout->{margin_b};
 
 	push @out, '<defaults>';
 	push @out, "${i}<scaling>";
@@ -697,12 +708,34 @@ sub _emit_defaults {
 	push @out, "${i}${i}<page-height>$ph</page-height>";
 	push @out, "${i}${i}<page-width>$pw</page-width>";
 	push @out, "${i}${i}<page-margins type=\"both\">";
-	push @out, "${i}${i}${i}<left-margin>$mg</left-margin>";
-	push @out, "${i}${i}${i}<right-margin>$mg</right-margin>";
-	push @out, "${i}${i}${i}<top-margin>$mg</top-margin>";
-	push @out, "${i}${i}${i}<bottom-margin>$mg</bottom-margin>";
+	push @out, "${i}${i}${i}<left-margin>$ml</left-margin>";
+	push @out, "${i}${i}${i}<right-margin>$mr</right-margin>";
+	push @out, "${i}${i}${i}<top-margin>$mt</top-margin>";
+	push @out, "${i}${i}${i}<bottom-margin>$mb</bottom-margin>";
 	push @out, "${i}${i}</page-margins>";
 	push @out, "${i}</page-layout>";
+
+	# Font declarations from NWC Font records (word-font then lyric-font per schema order)
+	my ($word_font, $lyric_font);
+	for my $font (@$fonts) {
+		next unless length($font->{typeface} // '');
+		my $style = $font->{style} // '';
+		if ($style eq 'StaffLyric' && !defined $lyric_font) {
+			$lyric_font = $font;
+		} elsif ($style =~ /\AStaff/i && !defined $word_font) {
+			$word_font = $font;
+		}
+	}
+	for my $pair ([$word_font, 'word-font'], [$lyric_font, 'lyric-font']) {
+		my ($font, $elem) = @$pair;
+		next unless defined $font;
+		my $tf  = _xml_escape($font->{typeface} // '');
+		my $sz  = $font->{size} ? " font-size=\"$font->{size}\"" : '';
+		my $wt  = $font->{bold}   ? ' font-weight="bold"'   : '';
+		my $fst = $font->{italic} ? ' font-style="italic"' : '';
+		push @out, "${i}<$elem font-family=\"$tf\"${sz}${wt}${fst}/>";
+	}
+
 	push @out, '</defaults>';
 	return @out;
 }
@@ -768,7 +801,7 @@ sub _emit_credits {
 	my $cx  = sprintf '%.2f', $layout->{center_x};
 	my $ty  = sprintf '%.2f', $layout->{page_height} - $layout->{margin_t};
 	my $sy  = sprintf '%.2f', $layout->{page_height} - $layout->{margin_t} - 60;
-	my $bot = $layout->{margin_t};
+	my $bot = $layout->{margin_b};
 
 	# Title credit on page 1 (large, centred near top)
 	if (defined $meta->{Title} && length $meta->{Title}) {
@@ -850,7 +883,8 @@ sub _emit_part_list {
 		my $id   = "P$part_id";
 		my $name = _xml_escape($names[$idx]);
 		push @out, "${i}<score-part id=\"$id\">";
-		push @out, "${i}${i}<part-name>$name</part-name>";
+		my $print_attr = ($staff->{_visible} // 1) ? '' : ' print-object="no"';
+		push @out, "${i}${i}<part-name${print_attr}>$name</part-name>";
 		my $instr = $staff->instrument;
 		if ($instr && $instr->{name}) {
 			push @out, "${i}${i}<score-instrument id=\"${id}-I1\">";
@@ -1005,6 +1039,9 @@ sub _emit_part {
 	my $clef_now    = $clef_start;
 	my $key_now     = $key_start;
 
+	# Expose per-staff DynVel map for _emit_dynamic to use during this part.
+	$self->{_dyn_vel} = $staff->{_dyn_vel};
+
 	# Pre-annotate all events with slur/tie and wedge metadata in one pass
 	# so that arcs crossing bar lines are handled correctly.
 	my $ann = $self->_annotate_events($staff->events);
@@ -1042,10 +1079,12 @@ sub _emit_part {
 	if (@pending || $measure_no == 1) {
 		push @out, $self->_emit_measure(
 			$measure_no, \@pending, $staff, $divisions,
-			$first, $clef_start, $key_start, $prev_bar, 'normal', $ann
+			$first, $clef_start, $key_start, $prev_bar,
+			$staff->{_ending_bar} // 'normal', $ann
 		);
 	}
 
+	delete $self->{_dyn_vel};
 	push @out, "</part>";
 	return @out;
 }
@@ -1196,8 +1235,10 @@ sub _annotate_events {
 	my ($self, $events) = @_;
 	my %ann;
 
-	my $in_slur      = 0;
-	my $last_slur_ev = undef;
+	my $in_slur       = 0;
+	my $slur_num      = 0;
+	my $last_slur_ev  = undef;
+	my $last_slur_num = 0;
 	my %pending_tie;   # pos_key => 1 for notes awaiting a tie-stop
 
 	for my $ev (@$events) {
@@ -1232,18 +1273,18 @@ sub _annotate_events {
 		my $has_slur = any { $_ eq 'Slur' } @{$ev->data->{articulations} // []};
 
 		if ($has_slur) {
-			$ann{$key}{slur_start} = 1 unless $in_slur;
-			$in_slur      = 1;
-			# TODO: Data Flow Anomaly - D~ rolling window: when consecutive notes
-			# are slurred, each assignment to $last_slur_ev replaces the previous
-			# value without an intervening read (dead store of intermediate values).
-			# This is intentional: only the final slurred-note key matters for the
-			# slur_stop annotation.  The pattern is correct but triggers a strict
-			# DU-chain D~ flag.
-			$last_slur_ev = $key;
+			unless ($in_slur) {
+				$slur_num = ($slur_num % $MAX_SLUR_NUMBER) + 1;
+				$ann{$key}{slur_start} = $slur_num;
+				$in_slur = 1;
+			}
+			# Rolling assignment: only the last slurred note's key matters for
+			# slur_stop; intermediate dead-stores are intentional.
+			$last_slur_ev  = $key;
+			$last_slur_num = $slur_num;
 		} else {
 			if ($in_slur) {
-				$ann{$last_slur_ev}{slur_stop} = 1;
+				$ann{$last_slur_ev}{slur_stop} = $last_slur_num;
 				$in_slur      = 0;
 				$last_slur_ev = undef;
 			}
@@ -1251,7 +1292,7 @@ sub _annotate_events {
 	}
 
 	# Close any slur still open at the end of the staff
-	$ann{$last_slur_ev}{slur_stop} = 1 if $in_slur && defined $last_slur_ev;
+	$ann{$last_slur_ev}{slur_stop} = $last_slur_num if $in_slur && defined $last_slur_ev;
 
 	return \%ann;
 }
@@ -1356,15 +1397,18 @@ sub _emit_note_event {
 
 	push @out, "${pad}<note>";
 	push @out, "${pad}${i}<chord/>" if $is_chord_member;
+	push @out, "${pad}${i}<grace/>" if $d->{is_grace};
 	push @out, "${pad}${i}<pitch>";
 	push @out, "${pad}${i}${i}<step>$pitch->{step}</step>";
 	push @out, "${pad}${i}${i}<alter>$pitch->{alter}</alter>" if $pitch->{alter};
 	push @out, "${pad}${i}${i}<octave>$pitch->{octave}</octave>";
 	push @out, "${pad}${i}</pitch>";
-	push @out, "${pad}${i}<duration>$ticks</duration>";
-	# <tie> elements come after <duration> and before <voice> per MusicXML schema
-	push @out, "${pad}${i}<tie type=\"stop\"/>"  if $tie_stop;
-	push @out, "${pad}${i}<tie type=\"start\"/>" if $tie_start;
+	unless ($d->{is_grace}) {
+		push @out, "${pad}${i}<duration>$ticks</duration>";
+		# <tie> elements come after <duration> and before <voice> per MusicXML schema
+		push @out, "${pad}${i}<tie type=\"stop\"/>"  if $tie_stop;
+		push @out, "${pad}${i}<tie type=\"start\"/>" if $tie_start;
+	}
 	push @out, "${pad}${i}<voice>1</voice>";
 	push @out, "${pad}${i}<type>$type</type>";
 	push @out, "${pad}${i}<dot/>" for 1 .. ($d->{dots} // 0);
@@ -1375,8 +1419,8 @@ sub _emit_note_event {
 	my @nots;
 	push @nots, "${pad}${i}${i}<tied type=\"stop\"/>"               if $tie_stop;
 	push @nots, "${pad}${i}${i}<tied type=\"start\"/>"              if $tie_start;
-	push @nots, "${pad}${i}${i}<slur number=\"1\" type=\"stop\"/>"  if $slur_stop;
-	push @nots, "${pad}${i}${i}<slur number=\"1\" type=\"start\"/>" if $slur_start;
+	push @nots, "${pad}${i}${i}<slur number=\"$slur_stop\" type=\"stop\"/>"   if $slur_stop;
+	push @nots, "${pad}${i}${i}<slur number=\"$slur_start\" type=\"start\"/>" if $slur_start;
 
 	# Articulations: only on the first note of a chord (is_chord_member is false)
 	my @artic_tokens = !$is_chord_member
@@ -1496,6 +1540,7 @@ sub _chord_note_event {
 			base_dur      => $d->{base_dur},
 			dots          => $d->{dots} // 0,
 			articulations => $d->{articulations} // [],
+			is_grace      => $d->{is_grace},
 		},
 	);
 }
@@ -1607,6 +1652,11 @@ sub _emit_dynamic {
 	push @out, "${pad}${i}${i}${i}<$marking/>";
 	push @out, "${pad}${i}${i}</dynamics>";
 	push @out, "${pad}${i}</direction-type>";
+	my $dyn_vel = $self->{_dyn_vel};
+	if (defined $dyn_vel && defined $dyn_vel->{$marking}) {
+		my $pct = int($dyn_vel->{$marking} * 100 / 127 + 0.5);
+		push @out, "${pad}${i}<sound dynamics=\"$pct\"/>";
+	}
 	push @out, "${pad}</direction>";
 	return @out;
 }

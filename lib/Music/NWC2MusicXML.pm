@@ -365,11 +365,14 @@ sub batch_convert {
 	my ($self, %input) = @_;
 	my $args = validate_strict(
 		schema => {
-			inputs     => { type => 'arrayref' },
-			output_dir => { type => 'scalar',   optional => 1 },
-			overwrite  => { type => 'boolean',   optional => 1, default  => 0 },
+			inputs     => {
+				type => 'arrayref',
+				element_type => 'string'
+			},
+			output_dir => { type => 'string', optional => 1 },
+			overwrite  => { type => 'boolean', optional => 1, default  => 0 },
 			recursive  => { type => 'boolean', optional => 1, default  => 0 },
-			base_dir   => { type => 'scalar',   optional => 1 },
+			base_dir   => { type => 'string', optional => 1 },
 		},
 		input => \%input,
 	);

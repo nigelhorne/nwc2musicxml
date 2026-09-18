@@ -1,7 +1,7 @@
 Revision history for NWC2MusicXML
 
-0.01  2026-09-16
-      - Initial scaffold generated.
+0.01
+      - Initial version
       - NWC2MusicXML::NWC    -- binary container decoder (stub; Phase 1).
       - NWC2MusicXML::Parser -- NWCTXT parser (stub; Phase 2).
       - NWC2MusicXML::Score  -- internal score IR.
@@ -11,7 +11,3 @@ Revision history for NWC2MusicXML
       - NWC2MusicXML::Diagnostics -- warning/logging subsystem.
       - NWC2MusicXML    -- top-level facade and batch converter.
       - bin/nwc2musicxml  -- command-line interface.
-      - t/00-load.t       -- module load tests.
-      - t/10-nwc.t        -- NWC container decoder tests.
-      - t/20-parser.t     -- NWCTXT parser tests.
-      - t/30-musicxml.t   -- MusicXML generator tests.

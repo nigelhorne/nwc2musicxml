@@ -90,6 +90,7 @@ sub new {
 		_properties  => $args->{properties},
 		_nwc_version => $args->{nwc_version},
 		_staves      => [],
+		_fonts       => [],
 	}, $class;
 
 	return $self;
@@ -138,6 +139,15 @@ Return the NWC version string extracted from the NWCTXT header
 =cut
 
 sub nwc_version { return $_[0]->{_nwc_version} }
+
+=head2 fonts
+
+Return the arrayref of font descriptors parsed from NWC Font records.
+Each entry is a hashref with keys: style, typeface, size, bold, italic.
+
+=cut
+
+sub fonts { return $_[0]->{_fonts} }
 
 =head2 set_metadata_field
 
