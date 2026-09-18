@@ -29,9 +29,9 @@ https://pjcj.net
 <tr><td class="h"><a id="L247">247</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $nwctxt and length $nwctxt</td></tr>
 <tr><td class="h"><a id="L261">261</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $header and index($header, $HEADER_PREFIX) == 0</td></tr>
 <tr><td class="h"><a id="L272">272</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $line and length $line</td></tr>
-<tr><td class="h"><a id="L273">273</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $line =~ /^\s*$/</td></tr>
+<tr><td class="h"><a id="L273">273</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $line =~ /\A\s*\z/</td></tr>
 <tr><td class="h"><a id="L276">276</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ++$self-&gt;{&#39;_record_count&#39;} &gt; $MAX_RECORDS</td></tr>
-<tr><td class="h"><a id="L279">279</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless $line =~ /^\|/</td></tr>
+<tr><td class="h"><a id="L279">279</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless $line =~ /\A\|/</td></tr>
 <tr><td class="h"><a id="L333">333</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless defined $fields and @$fields</td></tr>
 <tr><td class="h"><a id="L337">337</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (exists $DISPATCH{$type}) { }</td></tr>
 <tr><td class="h"><a id="L341">341</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (defined $staff)</td></tr>
@@ -41,7 +41,7 @@ https://pjcj.net
 <tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif ($ch eq &#39;\\&#39; and $pos + 1 &lt; $len) { }</td></tr>
 <tr><td class="h"><a id="L390">390</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($ch eq &#39;&quot;&#39;) { }</td></tr>
 <tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif ($ch eq &#39;|&#39;) { }</td></tr>
-<tr><td class="h"><a id="L413">413</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($field =~ /^([^:]+):(.*)$/s) { }</td></tr>
+<tr><td class="h"><a id="L413">413</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($field =~ /\A([^:]+):(.*)\z/) { }</td></tr>
 <tr><td class="h"><a id="L431">431</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if exists $h-&gt;{$key}</td></tr>
 <tr><td class="h"><a id="L457">457</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">($h-&gt;{&#39;Visible&#39;} // &#39;Y&#39;) eq &#39;Y&#39; ? :</td></tr>
 <tr><td class="h"><a id="L481">481</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless (exists $VALID_CLEFS{$type})</td></tr>
@@ -51,17 +51,17 @@ https://pjcj.net
 <tr><td class="h"><a id="L532">532</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (not $staff-&gt;has_notes) { }</td></tr>
 <tr><td class="h"><a id="L645">645</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($tok eq &#39;Dotted&#39;) { }</td></tr>
 <tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif ($tok eq &#39;DblDotted&#39;) { }</td></tr>
-<tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif ($tok =~ /^Triplet(?:=(.+))?$/) { }</td></tr>
+<tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif ($tok =~ /\ATriplet(?:=(.+))?\z/) { }</td></tr>
 <tr><td class="h"></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">elsif ($tok eq &#39;Grace&#39;) { }</td></tr>
 <tr><td class="h"><a id="L657">657</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $opts_str and length $opts_str</td></tr>
-<tr><td class="h"><a id="L660">660</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($opt =~ /^(\w+)=(.*)$/) { }</td></tr>
+<tr><td class="h"><a id="L660">660</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($opt =~ /\A(\w+)=(.*)\z/) { }</td></tr>
 <tr><td class="h"><a id="L767">767</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">$pos &gt;= 0 ? :</td></tr>
 <tr><td class="h"><a id="L811">811</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $staff</td></tr>
 <tr><td class="h"><a id="L822">822</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $sig and length $sig</td></tr>
 <tr><td class="h"><a id="L823">823</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $sig eq $KEY_SIG_NATURAL</td></tr>
 <tr><td class="h"><a id="L828">828</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless @acc</td></tr>
-<tr><td class="h"><a id="L830">830</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($acc[0] =~ /#/) { }</td></tr>
-<tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif ($acc[0] =~ /b$/) { }</td></tr>
+<tr><td class="h"><a id="L830">830</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (index($acc[0], &#39;#&#39;) != -1) { }</td></tr>
+<tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif (substr($acc[0], -1, 1) eq &#39;b&#39;) { }</td></tr>
 <tr><td class="h"><a id="L840">840</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless exists $MESSAGES{$key}</td></tr>
 </table>
 </body>

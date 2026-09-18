@@ -76,7 +76,7 @@ https://pjcj.net
 <tr><td class="h"><a id="L1109">1109</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless ($type eq &quot;Rest&quot;)</td></tr>
 <tr><td class="h"><a id="L1112">1112</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">$type eq &#39;Chord&#39; ? :</td></tr>
 <tr><td class="h"><a id="L1117">1117</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (delete $pending_tie{$pk})</td></tr>
-<tr><td class="h"><a id="L1120">1120</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($ps =~ /\^$/)</td></tr>
+<tr><td class="h"><a id="L1120">1120</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($ps =~ /\^\z/)</td></tr>
 <tr><td class="h"><a id="L1129">1129</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $type eq &quot;Rest&quot;</td></tr>
 <tr><td class="h"><a id="L1133">1133</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($has_slur) { }</td></tr>
 <tr><td class="h"><a id="L1134">1134</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless $in_slur</td></tr>
@@ -110,7 +110,7 @@ https://pjcj.net
 <tr><td class="h"><a id="L1278">1278</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (@ornament_els)</td></tr>
 <tr><td class="h"><a id="L1286">1286</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (@nots)</td></tr>
 <tr><td class="h"><a id="L1333">1333</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">$first ? :</td></tr>
-<tr><td class="h"><a id="L1380">1380</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if ($pos_str =~ /^([#bnx]*)(-?\d+)\^?$/)</td></tr>
+<tr><td class="h"><a id="L1380">1380</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if ($pos_str =~ /\A([#bnx]*)(-?\d+)\^?\z/)</td></tr>
 <tr><td class="h"><a id="L1395">1395</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (my $acc = $ACCIDENTAL_MAP{$acc_prefix}) { }</td></tr>
 <tr><td class="h"><a id="L1407">1407</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless $key_fifths</td></tr>
 <tr><td class="h"><a id="L1410">1410</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">$key_fifths &gt; 0 ? :</td></tr>
@@ -119,11 +119,11 @@ https://pjcj.net
 <tr><td class="h"><a id="L1441">1441</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $dot</td></tr>
 <tr><td class="h"><a id="L1456">1456</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless (exists $DYNAMIC_MAP{$marking})</td></tr>
 <tr><td class="h"><a id="L1457">1457</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $marking ne &quot;&quot;</td></tr>
-<tr><td class="h"><a id="L1461">1461</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">$placement =~ /above/i ? :</td></tr>
+<tr><td class="h"><a id="L1461">1461</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">lc $placement eq &#39;above&#39; ? :</td></tr>
 <tr><td class="h"><a id="L1487">1487</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $wedge_type</td></tr>
-<tr><td class="h"><a id="L1489">1489</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">$placement =~ /above/i ? :</td></tr>
+<tr><td class="h"><a id="L1489">1489</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">lc $placement eq &#39;above&#39; ? :</td></tr>
 <tr><td class="h"><a id="L1516">1516</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless length $text</td></tr>
-<tr><td class="h"><a id="L1518">1518</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">$placement =~ /above/i ? :</td></tr>
+<tr><td class="h"><a id="L1518">1518</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">lc $placement eq &#39;above&#39; ? :</td></tr>
 <tr><td class="h"><a id="L1554">1554</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if defined $clef-&gt;{&#39;line&#39;}</td></tr>
 <tr><td class="h"><a id="L1582">1582</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (my $key = $staff-&gt;initial_key)</td></tr>
 <tr><td class="h"><a id="L1588">1588</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (my $ts = $staff-&gt;initial_timesig)</td></tr>
@@ -132,8 +132,8 @@ https://pjcj.net
 <tr><td class="h"><a id="L1604">1604</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if defined $clef-&gt;{&#39;line&#39;}</td></tr>
 <tr><td class="h"><a id="L1627">1627</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if $d &gt; 0</td></tr>
 <tr><td class="h"><a id="L1631">1631</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless %seen_denoms</td></tr>
-<tr><td class="h"><a id="L1648">1648</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $s</td></tr>
-<tr><td class="h"><a id="L1674">1674</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless exists $MESSAGES{$key}</td></tr>
+<tr><td class="h"><a id="L1658">1658</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $s</td></tr>
+<tr><td class="h"><a id="L1679">1679</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless exists $MESSAGES{$key}</td></tr>
 </table>
 </body>
 </html>

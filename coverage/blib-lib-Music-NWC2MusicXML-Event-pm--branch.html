@@ -30,7 +30,7 @@ https://pjcj.net
 <tr><td class="h"><a id="L412">412</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $dur and exists $DURATION_RATIONALS{$dur}</td></tr>
 <tr><td class="h"><a id="L416">416</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless $dots</td></tr>
 <tr><td class="h"><a id="L471">471</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless ref $r eq &quot;ARRAY&quot; and @$r == 2 and $r-&gt;[1]</td></tr>
-<tr><td class="h"><a id="L481">481</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless ref $r eq &quot;ARRAY&quot; and @$r == 2 and $r-&gt;[0] =~ /^\d+$/ and $r-&gt;[1] =~ /^[1-9]\d*$/</td></tr>
+<tr><td class="h"><a id="L481">481</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless ref $r eq &quot;ARRAY&quot; and @$r == 2 and $r-&gt;[0] =~ /\A\d+\z/ and $r-&gt;[1] =~ /\A[1-9]\d*\z/</td></tr>
 <tr><td class="h"><a id="L499">499</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">$g ? :</td></tr>
 <tr><td class="h"><a id="L510">510</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless exists $MESSAGES{$key}</td></tr>
 </table>
