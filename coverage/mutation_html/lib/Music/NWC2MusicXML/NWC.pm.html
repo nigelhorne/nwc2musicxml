@@ -294,7 +294,7 @@ a.intra-dot:hover { color: #7700bb; }
 </div><div class='summary'>
 <strong>Structural Coverage (Approximate)</strong><p>
 TER1 (Statement): 97.47%<br>
-TER2 (Branch): 78.12%<br>
+TER2 (Branch): 81.25%<br>
 TER3 (LCSAJ): 100.0% (2/2)<br>
 Approximate LCSAJ segments: 33<br>
 </div>
@@ -534,292 +534,303 @@ Approximate LCSAJ segments: 33<br>
 </span><span class="">  193: =head4 Input
 </span><span class="">  194: 
 </span><span class="">  195:     $filename : SCALAR  path (required)
-</span><span class="">  196: 
-</span><span class="">  197: =head4 Output
-</span><span class="">  198: 
-</span><span class="">  199:     SCALAR (UTF-8 string)
-</span><span class="">  200: 
-</span><span class="">  201: =head3 MESSAGES
-</span><span class="">  202: 
-</span><span class="">  203: | Code                | Meaning                             | Resolution                     |
-</span><span class="">  204: |---------------------|-------------------------------------|--------------------------------|
-</span><span class="">  205: | error_not_a_file    | File cannot be opened               | Check path and permissions     |
-</span><span class="">  206: | error_not_nwc       | File does not begin with NWC magic  | Verify file is a real .nwc     |
-</span><span class="">  207: | error_truncated     | File too short to be valid          | File may be corrupt            |
-</span><span class="">  208: 
-</span><span class="">  209: =head3 FORMAL SPECIFICATION
-</span><span class="">  210: 
-</span><span class="">  211:  [ReadFile]
-</span><span class="">  212:    filename? : FileName
-</span><span class="">  213:    ----------
-</span><span class="">  214:    result! : NWCTXT
+</span><span class="">  196:                   -- Valid domain: defined, non-empty string naming a regular,
+</span><span class="">  197:                   --   readable file in NWC 2.x binary format
+</span><span class="">  198:                   -- Invalid partitions: undef, &#39;&#39; (empty), directory, non-existent,
+</span><span class="">  199:                   --   unreadable, or wrong format -&gt; all croak error_not_a_file
+</span><span class="">  200:                   --   or error_not_nwc / error_truncated depending on failure point
+</span><span class="">  201: 
+</span><span class="">  202: =head4 Output
+</span><span class="">  203: 
+</span><span class="">  204:     SCALAR (UTF-8 string)
+</span><span class="">  205: 
+</span><span class="">  206: =head3 MESSAGES
+</span><span class="">  207: 
+</span><span class="">  208: | Code                | Meaning                             | Resolution                     |
+</span><span class="">  209: |---------------------|-------------------------------------|--------------------------------|
+</span><span class="">  210: | error_not_a_file    | File cannot be opened               | Check path and permissions     |
+</span><span class="">  211: | error_not_nwc       | File does not begin with NWC magic  | Verify file is a real .nwc     |
+</span><span class="">  212: | error_truncated     | File too short to be valid          | File may be corrupt            |
+</span><span class="">  213: 
+</span><span class="">  214: =head3 FORMAL SPECIFICATION
 </span><span class="">  215: 
-</span><span class="">  216:  (placeholder)
-</span><span class="">  217: 
-</span><span class="">  218: =cut
-</span><span class="">  219: 
-</span><span class="">  220: sub read {
-</span><span class="">  221: 	my ($proto, $filename) = @_;
+</span><span class="">  216:  [ReadFile]
+</span><span class="">  217:    filename? : FileName
+</span><span class="">  218:    ----------
+</span><span class="">  219:    result! : NWCTXT
+</span><span class="">  220: 
+</span><span class="">  221:  (placeholder)
 </span><span class="">  222: 
-</span><span class="">  223: 	croak _fmt_msg(&#39;error_not_a_file&#39;, $filename // &#39;(undef)&#39;)
-</span><span class="">  224: 		unless defined $filename &amp;&amp; length $filename;
-</span><span class="">  225: 
-</span><span class="">  226: 	croak _fmt_msg(&#39;error_not_a_file&#39;, $filename)
-</span><span class="">  227: 		unless -f $filename &amp;&amp; -r $filename;
-</span><span class="">  228: 
-</span><span class="">  229: 	my $data;
-</span><span class="">  230: 	{
-</span><span class="">  231: 		open my $fh, &#39;&lt;:raw&#39;, $filename
-</span><span class="">  232: 			or croak _fmt_msg(&#39;error_not_a_file&#39;, &quot;$filename: $!&quot;);
-</span><span class="">  233: 		local $/;
-</span><span class="">  234: 		$data = &lt;$fh&gt;;
-</span><span class="">  235: 		close $fh;
-</span><span class="">  236: 	}
-</span><span class="">  237: 
-</span><span class="">  238: 	# Delegate to decode so tests can bypass file I/O entirely.
-</span><span class="">  239: 	my $self = ref($proto) ? $proto : $proto-&gt;new;
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  240: 	return $self-&gt;decode($data, $filename);
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  241: }
+</span><span class="">  223: =cut
+</span><span class="">  224: 
+</span><span class="">  225: sub read {
+</span><span class="">  226: 	my ($proto, $filename) = @_;
+</span><span class="">  227: 
+</span><span class="">  228: 	croak _fmt_msg(&#39;error_not_a_file&#39;, $filename // &#39;(undef)&#39;)
+</span><span class="">  229: 		unless defined $filename &amp;&amp; length $filename;
+</span><span class="">  230: 
+</span><span class="">  231: 	croak _fmt_msg(&#39;error_not_a_file&#39;, $filename)
+</span><span class="">  232: 		unless -f $filename &amp;&amp; -r $filename;
+</span><span class="">  233: 
+</span><span class="">  234: 	my $data;
+</span><span class="">  235: 	{
+</span><span class="">  236: 		open my $fh, &#39;&lt;:raw&#39;, $filename
+</span><span class="">  237: 			or croak _fmt_msg(&#39;error_not_a_file&#39;, &quot;$filename: $!&quot;);
+</span><span class="">  238: 		local $/;
+</span><span class="">  239: 		$data = &lt;$fh&gt;;
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  240: 		close $fh;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  241: 	}
 </span><span class="">  242: 
-</span><span class="">  243: # ---------------------------------------------------------------------------
-</span><span class="">  244: # Public: decode
-</span><span class="">  245: # ---------------------------------------------------------------------------
-</span><span class="">  246: 
-</span><span class="">  247: =head2 decode
-</span><span class="">  248: 
-</span><span class="">  249: Decode a binary NWC payload (already loaded into a scalar) and return its
-</span><span class="">  250: NWCTXT representation.
+</span><span class="">  243: 	# Delegate to decode so tests can bypass file I/O entirely.
+</span><span class="">  244: 	my $self = ref($proto) ? $proto : $proto-&gt;new;
+</span><span class="">  245: 	return $self-&gt;decode($data, $filename);
+</span><span class="">  246: }
+</span><span class="">  247: 
+</span><span class="">  248: # ---------------------------------------------------------------------------
+</span><span class="">  249: # Public: decode
+</span><span class="">  250: # ---------------------------------------------------------------------------
 </span><span class="">  251: 
-</span><span class="">  252: Can be called as a class method or instance method.
+</span><span class="">  252: =head2 decode
 </span><span class="">  253: 
-</span><span class="">  254: =head3 Purpose
-</span><span class="">  255: 
-</span><span class="">  256: Separates decompression logic from file I/O; enables unit testing with
-</span><span class="">  257: in-memory test vectors.
+</span><span class="">  254: Decode a binary NWC payload (already loaded into a scalar) and return its
+</span><span class="">  255: NWCTXT representation.
+</span><span class="">  256: 
+</span><span class="">  257: Can be called as a class method or instance method.
 </span><span class="">  258: 
-</span><span class="">  259: =head3 Arguments
+</span><span class="">  259: =head3 Purpose
 </span><span class="">  260: 
-</span><span class="">  261: =over 4
-</span><span class="">  262: 
-</span><span class="">  263: =item C&lt;$data&gt;     -- binary scalar containing the full file content (required).
-</span><span class="">  264: 
-</span><span class="">  265: =item C&lt;$filename&gt; -- source filename for diagnostic messages (optional, default C&lt;&lt; &lt;buffer&gt; &gt;&gt;).
-</span><span class="">  266: 
-</span><span class="">  267: =back
-</span><span class="">  268: 
-</span><span class="">  269: =head3 Returns
-</span><span class="">  270: 
-</span><span class="">  271: Scalar string containing the NWCTXT representation (UTF-8).
-</span><span class="">  272: 
-</span><span class="">  273: =head3 Side Effects
-</span><span class="">  274: 
-</span><span class="">  275: None (no I/O).  Croaks on any format or decompression error.
-</span><span class="">  276: 
-</span><span class="">  277: =head3 Usage Example
-</span><span class="">  278: 
-</span><span class="">  279:     my $nwctxt = Music::NWC2MusicXML::NWC-&gt;decode($binary_blob);
-</span><span class="">  280: 
-</span><span class="">  281: =head3 API SPECIFICATION
-</span><span class="">  282: 
-</span><span class="">  283: =head4 Input
-</span><span class="">  284: 
-</span><span class="">  285:     $data     : SCALAR (binary, required)
-</span><span class="">  286:     $filename : SCALAR (optional, default &#39;&lt;buffer&gt;&#39;)
+</span><span class="">  261: Separates decompression logic from file I/O; enables unit testing with
+</span><span class="">  262: in-memory test vectors.
+</span><span class="">  263: 
+</span><span class="">  264: =head3 Arguments
+</span><span class="">  265: 
+</span><span class="">  266: =over 4
+</span><span class="">  267: 
+</span><span class="">  268: =item C&lt;$data&gt;     -- binary scalar containing the full file content (required).
+</span><span class="">  269: 
+</span><span class="">  270: =item C&lt;$filename&gt; -- source filename for diagnostic messages (optional, default C&lt;&lt; &lt;buffer&gt; &gt;&gt;).
+</span><span class="">  271: 
+</span><span class="">  272: =back
+</span><span class="">  273: 
+</span><span class="">  274: =head3 Returns
+</span><span class="">  275: 
+</span><span class="">  276: Scalar string containing the NWCTXT representation (UTF-8).
+</span><span class="">  277: 
+</span><span class="">  278: =head3 Side Effects
+</span><span class="">  279: 
+</span><span class="">  280: None (no I/O).  Croaks on any format or decompression error.
+</span><span class="">  281: 
+</span><span class="">  282: =head3 Usage Example
+</span><span class="">  283: 
+</span><span class="">  284:     my $nwctxt = Music::NWC2MusicXML::NWC-&gt;decode($binary_blob);
+</span><span class="">  285: 
+</span><span class="">  286: =head3 API SPECIFICATION
 </span><span class="">  287: 
-</span><span class="">  288: =head4 Output
+</span><span class="">  288: =head4 Input
 </span><span class="">  289: 
-</span><span class="">  290:     SCALAR (UTF-8 string)
-</span><span class="">  291: 
-</span><span class="">  292: =head3 MESSAGES
-</span><span class="">  293: 
-</span><span class="">  294: | Code                   | Meaning                                 | Resolution                        |
-</span><span class="">  295: |------------------------|-----------------------------------------|-----------------------------------|
-</span><span class="">  296: | error_not_nwc          | Magic signature absent                  | Confirm file is an NWC 2.x binary |
-</span><span class="">  297: | error_truncated        | Data too short                          | File may be truncated             |
-</span><span class="">  298: | error_no_zlib_stream   | zlib stream not found in binary         | File may be corrupt               |
-</span><span class="">  299: | error_decompress_fail  | zlib inflation failed                   | Payload is corrupt                |
-</span><span class="">  300: | error_decomp_too_large | Decompressed size exceeds safety limit  | Reject; may be a zip bomb         |
-</span><span class="">  301: | error_no_nwctxt_marker | NWCTXT marker absent after decompression| File structure unexpected         |
-</span><span class="">  302: | error_bad_utf8         | Decompressed text is not valid UTF-8    | NWC file may use a legacy encoding|
-</span><span class="">  303: 
-</span><span class="">  304: =head3 FORMAL SPECIFICATION
-</span><span class="">  305: 
-</span><span class="">  306:  [Decode]
-</span><span class="">  307:    data?     : BinaryData
-</span><span class="">  308:    filename? : FileName
-</span><span class="">  309:    ----------
-</span><span class="">  310:    nwctxt!   : NWCTXT
-</span><span class="">  311: 
-</span><span class="">  312:  (placeholder)
-</span><span class="">  313: 
-</span><span class="">  314: =cut
-</span><span class="">  315: 
-</span><span class="">  316: sub decode {
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">317 → 354 → 361</span></span>  317: 	my ($proto, $data, $filename) = @_;
-</span><span class="">  318: 	$filename //= &#39;&lt;buffer&gt;&#39;;
-</span><span class="">  319: 
-</span><span class="">  320: 	my $self = ref($proto) ? $proto : $proto-&gt;new;
-</span><span class="">  321: 
-</span><span class="">  322: 	# Guard: minimum viable length
-</span><span class="">  323: 	croak _fmt_msg(&#39;error_truncated&#39;, $filename)
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  324: 		if !defined $data || length($data) &lt; $MIN_FILE_BYTES;
-</span><p> <b> Mutants (Total: 3, Killed: 3, Survived: 0)</b><p><span class="">  325: 
-</span><span class="">  326: 	# Verify NWC magic signature at offset 0
-</span><span class="">  327: 	croak _fmt_msg(&#39;error_not_nwc&#39;, $filename)
-</span><span class="">  328: 		unless substr($data, 0, $NWC_MAGIC_LEN) eq $NWC_MAGIC;
-</span><span class="">  329: 
-</span><span class="">  330: 	$self-&gt;_debug(&quot;magic verified: $filename&quot;);
-</span><span class="">  331: 
-</span><span class="">  332: 	# Locate the zlib compressed stream within the binary payload.
-</span><span class="">  333: 	# We scan rather than relying on a fixed offset so that different
-</span><span class="">  334: 	# NWC versions and padding sizes are handled uniformly.
-</span><span class="">  335: 	my $zlib_offset = $self-&gt;_find_zlib_offset(\$data, $filename);
+</span><span class="">  290:     $data     : SCALAR (binary, required)
+</span><span class="">  291:                   -- Valid domain: length &gt;= MIN_FILE_BYTES (9 bytes)
+</span><span class="">  292:                   --   Minimum: 5-byte magic &#39;[NWZ]&#39; + 4 bytes = 9 bytes (MIN_FILE_BYTES)
+</span><span class="">  293:                   --   Below min (length 0..8): croaks error_truncated
+</span><span class="">  294:                   --   At min (length 9) with wrong magic: croaks error_not_nwc
+</span><span class="">  295:                   --   MAX decompressed size: 268,435,456 bytes (MAX_DECOMP_BYTES = 256 MB)
+</span><span class="">  296:     $filename : SCALAR (optional, default &#39;&lt;buffer&gt;&#39;)
+</span><span class="">  297:                   -- Any string; used only in diagnostic messages
+</span><span class="">  298: 
+</span><span class="">  299: =head4 Output
+</span><span class="">  300: 
+</span><span class="">  301:     SCALAR (UTF-8 string)
+</span><span class="">  302: 
+</span><span class="">  303: =head3 MESSAGES
+</span><span class="">  304: 
+</span><span class="">  305: | Code                   | Meaning                                 | Resolution                        |
+</span><span class="">  306: |------------------------|-----------------------------------------|-----------------------------------|
+</span><span class="">  307: | error_not_nwc          | Magic signature absent                  | Confirm file is an NWC 2.x binary |
+</span><span class="">  308: | error_truncated        | Data too short                          | File may be truncated             |
+</span><span class="">  309: | error_no_zlib_stream   | zlib stream not found in binary         | File may be corrupt               |
+</span><span class="">  310: | error_decompress_fail  | zlib inflation failed                   | Payload is corrupt                |
+</span><span class="">  311: | error_decomp_too_large | Decompressed size exceeds safety limit  | Reject; may be a zip bomb         |
+</span><span class="">  312: | error_no_nwctxt_marker | NWCTXT marker absent after decompression| File structure unexpected         |
+</span><span class="">  313: | error_bad_utf8         | Decompressed text is not valid UTF-8    | NWC file may use a legacy encoding|
+</span><span class="">  314: 
+</span><span class="">  315: =head3 FORMAL SPECIFICATION
+</span><span class="">  316: 
+</span><span class="">  317:  [Decode]
+</span><span class="">  318:    data?     : BinaryData
+</span><span class="">  319:    filename? : FileName
+</span><span class="">  320:    ----------
+</span><span class="">  321:    nwctxt!   : NWCTXT
+</span><span class="">  322: 
+</span><span class="">  323:  (placeholder)
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  324: 
+</span><p> <b> Mutants (Total: 3, Killed: 3, Survived: 0)</b><p><span class="">  325: =cut
+</span><span class="">  326: 
+</span><span class="">  327: sub decode {
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">328 → 365 → 372</span></span>  328: 	my ($proto, $data, $filename) = @_;
+</span><span class="">  329: 	$filename //= &#39;&lt;buffer&gt;&#39;;
+</span><span class="">  330: 
+</span><span class="">  331: 	my $self = ref($proto) ? $proto : $proto-&gt;new;
+</span><span class="">  332: 
+</span><span class="">  333: 	# Guard: minimum viable length
+</span><span class="">  334: 	croak _fmt_msg(&#39;error_truncated&#39;, $filename)
+</span><span class="">  335: 		if !defined $data || length($data) &lt; $MIN_FILE_BYTES;
 </span><span class="">  336: 
-</span><span class="">  337: 	$self-&gt;_debug(&quot;zlib stream at offset $zlib_offset in $filename&quot;);
-</span><span class="">  338: 
-</span><span class="">  339: 	# Decompress
-</span><span class="">  340: 	my $raw = $self-&gt;_decompress(\$data, $zlib_offset, $filename);
-</span><span class="">  341: 
-</span><span class="">  342: 	$self-&gt;_debug(&#39;decompressed &#39; . length($raw) . &#39; bytes from &#39; . $filename);
-</span><span class="">  343: 
-</span><span class="">  344: 	# Locate the NWCTXT marker within the decompressed bytes
-</span><span class="">  345: 	my $marker_pos = index($raw, $NWCTXT_MARKER);
-</span><span class="">  346: 	croak _fmt_msg(&#39;error_no_nwctxt_marker&#39;, $filename)
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  347: 		if $marker_pos &lt; 0;
-</span><p> <b> Mutants (Total: 3, Killed: 3, Survived: 0)</b><p><span class="">  348: 
-</span><span class="">  349: 	my $nwctxt = substr($raw, $marker_pos);
-</span><span class="">  350: 
-</span><span class="">  351: 	# Validate UTF-8: attempt decode; Perl&#39;s utf8 flag approach
-</span><span class="">  352: 	# We do not blindly assume the file is UTF-8; we verify it.
-</span><span class="">  353: 	# If it fails, treat as Latin-1 (a common NWC legacy encoding) and warn.
-</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  354: 	if (!utf8::decode($nwctxt)) {
+</span><span class="">  337: 	# Verify NWC magic signature at offset 0
+</span><span class="">  338: 	croak _fmt_msg(&#39;error_not_nwc&#39;, $filename)
+</span><span class="">  339: 		unless substr($data, 0, $NWC_MAGIC_LEN) eq $NWC_MAGIC;
+</span><span class="">  340: 
+</span><span class="">  341: 	$self-&gt;_debug(&quot;magic verified: $filename&quot;);
+</span><span class="">  342: 
+</span><span class="">  343: 	# Locate the zlib compressed stream within the binary payload.
+</span><span class="">  344: 	# We scan rather than relying on a fixed offset so that different
+</span><span class="">  345: 	# NWC versions and padding sizes are handled uniformly.
+</span><span class="">  346: 	my $zlib_offset = $self-&gt;_find_zlib_offset(\$data, $filename);
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  347: 
+</span><p> <b> Mutants (Total: 3, Killed: 3, Survived: 0)</b><p><span class="">  348: 	$self-&gt;_debug(&quot;zlib stream at offset $zlib_offset in $filename&quot;);
+</span><span class="">  349: 
+</span><span class="">  350: 	# Decompress
+</span><span class="">  351: 	my $raw = $self-&gt;_decompress(\$data, $zlib_offset, $filename);
+</span><span class="">  352: 
+</span><span class="">  353: 	$self-&gt;_debug(&#39;decompressed &#39; . length($raw) . &#39; bytes from &#39; . $filename);
+</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  354: 
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
 					<ul>
 				<li><b>COND_INV_354_2: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
 </li></ul></details>
-<span class="">  355: 		# Latin-1 fallback: re-encode as UTF-8
-</span><span class="">  356: 		utf8::upgrade($nwctxt);
-</span><span class="">  357: 		carp _fmt_msg(&#39;error_bad_utf8&#39;, $filename)
-</span><span class="">  358: 			. &#39; -- assuming Latin-1&#39;;
-</span><span class="">  359: 	}
-</span><span class="">  360: 
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  361: 	return $nwctxt;
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  362: }
-</span><span class="">  363: 
-</span><span class="">  364: # ---------------------------------------------------------------------------
-</span><span class="">  365: # Private: _find_zlib_offset
-</span><span class="">  366: # ---------------------------------------------------------------------------
-</span><span class="">  367: 
-</span><span class="">  368: sub _find_zlib_offset {
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">369 → 382 → 392</span></span>  369: 	my ($self, $data_ref, $filename) = @_;
-</span><span class="">  370: 
-</span><span class="">  371: 	# Strategy: scan the binary for a byte pair (CMF, FLG) that satisfies
-</span><span class="">  372: 	# the zlib header checksum rule: (CMF*256 + FLG) % 31 == 0.
-</span><span class="">  373: 	# We look only for CMF=0x78 (deflate, 32K window) which covers all
-</span><span class="">  374: 	# compression levels produced by NoteWorthy Composer.
-</span><span class="">  375: 	#
-</span><span class="">  376: 	# We start at offset NWC_MAGIC_LEN + 2 because at minimum there must
-</span><span class="">  377: 	# be a two-byte version/header field after the magic.
+<span class="">  355: 	# Locate the NWCTXT marker within the decompressed bytes
+</span><span class="">  356: 	my $marker_pos = index($raw, $NWCTXT_MARKER);
+</span><span class="">  357: 	croak _fmt_msg(&#39;error_no_nwctxt_marker&#39;, $filename)
+</span><span class="">  358: 		if $marker_pos &lt; 0;
+</span><span class="">  359: 
+</span><span class="">  360: 	my $nwctxt = substr($raw, $marker_pos);
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  361: 
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  362: 	# Validate UTF-8: attempt decode; Perl&#39;s utf8 flag approach
+</span><span class="">  363: 	# We do not blindly assume the file is UTF-8; we verify it.
+</span><span class="">  364: 	# If it fails, treat as Latin-1 (a common NWC legacy encoding) and warn.
+</span><span class="">  365: 	if (!utf8::decode($nwctxt)) {
+</span><span class="">  366: 		# Latin-1 fallback: re-encode as UTF-8
+</span><span class="">  367: 		utf8::upgrade($nwctxt);
+</span><span class="">  368: 		carp _fmt_msg(&#39;error_bad_utf8&#39;, $filename)
+</span><span class="">  369: 			. &#39; -- assuming Latin-1&#39;;
+</span><span class="">  370: 	}
+</span><span class="">  371: 
+</span><span class="">  372: 	return $nwctxt;
+</span><span class="">  373: }
+</span><span class="">  374: 
+</span><span class="">  375: # ---------------------------------------------------------------------------
+</span><span class="">  376: # Private: _find_zlib_offset
+</span><span class="">  377: # ---------------------------------------------------------------------------
 </span><span class="">  378: 
-</span><span class="">  379: 	my $len  = length $$data_ref;
-</span><span class="">  380: 	my $start = $NWC_MAGIC_LEN;    # zlib stream follows immediately after magic
+</span><span class="">  379: sub _find_zlib_offset {
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">380 → 393 → 403</span></span>  380: 	my ($self, $data_ref, $filename) = @_;
 </span><span class="">  381: 
-</span><span class="">  382: 	for my $i ($start .. $len - 2) {
-</span><span class="">  383: 		my $cmf = ord(substr($$data_ref, $i,     1));
-</span><span class="">  384: 		my $flg = ord(substr($$data_ref, $i + 1, 1));
-</span><span class="">  385: 
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  386: 		next unless $cmf == $ZLIB_CMF;
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  387: 		next unless ($cmf * 256 + $flg) % 31 == 0;
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  388: 
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  389: 		return $i;
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  390: 	}
-</span><span class="">  391: 
-</span><span class="">  392: 	croak _fmt_msg(&#39;error_no_zlib_stream&#39;, $filename);
-</span><span class="">  393: }
-</span><span class="">  394: 
-</span><span class="">  395: # ---------------------------------------------------------------------------
-</span><span class="">  396: # Private: _decompress
-</span><span class="">  397: # ---------------------------------------------------------------------------
-</span><span class="">  398: 
-</span><span class="">  399: sub _decompress {
-</span><span class="">  400: 	my ($self, $data_ref, $offset, $filename) = @_;
-</span><span class="">  401: 
-</span><span class="">  402: 	my $compressed = substr($$data_ref, $offset);
-</span><span class="">  403: 
-</span><span class="">  404: 	# Compress::Zlib::uncompress handles a complete zlib stream.
-</span><span class="">  405: 	# It returns undef on failure.
-</span><span class="">  406: 	my $raw = Compress::Zlib::uncompress(\$compressed);
-</span><span class="">  407: 
-</span><span class="">  408: 	croak _fmt_msg(&#39;error_decompress_fail&#39;, &quot;zlib error in $filename&quot;)
-</span><span class="">  409: 		unless defined $raw;
-</span><span class="">  410: 
-</span><span class="">  411: 	croak _fmt_msg(&#39;error_decomp_too_large&#39;, $MAX_DECOMP_BYTES, $filename)
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  412: 		if length($raw) &gt; $MAX_DECOMP_BYTES;
-</span><p> <b> Mutants (Total: 3, Killed: 3, Survived: 0)</b><p><span class="">  413: 
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  414: 	return $raw;
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  415: }
-</span><span class="">  416: 
-</span><span class="">  417: # ---------------------------------------------------------------------------
-</span><span class="">  418: # Private: _debug
-</span><span class="">  419: # ---------------------------------------------------------------------------
-</span><span class="">  420: 
-</span><span class="">  421: sub _debug {
-</span><span class="">  422: 	my ($self, $msg) = @_;
-</span><span class="">  423: 	return unless defined $self-&gt;{_diagnostics};
-</span><span class="">  424: 	$self-&gt;{_diagnostics}-&gt;debug($msg);
-</span><span class="">  425: }
-</span><span class="">  426: 
-</span><span class="">  427: sub _fmt_msg {
-</span><span class="">  428: 	my ($key, @args) = @_;
-</span><span class="">  429: 	croak &quot;Unknown message key: $key&quot; unless exists $MESSAGES{$key};
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  430: 	return sprintf $MESSAGES{$key}, @args;
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  431: }
-</span><span class="">  432: 
-</span><span class="">  433: 1;
-</span><span class="">  434: 
-</span><span class="">  435: __END__
-</span><span class="">  436: 
-</span><span class="">  437: =head1 DIAGNOSTICS
-</span><span class="">  438: 
-</span><span class="">  439: =head3 MESSAGES
-</span><span class="">  440: 
-</span><span class="">  441: | Code                   | Meaning                                | Resolution                        |
-</span><span class="">  442: |------------------------|----------------------------------------|-----------------------------------|
-</span><span class="">  443: | error_not_a_file       | Cannot open/read input file            | Check path and permissions        |
-</span><span class="">  444: | error_not_nwc          | Magic signature absent                 | Confirm file is NWC 2.x           |
-</span><span class="">  445: | error_truncated        | File too short                         | File may be corrupt or incomplete |
-</span><span class="">  446: | error_no_zlib_stream   | No valid zlib header found             | Binary may be from unknown version|
-</span><span class="">  447: | error_decompress_fail  | zlib inflate failed                    | Payload corrupt                   |
-</span><span class="">  448: | error_decomp_too_large | Decompressed size exceeds 256 MB       | Possible zip-bomb; reject         |
-</span><span class="">  449: | error_no_nwctxt_marker | NWCTXT marker absent                   | Unexpected binary structure       |
-</span><span class="">  450: | error_bad_utf8         | Text not valid UTF-8                   | Latin-1 fallback applied          |
+</span><span class="">  382: 	# Strategy: scan the binary for a byte pair (CMF, FLG) that satisfies
+</span><span class="">  383: 	# the zlib header checksum rule: (CMF*256 + FLG) % 31 == 0.
+</span><span class="">  384: 	# We look only for CMF=0x78 (deflate, 32K window) which covers all
+</span><span class="">  385: 	# compression levels produced by NoteWorthy Composer.
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  386: 	#
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  387: 	# We start at offset NWC_MAGIC_LEN + 2 because at minimum there must
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  388: 	# be a two-byte version/header field after the magic.
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  389: 
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  390: 	my $len  = length $$data_ref;
+</span><span class="">  391: 	my $start = $NWC_MAGIC_LEN;    # zlib stream follows immediately after magic
+</span><span class="">  392: 
+</span><span class="">  393: 	for my $i ($start .. $len - 2) {
+</span><span class="">  394: 		my $cmf = ord(substr($$data_ref, $i,     1));
+</span><span class="">  395: 		my $flg = ord(substr($$data_ref, $i + 1, 1));
+</span><span class="">  396: 
+</span><span class="">  397: 		next unless $cmf == $ZLIB_CMF;
+</span><span class="">  398: 		next unless ($cmf * 256 + $flg) % 31 == 0;
+</span><span class="">  399: 
+</span><span class="">  400: 		return $i;
+</span><span class="">  401: 	}
+</span><span class="">  402: 
+</span><span class="">  403: 	croak _fmt_msg(&#39;error_no_zlib_stream&#39;, $filename);
+</span><span class="">  404: }
+</span><span class="">  405: 
+</span><span class="">  406: # ---------------------------------------------------------------------------
+</span><span class="">  407: # Private: _decompress
+</span><span class="">  408: # ---------------------------------------------------------------------------
+</span><span class="">  409: 
+</span><span class="">  410: sub _decompress {
+</span><span class="">  411: 	my ($self, $data_ref, $offset, $filename) = @_;
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  412: 
+</span><p> <b> Mutants (Total: 3, Killed: 3, Survived: 0)</b><p><span class="">  413: 	my $compressed = substr($$data_ref, $offset);
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  414: 
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  415: 	# Compress::Zlib::uncompress handles a complete zlib stream.
+</span><span class="">  416: 	# It returns undef on failure.
+</span><span class="">  417: 	my $raw = Compress::Zlib::uncompress(\$compressed);
+</span><span class="">  418: 
+</span><span class="">  419: 	croak _fmt_msg(&#39;error_decompress_fail&#39;, &quot;zlib error in $filename&quot;)
+</span><span class="">  420: 		unless defined $raw;
+</span><span class="">  421: 
+</span><span class="">  422: 	croak _fmt_msg(&#39;error_decomp_too_large&#39;, $MAX_DECOMP_BYTES, $filename)
+</span><span class="">  423: 		if length($raw) &gt; $MAX_DECOMP_BYTES;
+</span><span class="">  424: 
+</span><span class="">  425: 	return $raw;
+</span><span class="">  426: }
+</span><span class="">  427: 
+</span><span class="">  428: # ---------------------------------------------------------------------------
+</span><span class="">  429: # Private: _debug
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  430: # ---------------------------------------------------------------------------
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  431: 
+</span><span class="">  432: sub _debug {
+</span><span class="">  433: 	my ($self, $msg) = @_;
+</span><span class="">  434: 	return unless defined $self-&gt;{_diagnostics};
+</span><span class="">  435: 	$self-&gt;{_diagnostics}-&gt;debug($msg);
+</span><span class="">  436: }
+</span><span class="">  437: 
+</span><span class="">  438: sub _fmt_msg {
+</span><span class="">  439: 	my ($key, @args) = @_;
+</span><span class="">  440: 	croak &quot;Unknown message key: $key&quot; unless exists $MESSAGES{$key};
+</span><span class="">  441: 	return sprintf $MESSAGES{$key}, @args;
+</span><span class="">  442: }
+</span><span class="">  443: 
+</span><span class="">  444: 1;
+</span><span class="">  445: 
+</span><span class="">  446: __END__
+</span><span class="">  447: 
+</span><span class="">  448: =head1 DIAGNOSTICS
+</span><span class="">  449: 
+</span><span class="">  450: =head3 MESSAGES
 </span><span class="">  451: 
-</span><span class="">  452: =head1 LIMITATIONS
-</span><span class="">  453: 
-</span><span class="">  454: =over 4
-</span><span class="">  455: 
-</span><span class="">  456: =item * Only NWC 2.x binary format (C&lt;[NWZ]&gt; magic) is supported.  NWC 1.x
-</span><span class="">  457: files use a different structure and will be rejected.
-</span><span class="">  458: 
-</span><span class="">  459: =item * Files larger than 256 MB when decompressed will be rejected for
-</span><span class="">  460: safety.  Legitimate scores should not approach this limit.
-</span><span class="">  461: 
-</span><span class="">  462: =item * Latin-1 fallback for non-UTF-8 NWCTXT is a best-effort heuristic.
-</span><span class="">  463: 
-</span><span class="">  464: =back
-</span><span class="">  465: 
-</span><span class="">  466: =head1 AUTHOR
-</span><span class="">  467: 
-</span><span class="">  468: Nigel Horne C&lt;&lt; &lt;nigel.horne@gmail.com&gt; &gt;&gt;
+</span><span class="">  452: | Code                   | Meaning                                | Resolution                        |
+</span><span class="">  453: |------------------------|----------------------------------------|-----------------------------------|
+</span><span class="">  454: | error_not_a_file       | Cannot open/read input file            | Check path and permissions        |
+</span><span class="">  455: | error_not_nwc          | Magic signature absent                 | Confirm file is NWC 2.x           |
+</span><span class="">  456: | error_truncated        | File too short                         | File may be corrupt or incomplete |
+</span><span class="">  457: | error_no_zlib_stream   | No valid zlib header found             | Binary may be from unknown version|
+</span><span class="">  458: | error_decompress_fail  | zlib inflate failed                    | Payload corrupt                   |
+</span><span class="">  459: | error_decomp_too_large | Decompressed size exceeds 256 MB       | Possible zip-bomb; reject         |
+</span><span class="">  460: | error_no_nwctxt_marker | NWCTXT marker absent                   | Unexpected binary structure       |
+</span><span class="">  461: | error_bad_utf8         | Text not valid UTF-8                   | Latin-1 fallback applied          |
+</span><span class="">  462: 
+</span><span class="">  463: =head1 LIMITATIONS
+</span><span class="">  464: 
+</span><span class="">  465: =over 4
+</span><span class="">  466: 
+</span><span class="">  467: =item * Only NWC 2.x binary format (C&lt;[NWZ]&gt; magic) is supported.  NWC 1.x
+</span><span class="">  468: files use a different structure and will be rejected.
 </span><span class="">  469: 
-</span><span class="">  470: =head1 LICENSE
-</span><span class="">  471: 
-</span><span class="">  472: This library is free software; you can redistribute it and/or modify it
-</span><span class="">  473: under the same terms as Perl itself.
+</span><span class="">  470: =item * Files larger than 256 MB when decompressed will be rejected for
+</span><span class="">  471: safety.  Legitimate scores should not approach this limit.
+</span><span class="">  472: 
+</span><span class="">  473: =item * Latin-1 fallback for non-UTF-8 NWCTXT is a best-effort heuristic.
 </span><span class="">  474: 
-</span><span class="">  475: =cut
+</span><span class="">  475: =back
+</span><span class="">  476: 
+</span><span class="">  477: =head1 AUTHOR
+</span><span class="">  478: 
+</span><span class="">  479: Nigel Horne C&lt;&lt; &lt;nigel.horne@gmail.com&gt; &gt;&gt;
+</span><span class="">  480: 
+</span><span class="">  481: =head1 LICENSE
+</span><span class="">  482: 
+</span><span class="">  483: This library is free software; you can redistribute it and/or modify it
+</span><span class="">  484: under the same terms as Perl itself.
+</span><span class="">  485: 
+</span><span class="">  486: =cut
 </span></pre>
 
 <script>

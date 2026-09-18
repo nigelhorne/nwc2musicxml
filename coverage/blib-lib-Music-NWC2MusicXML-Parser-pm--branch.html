@@ -20,49 +20,49 @@ https://pjcj.net
 <h1>Branch Coverage</h1>
 <table>
 <tr><td class="h" align="right">File:</td><td align="left">blib/lib/Music/NWC2MusicXML/Parser.pm</td></tr>
-<tr><td class="h" align="right">Coverage:</td><td align="left" class="c1">82.9%</td></tr>
+<tr><td class="h" align="right">Coverage:</td><td align="left" class="c1">88.2%</td></tr>
 </table>
 <div><br/></div>
 <table>
 <tr><th>line</th><th>%</th><th colspan="2">coverage</th><th>branch</th></tr>
 <tr><td class="h"><a id="L155">155</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless defined $args</td></tr>
-<tr><td class="h"><a id="L239">239</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $nwctxt and length $nwctxt</td></tr>
-<tr><td class="h"><a id="L253">253</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $header and index($header, $HEADER_PREFIX) == 0</td></tr>
-<tr><td class="h"><a id="L264">264</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless defined $line and length $line</td></tr>
-<tr><td class="h"><a id="L265">265</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if $line =~ /^\s*$/</td></tr>
-<tr><td class="h"><a id="L268">268</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ++$self-&gt;{&#39;_record_count&#39;} &gt; $MAX_RECORDS</td></tr>
-<tr><td class="h"><a id="L271">271</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless $line =~ /^\|/</td></tr>
-<tr><td class="h"><a id="L325">325</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless defined $fields and @$fields</td></tr>
-<tr><td class="h"><a id="L329">329</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (exists $DISPATCH{$type}) { }</td></tr>
-<tr><td class="h"><a id="L333">333</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (defined $staff)</td></tr>
-<tr><td class="h"><a id="L363">363</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if substr($line, 0, 1) eq &quot;|&quot;</td></tr>
-<tr><td class="h"><a id="L371">371</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($in_quote) { }</td></tr>
-<tr><td class="h"><a id="L372">372</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($ch eq &#39;&quot;&#39;) { }</td></tr>
+<tr><td class="h"><a id="L247">247</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $nwctxt and length $nwctxt</td></tr>
+<tr><td class="h"><a id="L261">261</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $header and index($header, $HEADER_PREFIX) == 0</td></tr>
+<tr><td class="h"><a id="L272">272</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $line and length $line</td></tr>
+<tr><td class="h"><a id="L273">273</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $line =~ /^\s*$/</td></tr>
+<tr><td class="h"><a id="L276">276</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ++$self-&gt;{&#39;_record_count&#39;} &gt; $MAX_RECORDS</td></tr>
+<tr><td class="h"><a id="L279">279</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless $line =~ /^\|/</td></tr>
+<tr><td class="h"><a id="L333">333</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless defined $fields and @$fields</td></tr>
+<tr><td class="h"><a id="L337">337</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (exists $DISPATCH{$type}) { }</td></tr>
+<tr><td class="h"><a id="L341">341</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (defined $staff)</td></tr>
+<tr><td class="h"><a id="L371">371</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if substr($line, 0, 1) eq &quot;|&quot;</td></tr>
+<tr><td class="h"><a id="L379">379</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($in_quote) { }</td></tr>
+<tr><td class="h"><a id="L380">380</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($ch eq &#39;&quot;&#39;) { }</td></tr>
 <tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif ($ch eq &#39;\\&#39; and $pos + 1 &lt; $len) { }</td></tr>
-<tr><td class="h"><a id="L382">382</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($ch eq &#39;&quot;&#39;) { }</td></tr>
+<tr><td class="h"><a id="L390">390</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($ch eq &#39;&quot;&#39;) { }</td></tr>
 <tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif ($ch eq &#39;|&#39;) { }</td></tr>
-<tr><td class="h"><a id="L405">405</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($field =~ /^([^:]+):(.*)$/s) { }</td></tr>
-<tr><td class="h"><a id="L423">423</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if exists $h-&gt;{$key}</td></tr>
-<tr><td class="h"><a id="L449">449</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">($h-&gt;{&#39;Visible&#39;} // &#39;Y&#39;) eq &#39;Y&#39; ? :</td></tr>
-<tr><td class="h"><a id="L473">473</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless (exists $VALID_CLEFS{$type})</td></tr>
-<tr><td class="h"><a id="L478">478</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (not $staff-&gt;has_notes) { }</td></tr>
-<tr><td class="h"><a id="L500">500</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (not $staff-&gt;has_notes) { }</td></tr>
-<tr><td class="h"><a id="L516">516</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless (defined $beats and defined $beat_type)</td></tr>
-<tr><td class="h"><a id="L524">524</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (not $staff-&gt;has_notes) { }</td></tr>
-<tr><td class="h"><a id="L637">637</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($tok eq &#39;Dotted&#39;) { }</td></tr>
+<tr><td class="h"><a id="L413">413</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($field =~ /^([^:]+):(.*)$/s) { }</td></tr>
+<tr><td class="h"><a id="L431">431</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if exists $h-&gt;{$key}</td></tr>
+<tr><td class="h"><a id="L457">457</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">($h-&gt;{&#39;Visible&#39;} // &#39;Y&#39;) eq &#39;Y&#39; ? :</td></tr>
+<tr><td class="h"><a id="L481">481</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless (exists $VALID_CLEFS{$type})</td></tr>
+<tr><td class="h"><a id="L486">486</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (not $staff-&gt;has_notes) { }</td></tr>
+<tr><td class="h"><a id="L508">508</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (not $staff-&gt;has_notes) { }</td></tr>
+<tr><td class="h"><a id="L524">524</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless (defined $beats and defined $beat_type)</td></tr>
+<tr><td class="h"><a id="L532">532</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (not $staff-&gt;has_notes) { }</td></tr>
+<tr><td class="h"><a id="L645">645</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($tok eq &#39;Dotted&#39;) { }</td></tr>
 <tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif ($tok eq &#39;DblDotted&#39;) { }</td></tr>
 <tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif ($tok =~ /^Triplet(?:=(.+))?$/) { }</td></tr>
 <tr><td class="h"></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">elsif ($tok eq &#39;Grace&#39;) { }</td></tr>
-<tr><td class="h"><a id="L649">649</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $opts_str and length $opts_str</td></tr>
-<tr><td class="h"><a id="L652">652</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($opt =~ /^(\w+)=(.*)$/) { }</td></tr>
-<tr><td class="h"><a id="L759">759</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">$pos &gt;= 0 ? :</td></tr>
-<tr><td class="h"><a id="L803">803</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $staff</td></tr>
-<tr><td class="h"><a id="L814">814</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $sig and length $sig</td></tr>
-<tr><td class="h"><a id="L815">815</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $sig eq $KEY_SIG_NATURAL</td></tr>
-<tr><td class="h"><a id="L820">820</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless @acc</td></tr>
-<tr><td class="h"><a id="L822">822</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($acc[0] =~ /#/) { }</td></tr>
-<tr><td class="h"></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">elsif ($acc[0] =~ /b$/) { }</td></tr>
-<tr><td class="h"><a id="L832">832</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless exists $MESSAGES{$key}</td></tr>
+<tr><td class="h"><a id="L657">657</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $opts_str and length $opts_str</td></tr>
+<tr><td class="h"><a id="L660">660</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($opt =~ /^(\w+)=(.*)$/) { }</td></tr>
+<tr><td class="h"><a id="L767">767</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">$pos &gt;= 0 ? :</td></tr>
+<tr><td class="h"><a id="L811">811</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $staff</td></tr>
+<tr><td class="h"><a id="L822">822</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $sig and length $sig</td></tr>
+<tr><td class="h"><a id="L823">823</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $sig eq $KEY_SIG_NATURAL</td></tr>
+<tr><td class="h"><a id="L828">828</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless @acc</td></tr>
+<tr><td class="h"><a id="L830">830</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($acc[0] =~ /#/) { }</td></tr>
+<tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif ($acc[0] =~ /b$/) { }</td></tr>
+<tr><td class="h"><a id="L840">840</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless exists $MESSAGES{$key}</td></tr>
 </table>
 </body>
 </html>
