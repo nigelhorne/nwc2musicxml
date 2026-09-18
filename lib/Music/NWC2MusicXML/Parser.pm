@@ -453,10 +453,14 @@ sub _handle_staff_properties {
 	my ($self, $fields) = @_;
 	my $h = $self->_fields_to_hash($fields);
 	my $staff = $self->_current_staff_or_croak('StaffProperties');
-	# Map recognised properties onto the staff object
-	$staff->{_visible}    = ($h->{Visible} // 'Y') eq 'Y' ? 1 : 0;
-	$staff->{_lines}      = $h->{Lines} // 5;
-	$staff->{_ending_bar} = $h->{EndingBar};
+	$staff->{_visible}         = ($h->{Visible} // 'Y') eq 'Y' ? 1 : 0;
+	$staff->{_lines}           = $h->{Lines} // 5;
+	$staff->{_ending_bar}      = $h->{EndingBar};
+	$staff->{_channel}         = $h->{Channel} + 0 if defined $h->{Channel};
+	$staff->{_with_next_staff} = $h->{WithNextStaff} if defined $h->{WithNextStaff};
+	$staff->{_volume}          = $h->{Volume}    + 0 if defined $h->{Volume};
+	$staff->{_stereo_pan}      = $h->{StereoPan} + 0 if defined $h->{StereoPan};
+	$staff->{_muted}           = ($h->{Muted} // 'N') eq 'Y' ? 1 : 0;
 }
 
 sub _handle_staff_instrument {
@@ -466,6 +470,7 @@ sub _handle_staff_instrument {
 	$staff->{_instrument} = {
 		name  => $h->{Name}  // '',
 		patch => $h->{Patch} // 0,
+		trans => $h->{Trans} // 0,
 	};
 }
 
@@ -698,10 +703,18 @@ sub _handle_text {
 
 sub _handle_lyric {
 	my ($self, $fields) = @_;
-	my $h = $self->_fields_to_hash($fields);
+	my $h    = $self->_fields_to_hash($fields);
+	my $text = $h->{Text} // '';
+	# Syllabic type encoded by leading/trailing hyphens: strip them, infer type.
+	my $starts_h = ($text =~ s/\A-//);
+	my $ends_h   = ($text =~ s/-\z//);
+	my $syllabic = $starts_h && $ends_h ? 'middle'
+	             : $starts_h            ? 'end'
+	             : $ends_h              ? 'begin'
+	             :                        'single';
 	$self->_append_event(Music::NWC2MusicXML::Event->new(
 		type => 'Lyric',
-		data => { text => $h->{Text} // '', verse => $h->{Verse} // 1 },
+		data => { text => $text, verse => $h->{Verse} // 1, syllabic => $syllabic },
 	));
 }
 
@@ -754,7 +767,7 @@ sub _handle_flow_control {
 	my $h = $self->_fields_to_hash($fields);
 	$self->_append_event(Music::NWC2MusicXML::Event->new(
 		type => 'FlowControl',
-		data => { directive => $h->{_positional} // '', extra => $h },
+		data => { directive => $h->{_positional} // $h->{Style} // '', extra => $h },
 	));
 }
 

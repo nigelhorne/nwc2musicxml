@@ -144,6 +144,20 @@ Readonly::Hash my %NWC_TYPE_MAP => (
 	'64th' => '64th',
 );
 
+# Flow-control directive -> MusicXML element and/or words direction
+Readonly::Hash my %FLOW_CONTROL_MAP => (
+	Coda           => { element => 'coda'                      },
+	Segno          => { element => 'segno'                     },
+	DaCapo         => { words => 'D.C.'                        },
+	DaCapoAlFine   => { words => 'D.C. al Fine'                },
+	DaCapoAlCoda   => { words => 'D.C. al Coda'                },
+	DalSegno       => { words => 'D.S.'                        },
+	DalSegnoAlFine => { words => 'D.S. al Fine'                },
+	DalSegnoAlCoda => { words => 'D.S. al Coda'                },
+	Fine           => { words => 'Fine'                        },
+	ToCoda         => { element => 'coda', words => 'To Coda'  },
+);
+
 Readonly::Hash my %MESSAGES => (
 	error_bad_score      => 'generate: argument must be a Music::NWC2MusicXML::Score',
 	error_no_staves      => 'Score contains no staves -- cannot generate MusicXML',
@@ -735,6 +749,12 @@ sub _emit_identification {
 	push @out, "${i}<encoding>";
 	push @out, "${i}${i}<software>Music::NWC2MusicXML $VERSION</software>";
 	push @out, "${i}</encoding>";
+	if (defined $meta->{Comments} && length($meta->{Comments} // '')) {
+		push @out, "${i}<miscellaneous>";
+		push @out, "${i}${i}<miscellaneous-field name=\"comments\">"
+			. _xml_escape($meta->{Comments}) . '</miscellaneous-field>';
+		push @out, "${i}</miscellaneous>";
+	}
 	push @out, '</identification>';
 	return @out;
 }
@@ -811,14 +831,24 @@ sub _emit_part_list {
 	my @out;
 	my $i = $self->{_indent};
 
-	# Resolve display names once; deduplication happens inside.
-	my @names = _resolve_part_names($staves);
+	my @names  = _resolve_part_names($staves);
+	my @groups = _compute_groups($staves);
 
 	push @out, '<part-list>';
 	my $part_id = 1;
 	for my $staff (@$staves) {
+		my $idx = $part_id - 1;
+
+		# Groups starting before this score-part (outer before inner)
+		for my $g (sort { $a->{num} <=> $b->{num} } grep { $_->{start} == $idx } @groups) {
+			push @out, "${i}<part-group type=\"start\" number=\"$g->{num}\">";
+			push @out, "${i}${i}<group-symbol>$g->{symbol}</group-symbol>";
+			push @out, "${i}${i}<group-barline>$g->{bars}</group-barline>";
+			push @out, "${i}</part-group>";
+		}
+
 		my $id   = "P$part_id";
-		my $name = _xml_escape($names[$part_id - 1]);
+		my $name = _xml_escape($names[$idx]);
 		push @out, "${i}<score-part id=\"$id\">";
 		push @out, "${i}${i}<part-name>$name</part-name>";
 		my $instr = $staff->instrument;
@@ -828,18 +858,66 @@ sub _emit_part_list {
 				. _xml_escape($instr->{name}) . '</instrument-name>';
 			push @out, "${i}${i}</score-instrument>";
 			if (defined $instr->{patch}) {
+				my $chan = $staff->{_channel} // 1;
 				push @out, "${i}${i}<midi-instrument id=\"${id}-I1\">";
-				push @out, "${i}${i}${i}<midi-channel>1</midi-channel>";
+				push @out, "${i}${i}${i}<midi-channel>$chan</midi-channel>";
 				push @out, "${i}${i}${i}<midi-program>"
 					. ($instr->{patch} + 1) . '</midi-program>';
 				push @out, "${i}${i}</midi-instrument>";
 			}
 		}
 		push @out, "${i}</score-part>";
+
+		# Groups stopping after this score-part (inner before outer)
+		for my $g (sort { $b->{num} <=> $a->{num} } grep { $_->{end} == $idx } @groups) {
+			push @out, "${i}<part-group type=\"stop\" number=\"$g->{num}\"/>";
+		}
+
 		$part_id++;
 	}
 	push @out, '</part-list>';
 	return @out;
+}
+
+# Compute bracket/brace grouping structure from WithNextStaff flags.
+# Returns a list of group hashrefs: {num, start, end, symbol, bars}.
+# Bracket groups are numbered before Brace groups so outer comes first.
+sub _compute_groups {
+	my ($staves) = @_;
+	my @all_groups;
+	my $group_num = 1;
+
+	for my $sym (qw(Bracket Brace)) {
+		my $i = 0;
+		while ($i < @$staves) {
+			my $wnxs  = $staves->[$i]{_with_next_staff} // '';
+			my %flags = map { $_ => 1 } split /,/, $wnxs;
+
+			if ($flags{$sym}) {
+				my $start        = $i;
+				my $connect_bars = $flags{ConnectBars} ? 'yes' : 'no';
+				# Extend the group while consecutive staves carry the same flag.
+				while ($i < @$staves - 1) {
+					my $cur = $staves->[$i]{_with_next_staff} // '';
+					my %cf  = map { $_ => 1 } split /,/, $cur;
+					last unless $cf{$sym};
+					$i++;
+				}
+				push @all_groups, {
+					num    => $group_num++,
+					start  => $start,
+					end    => $i,
+					symbol => lc($sym),
+					bars   => $connect_bars,
+				} if $i > $start;
+				$i++;
+			} else {
+				$i++;
+			}
+		}
+	}
+
+	return @all_groups;
 }
 
 # ---------------------------------------------------------------------------
@@ -931,6 +1009,7 @@ sub _emit_part {
 	# so that arcs crossing bar lines are handled correctly.
 	my $ann = $self->_annotate_events($staff->events);
 	$self->_annotate_wedges($staff->events, $ann);
+	$self->_annotate_lyrics($staff->events, $ann);
 
 	for my $event (@{ $staff->events }) {
 		my $type = $event->type;
@@ -987,7 +1066,7 @@ sub _emit_measure {
 
 	push @out, "${pad}<measure number=\"$number\">";
 
-	if ($prev_bar eq 'MasterRepeatOpen') {
+	if ($prev_bar eq 'MasterRepeatOpen' || $prev_bar eq 'LocalRepeatOpen') {
 		push @out, "${pad}${i}<barline location=\"left\">";
 		push @out, "${pad}${i}${i}<bar-style>heavy-light</bar-style>";
 		push @out, "${pad}${i}${i}<repeat direction=\"forward\"/>";
@@ -996,6 +1075,14 @@ sub _emit_measure {
 
 	if ($is_first) {
 		push @out, $self->_emit_attributes($staff, $divisions, $pad . $i);
+		# Emit MIDI playback volume/pan at the start of the first measure.
+		my ($vol, $pan) = ($staff->{_volume}, $staff->{_stereo_pan});
+		if (defined $vol || defined $pan) {
+			my @sa;
+			push @sa, sprintf('dynamics="%d"', int($vol * 100 / 127 + 0.5)) if defined $vol;
+			push @sa, sprintf('pan="%d"',      int(($pan - 64) * 90 / 63 + 0.5)) if defined $pan;
+			push @out, "${pad}${i}<sound " . join(' ', @sa) . '/>' if @sa;
+		}
 	}
 
 	for my $event (@$events) {
@@ -1033,6 +1120,20 @@ sub _emit_measure {
 			my $d = $event->data // {};
 			push @out, $self->_emit_tempo_variance(
 				$d->{style}, $d->{placement}, $pad . $i);
+
+		} elsif ($type eq 'Text') {
+			my $d = $event->data // {};
+			push @out, $self->_emit_text_direction(
+				$d->{text}, $d->{placement}, $pad . $i);
+
+		} elsif ($type eq 'FlowControl') {
+			my $d = $event->data // {};
+			push @out, $self->_emit_flow_control($d->{directive}, $pad . $i);
+
+		} elsif ($type eq 'Instrument') {
+			my $d = $event->data // {};
+			push @out, $self->_emit_instrument_change(
+				$d->{name}, $d->{patch}, $pad . $i);
 
 		} elsif ($type eq 'Note') {
 			push @out, $self->_emit_wedge($ev_ann->{wedge_start}, undef, $pad . $i)
@@ -1153,6 +1254,29 @@ sub _annotate_events {
 	$ann{$last_slur_ev}{slur_stop} = 1 if $in_slur && defined $last_slur_ev;
 
 	return \%ann;
+}
+
+# Associate each Lyric event with the immediately preceding Note or Chord event.
+# Lyric events in NWCTXT always follow the note they annotate.
+sub _annotate_lyrics {
+	my ($self, $events, $ann) = @_;
+	$ann //= {};
+
+	my $last_note_key;
+	for my $ev (@$events) {
+		my $type = $ev->type;
+		if ($type eq 'Note' || $type eq 'Chord') {
+			$last_note_key = "$ev";
+		} elsif ($type eq 'Lyric' && defined $last_note_key) {
+			my $d = $ev->data // {};
+			push @{ $ann->{$last_note_key}{lyrics} }, {
+				text     => $d->{text}     // '',
+				verse    => $d->{verse}    // 1,
+				syllabic => $d->{syllabic} // 'single',
+			};
+		}
+	}
+	return $ann;
 }
 
 # Annotate wedge (hairpin) start/stop transitions into an existing %$ann hash.
@@ -1289,6 +1413,19 @@ sub _emit_note_event {
 		push @out, "${pad}${i}</notations>";
 	}
 
+	# Lyrics: only on the first note of a chord (is_chord_member is false).
+	unless ($is_chord_member) {
+		for my $lyric (@{ $ev_ann->{lyrics} // [] }) {
+			my $num      = $lyric->{verse}    // 1;
+			my $syllabic = $lyric->{syllabic} // 'single';
+			my $text     = _xml_escape($lyric->{text} // '');
+			push @out, "${pad}${i}<lyric number=\"$num\">";
+			push @out, "${pad}${i}${i}<syllabic>$syllabic</syllabic>";
+			push @out, "${pad}${i}${i}<text>$text</text>";
+			push @out, "${pad}${i}</lyric>";
+		}
+	}
+
 	push @out, "${pad}</note>";
 	return @out;
 }
@@ -1330,7 +1467,11 @@ sub _emit_chord_event {
 		my %pos_ann = (
 			tie_stop_keys  => { $pk => ($ev_ann->{tie_stop_keys}  // {})->{$pk} // 0 },
 			tie_start_keys => { $pk => ($ev_ann->{tie_start_keys} // {})->{$pk} // 0 },
-			($first ? (slur_start => $ev_ann->{slur_start}, slur_stop => $ev_ann->{slur_stop}) : ()),
+			($first ? (
+				slur_start => $ev_ann->{slur_start},
+				slur_stop  => $ev_ann->{slur_stop},
+				lyrics     => $ev_ann->{lyrics},
+			) : ()),
 		);
 		push @out, $self->_emit_note_event(
 			_chord_note_event($event, $pos_str),
@@ -1525,6 +1666,59 @@ sub _emit_tempo_variance {
 	return @out;
 }
 
+sub _emit_text_direction {
+	my ($self, $text, $placement, $pad) = @_;
+	$text      //= '';
+	$placement //= '';
+	return () unless length $text;
+	my $i     = $self->{_indent};
+	my $place = (lc($placement) eq 'above') ? 'above' : 'below';
+	my @out;
+	push @out, "${pad}<direction placement=\"$place\">";
+	push @out, "${pad}${i}<direction-type>";
+	push @out, "${pad}${i}${i}<words>" . _xml_escape($text) . "</words>";
+	push @out, "${pad}${i}</direction-type>";
+	push @out, "${pad}</direction>";
+	return @out;
+}
+
+sub _emit_flow_control {
+	my ($self, $directive, $pad) = @_;
+	$directive //= '';
+	my $map = $FLOW_CONTROL_MAP{$directive};
+	return () unless defined $map;
+	my $i = $self->{_indent};
+	my @out;
+	push @out, "${pad}<direction placement=\"above\">";
+	if (defined $map->{element}) {
+		push @out, "${pad}${i}<direction-type>";
+		push @out, "${pad}${i}${i}<$map->{element}/>";
+		push @out, "${pad}${i}</direction-type>";
+	}
+	if (defined $map->{words}) {
+		push @out, "${pad}${i}<direction-type>";
+		push @out, "${pad}${i}${i}<words font-style=\"italic\">"
+			. _xml_escape($map->{words}) . "</words>";
+		push @out, "${pad}${i}</direction-type>";
+	}
+	push @out, "${pad}</direction>";
+	return @out;
+}
+
+sub _emit_instrument_change {
+	my ($self, $name, $patch, $pad) = @_;
+	my $i    = $self->{_indent};
+	my $prog = ($patch // 0) + 1;
+	my $text = $name ? _xml_escape($name) : "Program $prog";
+	my @out;
+	push @out, "${pad}<direction placement=\"above\">";
+	push @out, "${pad}${i}<direction-type>";
+	push @out, "${pad}${i}${i}<other-direction>$text</other-direction>";
+	push @out, "${pad}${i}</direction-type>";
+	push @out, "${pad}</direction>";
+	return @out;
+}
+
 sub _emit_time_change {
 	my ($self, $ts_data, $pad) = @_;
 	my @out;
@@ -1603,6 +1797,13 @@ sub _emit_attributes {
 		push @out, "${pad}${i}${i}<line>$clef->{line}</line>"
 			if defined $clef->{line};
 		push @out, "${pad}${i}</clef>";
+	}
+
+	my $trans = ($staff->instrument // {})->{trans} // 0;
+	if ($trans) {
+		push @out, "${pad}${i}<transpose>";
+		push @out, "${pad}${i}${i}<chromatic>$trans</chromatic>";
+		push @out, "${pad}${i}</transpose>";
 	}
 
 	push @out, "${pad}</attributes>";
