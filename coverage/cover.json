@@ -4,256 +4,256 @@
          "OS" : "linux",
          "abstract" : "Convert NoteWorthy Composer 2 C<.nwc> score files to MusicXML.",
          "dir" : "/home/runner/work/nwc2musicxml/nwc2musicxml",
-         "finish" : 1789742418.44331,
+         "finish" : 1789744413.12076,
          "name" : "Music-NWC2MusicXML",
          "perl" : "5.40.5",
          "run" : "-e",
-         "start" : 1789742210.37545,
+         "start" : 1789744167.02664,
          "version" : "0.01"
       },
       {
          "OS" : "linux",
          "abstract" : "Convert NoteWorthy Composer 2 C<.nwc> score files to MusicXML.",
          "dir" : "/home/runner/work/nwc2musicxml/nwc2musicxml",
-         "finish" : 1789742210.48424,
+         "finish" : 1789744167.15577,
          "name" : "Music-NWC2MusicXML",
          "perl" : "5.40.5",
          "run" : "-e",
-         "start" : 1789742210.48414,
+         "start" : 1789744167.15559,
          "version" : "0.01"
       },
       {
          "OS" : "linux",
          "abstract" : "Convert NoteWorthy Composer 2 C<.nwc> score files to MusicXML.",
          "dir" : "/home/runner/work/nwc2musicxml/nwc2musicxml",
-         "finish" : 1789742210.77413,
+         "finish" : 1789744167.50514,
          "name" : "Music-NWC2MusicXML",
          "perl" : "5.40.5",
          "run" : "t/00-load.t",
-         "start" : 1789742210.77316,
+         "start" : 1789744167.5041,
          "version" : "0.01"
       },
       {
          "OS" : "linux",
          "abstract" : "Convert NoteWorthy Composer 2 C<.nwc> score files to MusicXML.",
          "dir" : "/home/runner/work/nwc2musicxml/nwc2musicxml",
-         "finish" : 1789742211.29588,
+         "finish" : 1789744168.15714,
          "name" : "Music-NWC2MusicXML",
          "perl" : "5.40.5",
          "run" : "t/10-nwc.t",
-         "start" : 1789742211.29237,
+         "start" : 1789744168.1537,
          "version" : "0.01"
       },
       {
          "OS" : "linux",
          "abstract" : "Convert NoteWorthy Composer 2 C<.nwc> score files to MusicXML.",
          "dir" : "/home/runner/work/nwc2musicxml/nwc2musicxml",
-         "finish" : 1789742211.54593,
+         "finish" : 1789744168.46043,
          "name" : "Music-NWC2MusicXML",
          "perl" : "5.40.5",
          "run" : "t/20-parser.t",
-         "start" : 1789742211.53697,
+         "start" : 1789744168.44805,
          "version" : "0.01"
       },
       {
          "OS" : "linux",
          "abstract" : "Convert NoteWorthy Composer 2 C<.nwc> score files to MusicXML.",
          "dir" : "/home/runner/work/nwc2musicxml/nwc2musicxml",
-         "finish" : 1789742211.8779,
+         "finish" : 1789744168.85733,
          "name" : "Music-NWC2MusicXML",
          "perl" : "5.40.5",
          "run" : "t/30-musicxml.t",
-         "start" : 1789742211.87308,
+         "start" : 1789744168.85168,
          "version" : "0.01"
       },
       {
          "OS" : "linux",
          "abstract" : "Convert NoteWorthy Composer 2 C<.nwc> score files to MusicXML.",
          "dir" : "/home/runner/work/nwc2musicxml/nwc2musicxml",
-         "finish" : 1789742214.37098,
+         "finish" : 1789744171.85866,
          "name" : "Music-NWC2MusicXML",
          "perl" : "5.40.5",
          "run" : "t/40-input.t",
-         "start" : 1789742212.26215,
+         "start" : 1789744169.34656,
          "version" : "0.01"
       },
       {
          "OS" : "linux",
          "abstract" : "Convert NoteWorthy Composer 2 C<.nwc> score files to MusicXML.",
          "dir" : "/home/runner/work/nwc2musicxml/nwc2musicxml",
-         "finish" : 1789742214.8919,
+         "finish" : 1789744172.53095,
          "name" : "Music-NWC2MusicXML",
          "perl" : "5.40.5",
          "run" : "t/50-events.t",
-         "start" : 1789742214.82447,
+         "start" : 1789744172.44965,
          "version" : "0.01"
       },
       {
          "OS" : "linux",
          "abstract" : "Convert NoteWorthy Composer 2 C<.nwc> score files to MusicXML.",
          "dir" : "/home/runner/work/nwc2musicxml/nwc2musicxml",
-         "finish" : 1789742217.64011,
+         "finish" : 1789744175.8088,
          "name" : "Music-NWC2MusicXML",
          "perl" : "5.40.5",
          "run" : "t/cgi_security.t",
-         "start" : 1789742215.4521,
+         "start" : 1789744173.21561,
          "version" : "0.01"
       },
       {
          "OS" : "linux",
          "abstract" : "Convert NoteWorthy Composer 2 C<.nwc> score files to MusicXML.",
          "dir" : "/home/runner/work/nwc2musicxml/nwc2musicxml",
-         "finish" : 1789742225.47273,
+         "finish" : 1789744185.09101,
          "name" : "Music-NWC2MusicXML",
          "perl" : "5.40.5",
          "run" : "t/data-flow.t",
-         "start" : 1789742218.28945,
+         "start" : 1789744176.61018,
          "version" : "0.01"
       },
       {
          "OS" : "linux",
          "abstract" : "Convert NoteWorthy Composer 2 C<.nwc> score files to MusicXML.",
          "dir" : "/home/runner/work/nwc2musicxml/nwc2musicxml",
-         "finish" : 1789742226.71659,
+         "finish" : 1789744186.59038,
          "name" : "Music-NWC2MusicXML",
          "perl" : "5.40.5",
          "run" : "t/domain.t",
-         "start" : 1789742226.1613,
+         "start" : 1789744185.93332,
          "version" : "0.01"
       },
       {
          "OS" : "linux",
          "abstract" : "Convert NoteWorthy Composer 2 C<.nwc> score files to MusicXML.",
          "dir" : "/home/runner/work/nwc2musicxml/nwc2musicxml",
-         "finish" : 1789742369.76714,
+         "finish" : 1789744354.80097,
          "name" : "Music-NWC2MusicXML",
          "perl" : "5.40.5",
          "run" : "t/edge_cases.t",
-         "start" : 1789742227.37158,
+         "start" : 1789744187.3966,
          "version" : "0.01"
       },
       {
          "OS" : "linux",
          "abstract" : "Convert NoteWorthy Composer 2 C<.nwc> score files to MusicXML.",
          "dir" : "/home/runner/work/nwc2musicxml/nwc2musicxml",
-         "finish" : 1789742370.96951,
+         "finish" : 1789744356.18151,
          "name" : "Music-NWC2MusicXML",
          "perl" : "5.40.5",
          "run" : "t/function.t",
-         "start" : 1789742370.81297,
+         "start" : 1789744355.99873,
          "version" : "0.01"
       },
       {
          "OS" : "linux",
          "abstract" : "Convert NoteWorthy Composer 2 C<.nwc> score files to MusicXML.",
          "dir" : "/home/runner/work/nwc2musicxml/nwc2musicxml",
-         "finish" : 1789742413.9845,
+         "finish" : 1789744407.9063,
          "name" : "Music-NWC2MusicXML",
          "perl" : "5.40.5",
          "run" : "t/integration.t",
-         "start" : 1789742371.6621,
+         "start" : 1789744357.03312,
          "version" : "0.01"
       },
       {
          "OS" : "linux",
          "abstract" : "Convert NoteWorthy Composer 2 C<.nwc> score files to MusicXML.",
          "dir" : "/home/runner/work/nwc2musicxml/nwc2musicxml",
-         "finish" : 1789742371.7965,
+         "finish" : 1789744357.19229,
          "name" : "Music-NWC2MusicXML",
          "perl" : "5.40.5",
          "run" : "-e",
-         "start" : 1789742371.7719,
+         "start" : 1789744357.16308,
          "version" : "0.01"
       },
       {
          "OS" : "linux",
          "abstract" : "Convert NoteWorthy Composer 2 C<.nwc> score files to MusicXML.",
          "dir" : "/home/runner/work/nwc2musicxml/nwc2musicxml",
-         "finish" : 1789742414.64699,
+         "finish" : 1789744408.73566,
          "name" : "Music-NWC2MusicXML",
          "perl" : "5.40.5",
          "run" : "t/locales.t",
-         "start" : 1789742414.59051,
+         "start" : 1789744408.66895,
          "version" : "0.01"
       },
       {
          "OS" : "linux",
          "abstract" : "Convert NoteWorthy Composer 2 C<.nwc> score files to MusicXML.",
          "dir" : "/home/runner/work/nwc2musicxml/nwc2musicxml",
-         "finish" : 1789742415.04429,
+         "finish" : 1789744409.20508,
          "name" : "Music-NWC2MusicXML",
          "perl" : "5.40.5",
          "run" : "t/mutant_killers.t",
-         "start" : 1789742415.03216,
+         "start" : 1789744409.19319,
          "version" : "0.01"
       },
       {
          "OS" : "linux",
          "abstract" : "Convert NoteWorthy Composer 2 C<.nwc> score files to MusicXML.",
          "dir" : "/home/runner/work/nwc2musicxml/nwc2musicxml",
-         "finish" : 1789742415.48418,
+         "finish" : 1789744409.71447,
          "name" : "Music-NWC2MusicXML",
          "perl" : "5.40.5",
          "run" : "t/path.t",
-         "start" : 1789742415.37098,
+         "start" : 1789744409.58312,
          "version" : "0.01"
       },
       {
          "OS" : "linux",
          "abstract" : "Convert NoteWorthy Composer 2 C<.nwc> score files to MusicXML.",
          "dir" : "/home/runner/work/nwc2musicxml/nwc2musicxml",
-         "finish" : 1789742417.27158,
+         "finish" : 1789744411.67742,
          "name" : "Music-NWC2MusicXML",
          "perl" : "5.40.5",
          "run" : "t/transaction.t",
-         "start" : 1789742416.15704,
+         "start" : 1789744410.53377,
          "version" : "0.01"
       },
       {
          "OS" : "linux",
          "abstract" : "Convert NoteWorthy Composer 2 C<.nwc> score files to MusicXML.",
          "dir" : "/home/runner/work/nwc2musicxml/nwc2musicxml",
-         "finish" : 1789742418.02722,
+         "finish" : 1789744412.59213,
          "name" : "Music-NWC2MusicXML",
          "perl" : "5.40.5",
          "run" : "t/unit.t",
-         "start" : 1789742417.89392,
+         "start" : 1789744412.43338,
          "version" : "0.01"
       }
    ],
    "summary" : {
       "Total" : {
          "branch" : {
-            "covered" : 371,
-            "error" : 53,
-            "percentage" : 87.5,
-            "total" : 424,
+            "covered" : 400,
+            "error" : 84,
+            "percentage" : 82.6446280991736,
+            "total" : 484,
             "uncoverable" : 0
          },
          "condition" : {
-            "covered" : 284,
-            "error" : 137,
-            "percentage" : 67.458432304038,
-            "total" : 421,
+            "covered" : 307,
+            "error" : 183,
+            "percentage" : 62.6530612244898,
+            "total" : 490,
             "uncoverable" : 0
          },
          "statement" : {
-            "covered" : 1336,
-            "error" : 39,
-            "percentage" : 97.1636363636364,
-            "total" : 1375
+            "covered" : 1398,
+            "error" : 106,
+            "percentage" : 92.9521276595745,
+            "total" : 1504
          },
          "subroutine" : {
-            "covered" : 213,
-            "error" : 9,
-            "percentage" : 95.945945945946,
-            "total" : 222
+            "covered" : 215,
+            "error" : 12,
+            "percentage" : 94.7136563876652,
+            "total" : 227
          },
          "total" : {
-            "covered" : 2204,
-            "error" : 238,
-            "percentage" : 90.2538902538903,
-            "total" : 2442,
+            "covered" : 2320,
+            "error" : 385,
+            "percentage" : 85.7670979667283,
+            "total" : 2705,
             "uncoverable" : 0
          }
       },
@@ -361,35 +361,36 @@
       },
       "blib/lib/Music/NWC2MusicXML/MusicXML.pm" : {
          "branch" : {
-            "covered" : 202,
-            "error" : 16,
-            "percentage" : 92.6605504587156,
-            "total" : 218,
+            "covered" : 222,
+            "error" : 40,
+            "percentage" : 84.7328244274809,
+            "total" : 262,
             "uncoverable" : 0
          },
          "condition" : {
-            "covered" : 154,
-            "error" : 90,
-            "percentage" : 63.1147540983607,
-            "total" : 244,
+            "covered" : 173,
+            "error" : 130,
+            "percentage" : 57.0957095709571,
+            "total" : 303,
             "uncoverable" : 0
          },
          "statement" : {
-            "covered" : 610,
-            "error" : 5,
-            "percentage" : 99.1869918699187,
-            "total" : 615
+            "covered" : 667,
+            "error" : 68,
+            "percentage" : 90.7482993197279,
+            "total" : 735
          },
          "subroutine" : {
-            "covered" : 48,
-            "percentage" : 100,
-            "total" : 48
+            "covered" : 50,
+            "error" : 3,
+            "percentage" : 94.3396226415094,
+            "total" : 53
          },
          "total" : {
-            "covered" : 1014,
-            "error" : 111,
-            "percentage" : 90.1333333333333,
-            "total" : 1125,
+            "covered" : 1112,
+            "error" : 241,
+            "percentage" : 82.1877309682188,
+            "total" : 1353,
             "uncoverable" : 0
          }
       },
@@ -428,24 +429,24 @@
       },
       "blib/lib/Music/NWC2MusicXML/Parser.pm" : {
          "branch" : {
-            "covered" : 67,
-            "error" : 9,
-            "percentage" : 88.1578947368421,
-            "total" : 76,
+            "covered" : 76,
+            "error" : 16,
+            "percentage" : 82.6086956521739,
+            "total" : 92,
             "uncoverable" : 0
          },
          "condition" : {
-            "covered" : 60,
-            "error" : 41,
-            "percentage" : 59.4059405940594,
-            "total" : 101,
+            "covered" : 64,
+            "error" : 47,
+            "percentage" : 57.6576576576577,
+            "total" : 111,
             "uncoverable" : 0
          },
          "statement" : {
-            "covered" : 223,
-            "error" : 24,
-            "percentage" : 90.2834008097166,
-            "total" : 247
+            "covered" : 228,
+            "error" : 28,
+            "percentage" : 89.0625,
+            "total" : 256
          },
          "subroutine" : {
             "covered" : 40,
@@ -454,10 +455,10 @@
             "total" : 48
          },
          "total" : {
-            "covered" : 390,
-            "error" : 82,
-            "percentage" : 82.6271186440678,
-            "total" : 472,
+            "covered" : 408,
+            "error" : 99,
+            "percentage" : 80.4733727810651,
+            "total" : 507,
             "uncoverable" : 0
          }
       },
