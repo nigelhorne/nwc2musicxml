@@ -969,6 +969,7 @@ sub _emit_measure {
 	my @out;
 	my $i   = $self->{_indent};
 	my $pad = $i;
+	my $bar_accidentals = {};   # pitch_key -> alter; reset each measure
 
 	push @out, "${pad}<measure number=\"$number\">";
 
@@ -1023,7 +1024,7 @@ sub _emit_measure {
 			push @out, $self->_emit_wedge($ev_ann->{wedge_start}, undef, $pad . $i)
 				if $ev_ann->{wedge_start};
 			push @out, $self->_emit_note_event(
-				$event, $curr_clef, $curr_key, $divisions, $pad . $i, 0, $ev_ann);
+				$event, $curr_clef, $curr_key, $divisions, $pad . $i, 0, $ev_ann, $bar_accidentals);
 			push @out, $self->_emit_wedge('crescOff', undef, $pad . $i)
 				if $ev_ann->{wedge_stop_after};
 		} elsif ($type eq 'Rest') {
@@ -1036,7 +1037,7 @@ sub _emit_measure {
 			push @out, $self->_emit_wedge($ev_ann->{wedge_start}, undef, $pad . $i)
 				if $ev_ann->{wedge_start};
 			push @out, $self->_emit_chord_event(
-				$event, $curr_clef, $curr_key, $divisions, $pad . $i, $ev_ann);
+				$event, $curr_clef, $curr_key, $divisions, $pad . $i, $ev_ann, $bar_accidentals);
 			push @out, $self->_emit_wedge('crescOff', undef, $pad . $i)
 				if $ev_ann->{wedge_stop_after};
 		}
@@ -1186,13 +1187,23 @@ sub _annotate_wedges {
 # ---------------------------------------------------------------------------
 
 sub _emit_note_event {
-	my ($self, $event, $clef, $key_fifths, $divisions, $pad, $is_chord_member, $ev_ann) = @_;
-	$ev_ann //= {};
+	my ($self, $event, $clef, $key_fifths, $divisions, $pad, $is_chord_member, $ev_ann, $bar_accidentals) = @_;
+	$ev_ann          //= {};
+	$bar_accidentals //= {};
 	my $d   = $event->data;
 	my @out;
 	my $i   = $self->{_indent};
 
 	my $pitch = $self->_pos_to_pitch($d->{nwc_pos} // '0', $clef, $key_fifths);
+
+	# Accidentals carry through the bar: once a pitch class is altered in a measure,
+	# all subsequent notes at the same step+octave inherit that alteration.
+	my $pitch_key = $pitch->{step} . $pitch->{octave};
+	if (defined $pitch->{accidental}) {
+		$bar_accidentals->{$pitch_key} = $pitch->{alter};
+	} elsif (exists $bar_accidentals->{$pitch_key}) {
+		$pitch->{alter} = $bar_accidentals->{$pitch_key};
+	}
 	my $ticks = _rational_to_ticks($event->duration, $divisions);
 	my $type  = $NWC_TYPE_MAP{ $d->{base_dur} // '4th' } // 'quarter';
 
@@ -1289,8 +1300,9 @@ sub _emit_rest_event {
 }
 
 sub _emit_chord_event {
-	my ($self, $event, $clef, $key_fifths, $divisions, $pad, $ev_ann) = @_;
-	$ev_ann //= {};
+	my ($self, $event, $clef, $key_fifths, $divisions, $pad, $ev_ann, $bar_accidentals) = @_;
+	$ev_ann          //= {};
+	$bar_accidentals //= {};
 	my $d     = $event->data;
 	my @out;
 
@@ -1308,7 +1320,7 @@ sub _emit_chord_event {
 		);
 		push @out, $self->_emit_note_event(
 			_chord_note_event($event, $pos_str),
-			$clef, $key_fifths, $divisions, $pad, !$first, \%pos_ann
+			$clef, $key_fifths, $divisions, $pad, !$first, \%pos_ann, $bar_accidentals
 		);
 		$first = 0;
 	}
@@ -1340,10 +1352,9 @@ sub _chord_note_event {
 # Convert an NWC position string (e.g. "#-6", "b3", "-9^") to a MusicXML
 # pitch descriptor { step, octave, alter, accidental }.
 #
-# Position 0 = top line of the staff (clef-specific reference note).
+# Position 0 = middle line (3rd from bottom) of the staff (clef-specific).
 # Negative positions go DOWN the staff; positive positions go UP.
-# Formula: diatonic_index = ref_oct*7 + ref_step + pos_num
-# Verified: Bass pos -7 = A2 (dominant drone in D minor). Treble pos -9 = D4 (tonic).
+# Formula: diatonic_index = octave*7 + step_index + pos_num
 sub _pos_to_pitch {
 	my ($self, $pos_str, $clef, $key_fifths) = @_;
 	$pos_str    //= '0';
