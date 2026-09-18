@@ -21,6 +21,7 @@ t/20-parser.t
 t/30-musicxml.t
 t/40-input.t
 t/50-events.t
+t/cgi_security.t
 t/data-flow.t
 t/domain.t
 t/edge_cases.t
@@ -28,6 +29,7 @@ t/function.t
 t/input/Pilgrim.nwc
 t/integration.t
 t/locales.t
+t/mutant_killers.t
 t/path.t
 t/transaction.t
 t/unit.t

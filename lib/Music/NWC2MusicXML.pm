@@ -43,6 +43,7 @@ Readonly::Hash my %MESSAGES => (
 	error_generate       => 'MusicXML generation failed for %s: %s',
 	error_write          => 'Cannot write output %s: %s',
 	error_mkdir          => 'Cannot create output directory %s: %s',
+	error_traversal      => 'Path traversal rejected: %s is outside base_dir %s',
 	error_internal       => 'Internal error: %s',
 	info_converting      => 'Converting: %s -> %s',
 	info_done            => 'Done: %s',
@@ -379,18 +380,19 @@ sub batch_convert {
 	my %counts = (processed => 0, successful => 0, warnings => 0, failed => 0);
 
 	for my $file (@{ $args->{inputs} }) {
-		# Compute output path
-		my $output = $self->_batch_output_path(
-			input      => $file,
-			output_dir => $args->{output_dir},
-			recursive  => $args->{recursive},
-			base_dir   => $args->{base_dir},
-		);
-
 		$counts{processed}++;
 
-		# A per-file failure must not abort the batch
+		# A per-file failure must not abort the batch.
+		# Output-path computation is inside the eval so traversal errors
+		# are caught per-file rather than aborting the whole batch.
+		my $output;
 		my $ok = eval {
+			$output = $self->_batch_output_path(
+				input      => $file,
+				output_dir => $args->{output_dir},
+				recursive  => $args->{recursive},
+				base_dir   => $args->{base_dir},
+			);
 			$self->convert(
 				input     => $file,
 				output    => $output,
@@ -526,6 +528,10 @@ sub _batch_output_path {
 	if ($args->{recursive} && defined $args->{base_dir}) {
 		# Compute relative path from base_dir to preserve directory structure
 		my $rel = File::Spec->abs2rel(dirname($args->{input}), $args->{base_dir});
+		# Guard: any '..' component means the input sits outside base_dir;
+		# writing there would escape output_dir (path traversal).
+		croak _fmt_msg('error_traversal', $args->{input}, $args->{base_dir})
+			if grep { $_ eq '..' } File::Spec->splitdir($rel);
 		return File::Spec->catfile($args->{output_dir}, $rel, $out_name);
 	}
 
