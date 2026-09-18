@@ -116,7 +116,10 @@ subtest 'NWC::read does not leak $/ to calling scope' => sub {
 
 subtest 'NWC::read does not leak file descriptors (Open-Use-Close verified)' => sub {
 	# Resource lifecycle: count open fds before and after; they must match.
-	return note 'No /proc/self/fd on this platform' unless -d '/proc/self/fd';
+	unless (-d '/proc/self/fd') {
+		pass 'fd-leak check skipped: /proc/self/fd not available on this platform';
+		return;
+	}
 	return note 'No test NWC file available' unless -f $PILGRIM_NWC;
 
 	my $before = () = glob '/proc/self/fd/*';
@@ -127,7 +130,10 @@ subtest 'NWC::read does not leak file descriptors (Open-Use-Close verified)' => 
 };
 
 subtest 'NWC::read does not leak fds on multiple calls' => sub {
-	return note 'No /proc/self/fd on this platform' unless -d '/proc/self/fd';
+	unless (-d '/proc/self/fd') {
+		pass 'fd-leak check skipped: /proc/self/fd not available on this platform';
+		return;
+	}
 	return note 'No test NWC file available' unless -f $PILGRIM_NWC;
 
 	my $before = () = glob '/proc/self/fd/*';
