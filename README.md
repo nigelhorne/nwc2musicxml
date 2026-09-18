@@ -90,9 +90,7 @@ Blessed `Music::NWC2MusicXML` object.
 
 ### MESSAGES
 
-| Code | Meaning | Resolution |
-|------|---------|------------|
-|      |         |            |
+None.
 
 ## convert
 
@@ -133,7 +131,7 @@ Croaks on fatal errors; non-fatal issues are issued as warnings.
 
     input     : SCALAR (path, required)
     output    : SCALAR (path, optional)
-    overwrite : SCALAR (bool, optional, default 0)
+    overwrite : boolean (optional, default false)
 
 #### Output
 

@@ -875,7 +875,7 @@ __END__
 
 =head1 AUTHOR
 
-Nigel Horne C<< <nigel.horne@gmail.com> >>
+Nigel Horne C<< <njh@nigelhorne.com> >>
 
 =head1 LICENSE
 

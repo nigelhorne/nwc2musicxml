@@ -159,9 +159,7 @@ Blessed C<Music::NWC2MusicXML> object.
 
 =head3 MESSAGES
 
-| Code | Meaning | Resolution |
-|------|---------|------------|
-|      |         |            |
+None.
 
 =cut
 
@@ -243,7 +241,7 @@ Croaks on fatal errors; non-fatal issues are issued as warnings.
 
     input     : SCALAR (path, required)
     output    : SCALAR (path, optional)
-    overwrite : SCALAR (bool, optional, default 0)
+    overwrite : boolean (optional, default false)
 
 =head4 Output
 
@@ -268,7 +266,7 @@ sub convert {
 		schema => {
 			input     => { type => 'scalar' },
 			output    => { type => 'scalar', optional => 1 },
-			overwrite => { type => 'scalar', optional => 1, default  => 0 },
+			overwrite => { type => 'boolean', optional => 1, default  => 0 },
 		},
 		input => \%input,
 	);
@@ -368,8 +366,8 @@ sub batch_convert {
 		schema => {
 			inputs     => { type => 'arrayref' },
 			output_dir => { type => 'scalar',   optional => 1 },
-			overwrite  => { type => 'scalar',   optional => 1, default  => 0 },
-			recursive  => { type => 'scalar',   optional => 1, default  => 0 },
+			overwrite  => { type => 'boolean',   optional => 1, default  => 0 },
+			recursive  => { type => 'boolean', optional => 1, default  => 0 },
 			base_dir   => { type => 'scalar',   optional => 1 },
 		},
 		input => \%input,
