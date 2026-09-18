@@ -193,6 +193,11 @@ Reads from disk.  Croaks on any I/O or format error.
 =head4 Input
 
     $filename : SCALAR  path (required)
+                  -- Valid domain: defined, non-empty string naming a regular,
+                  --   readable file in NWC 2.x binary format
+                  -- Invalid partitions: undef, '' (empty), directory, non-existent,
+                  --   unreadable, or wrong format -> all croak error_not_a_file
+                  --   or error_not_nwc / error_truncated depending on failure point
 
 =head4 Output
 
@@ -283,7 +288,13 @@ None (no I/O).  Croaks on any format or decompression error.
 =head4 Input
 
     $data     : SCALAR (binary, required)
+                  -- Valid domain: length >= MIN_FILE_BYTES (9 bytes)
+                  --   Minimum: 5-byte magic '[NWZ]' + 4 bytes = 9 bytes (MIN_FILE_BYTES)
+                  --   Below min (length 0..8): croaks error_truncated
+                  --   At min (length 9) with wrong magic: croaks error_not_nwc
+                  --   MAX decompressed size: 268,435,456 bytes (MAX_DECOMP_BYTES = 256 MB)
     $filename : SCALAR (optional, default '<buffer>')
+                  -- Any string; used only in diagnostic messages
 
 =head4 Output
 

@@ -206,9 +206,18 @@ None.
 =head4 Input
 
     type       : SCALAR  (required)
+                   -- Valid domain: any string registered in %MUSICAL_EVENT_TYPES
+                   --   or %METADATA_EVENT_TYPES (see Event.pm constants)
+                   -- Invalid partition: unknown/unregistered string, undef, or ''
+                   --   -> stored as UnsupportedEvent (carp), not croak
     nwc_label  : SCALAR  (optional)
     start_time : ARRAYREF [int>=0, int>0]  (optional, default [0,1])
+                   -- Valid domain: exactly-2-element arrayref [numerator, denominator]
+                   --   where denominator > 0.  Numerator >= 0.
+                   -- Invalid: non-arrayref, 1-element, 3+-element, or denominator=0
+                   --   -> croak error_bad_rational
     duration   : ARRAYREF [int>=0, int>0]  (optional, default [0,1])
+                   -- Same constraints as start_time
     data       : HASHREF  (optional, default {})
 
 =head4 Output
@@ -374,11 +383,19 @@ Arrayref C<[$num, $den]>.
 =head4 Input
 
     nwc_duration : SCALAR (required)
+                     -- Valid domain: exactly one of the 7 NWC duration names:
+                     --   'Whole', 'Half', '4th', '8th', '16th', '32nd', '64th'
+                     -- Invalid partitions: undef, '' (empty), 'Quarter' (wrong name),
+                     --   'whole' (wrong case), any other string -> croak error_bad_duration
+                     -- Note: NWC uses '4th' not 'Quarter' for the quarter note.
     dots         : SCALAR int >= 0 (optional, default 0)
+                     -- Valid domain: 0 (no dots), 1 (dotted), 2 (double-dotted)
+                     -- NWC maximum is 2; dots=3+ are mathematically valid but not
+                     --   produced by any NWC 2.x score; undef treated as 0
 
 =head4 Output
 
-    ARRAYREF [$num:int, $den:int]
+    ARRAYREF [$num:int, $den:int]  (rational in quarter-note units, reduced to lowest terms)
 
 =head3 FORMAL SPECIFICATION
 
@@ -429,6 +446,20 @@ sub rational_add {
 
 Class method.  Convert a rational to a floating-point number for display
 or approximate comparison only.  Never use the result for musical timing.
+
+=head3 API SPECIFICATION
+
+=head4 Input
+
+    $r : ARRAYREF [$num:int, $den:int>0]  (required)
+           -- Valid domain: exactly-2-element arrayref where $den > 0
+           -- Invalid: non-arrayref scalar, 1-element arrayref, 3+-element arrayref,
+           --   or denominator = 0 -> croak error_bad_rational
+           -- BVA boundary: $num = 0 is valid (returns 0.0)
+
+=head4 Output
+
+    SCALAR (floating-point approximation of $num / $den)
 
 =cut
 

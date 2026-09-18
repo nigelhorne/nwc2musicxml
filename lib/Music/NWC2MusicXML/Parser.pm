@@ -206,6 +206,14 @@ Issues warnings via C<diagnostics> for non-fatal issues (e.g. unknown records).
 =head4 Input
 
     $nwctxt : SCALAR (UTF-8, required)
+                -- Valid domain: non-empty string beginning with the line
+                --   '!NoteWorthyComposer(<version>)' followed by pipe-delimited records
+                -- Invalid partitions:
+                --   undef or '' -> croaks error_empty_input
+                --   non-empty but missing header -> croaks error_no_header
+                -- Boundary: MAX_RECORDS = 1,000,000 pipe-delimited records
+                --   At exactly 1,000,000 records: accepted
+                --   At 1,000,001+ records: croaks error_too_many_records
 
 =head4 Output
 

@@ -22,6 +22,7 @@ t/30-musicxml.t
 t/40-input.t
 t/50-events.t
 t/data-flow.t
+t/domain.t
 t/edge_cases.t
 t/function.t
 t/input/Pilgrim.nwc

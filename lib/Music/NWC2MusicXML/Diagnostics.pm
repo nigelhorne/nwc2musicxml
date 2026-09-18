@@ -98,6 +98,46 @@ and can be printed at batch completion.
 
 =cut
 
+=head2 new
+
+Construct a Diagnostics instance.
+
+=head3 Arguments
+
+Named parameters:
+
+=over 4
+
+=item C<level> -- log verbosity (optional, default C<'normal'>).
+
+=item C<warnings_fh> -- writable filehandle for per-warning output (optional).
+
+=back
+
+=head3 Returns
+
+Blessed C<Music::NWC2MusicXML::Diagnostics> object.
+
+=head3 API SPECIFICATION
+
+=head4 Input
+
+    level        : SCALAR (optional, default 'normal')
+                     -- Valid domain (4 values only, case-sensitive):
+                     --   'quiet', 'normal', 'verbose', 'debug'
+                     -- Invalid: undef, '' (empty), wrong-case ('QUIET', 'Normal'),
+                     --   numeric (0, 1, 2, 3), or any other string -> croak
+                     --   error_internal 'Unknown log level: ...'
+    warnings_fh  : filehandle (optional)
+                     -- Valid: any writable filehandle, or undef/absent (no file output)
+                     -- The caller retains ownership; this module never closes it
+
+=head4 Output
+
+    Music::NWC2MusicXML::Diagnostics object
+
+=cut
+
 sub new {
 	my ($class, %input) = @_;
 	my $warnings_fh = delete $input{warnings_fh};   # glob refs can't be typed
@@ -432,7 +472,11 @@ C<$self>.
 
 =head4 Input
 
-    outcome : SCALAR (required) -- 'processed'|'successful'|'warnings'|'failed'
+    outcome : SCALAR (required)
+                -- Valid domain (4 values only, case-sensitive):
+                --   'processed', 'successful', 'warnings', 'failed'
+                -- Invalid: undef, '' (empty), wrong-case ('Processed'), any other
+                --   string -> croak error_internal 'Unknown counter: ...'
 
 =head4 Output
 
