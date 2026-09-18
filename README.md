@@ -4,7 +4,7 @@ Music::NWC2MusicXML - Convert NoteWorthy Composer 2 `.nwc` score files to MusicX
 
 # VERSION
 
-0.01
+0.001.0
 
 # SYNOPSIS
 
@@ -224,11 +224,18 @@ Return the `Music::NWC2MusicXML::Diagnostics` instance.
 
 # LIMITATIONS
 
-- Recursive directory scanning (`--recursive`) is not yet implemented;
-inputs must be passed explicitly.
-- Parallel batch processing is not implemented.
+- Parallel batch processing is not implemented; files are converted sequentially.
 - MusicXML validation against the official DTD/XSD is not performed
 internally; use an external validator with `--validate`.
+- Tuplet time-modification and multi-voice `RestChord` records are not yet
+emitted (Phase 4 items).
+
+# DEPENDENCIES
+
+[Object::Configure](https://metacpan.org/pod/Object%3A%3AConfigure) is used to allow callers to pre-configure converter
+defaults at the class level (e.g. `Music::NWC2MusicXML->configure(log_level => 'verbose')`).
+This means a consuming application can set defaults once and `new` will
+honour them without repeating the arguments on each call.
 
 # SEE ALSO
 

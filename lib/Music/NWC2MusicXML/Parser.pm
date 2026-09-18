@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use autodie qw(:all);
 
-our $VERSION = '0.01';
+our $VERSION = '0.001.0';
 
 use Carp qw(croak carp);
 use Readonly;
@@ -63,7 +63,7 @@ representation.
 
 =head1 VERSION
 
-0.01
+0.001.0
 
 =head1 SYNOPSIS
 

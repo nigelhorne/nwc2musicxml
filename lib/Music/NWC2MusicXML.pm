@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use autodie qw(:all);
 
-our $VERSION = '0.01';
+our $VERSION = '0.001.0';
 
 use Carp qw(croak carp);
 use Readonly;
@@ -56,7 +56,7 @@ Music::NWC2MusicXML - Convert NoteWorthy Composer 2 C<.nwc> score files to Music
 
 =head1 VERSION
 
-0.01
+0.001.0
 
 =head1 SYNOPSIS
 
@@ -568,15 +568,22 @@ __END__
 
 =over 4
 
-=item * Recursive directory scanning (C<--recursive>) is not yet implemented;
-inputs must be passed explicitly.
-
-=item * Parallel batch processing is not implemented.
+=item * Parallel batch processing is not implemented; files are converted sequentially.
 
 =item * MusicXML validation against the official DTD/XSD is not performed
 internally; use an external validator with C<--validate>.
 
+=item * Tuplet time-modification and multi-voice C<RestChord> records are not yet
+emitted (Phase 4 items).
+
 =back
+
+=head1 DEPENDENCIES
+
+L<Object::Configure> is used to allow callers to pre-configure converter
+defaults at the class level (e.g. C<< Music::NWC2MusicXML->configure(log_level => 'verbose') >>).
+This means a consuming application can set defaults once and C<new> will
+honour them without repeating the arguments on each call.
 
 =head1 SEE ALSO
 
