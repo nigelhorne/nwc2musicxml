@@ -108,7 +108,7 @@ sub _minimal_score {
 subtest 'NWC::read does not leak $/ to calling scope' => sub {
 	# DU: local $/ = undef is defined inside a bare block; must be killed (K)
 	# before returning so the caller's input record separator is unchanged.
-	skip 'No test NWC file available' unless -f $PILGRIM_NWC;
+	return note 'No test NWC file available' unless -f $PILGRIM_NWC;
 	my $before = $/;
 	Music::NWC2MusicXML::NWC->read($PILGRIM_NWC);
 	is $/, $before, '$/ unchanged after NWC::read (local $/ correctly scoped)';
@@ -116,8 +116,8 @@ subtest 'NWC::read does not leak $/ to calling scope' => sub {
 
 subtest 'NWC::read does not leak file descriptors (Open-Use-Close verified)' => sub {
 	# Resource lifecycle: count open fds before and after; they must match.
-	skip 'No /proc/self/fd on this platform' unless -d '/proc/self/fd';
-	skip 'No test NWC file available' unless -f $PILGRIM_NWC;
+	return note 'No /proc/self/fd on this platform' unless -d '/proc/self/fd';
+	return note 'No test NWC file available' unless -f $PILGRIM_NWC;
 
 	my $before = () = glob '/proc/self/fd/*';
 	Music::NWC2MusicXML::NWC->read($PILGRIM_NWC);
@@ -127,8 +127,8 @@ subtest 'NWC::read does not leak file descriptors (Open-Use-Close verified)' => 
 };
 
 subtest 'NWC::read does not leak fds on multiple calls' => sub {
-	skip 'No /proc/self/fd on this platform' unless -d '/proc/self/fd';
-	skip 'No test NWC file available' unless -f $PILGRIM_NWC;
+	return note 'No /proc/self/fd on this platform' unless -d '/proc/self/fd';
+	return note 'No test NWC file available' unless -f $PILGRIM_NWC;
 
 	my $before = () = glob '/proc/self/fd/*';
 	for (1 .. 5) {
@@ -140,7 +140,7 @@ subtest 'NWC::read does not leak fds on multiple calls' => sub {
 };
 
 subtest 'NWC::read returns scalar string, not arrayref or filehandle' => sub {
-	skip 'No test NWC file available' unless -f $PILGRIM_NWC;
+	return note 'No test NWC file available' unless -f $PILGRIM_NWC;
 	my $result = Music::NWC2MusicXML::NWC->read($PILGRIM_NWC);
 	ok !ref($result), 'NWC::read returns a plain scalar (not a reference)';
 	ok length($result) > 0, 'result is non-empty string';
@@ -155,10 +155,11 @@ subtest 'NWC::read returns scalar string, not arrayref or filehandle' => sub {
 #           $raw (D) -> substr($raw, $marker_pos) -> $nwctxt (D) -> return
 
 subtest 'NWC decode pipeline: each stage produces a defined, non-empty value' => sub {
-	skip 'No test NWC file available' unless -f $PILGRIM_NWC;
+	return note 'No test NWC file available' unless -f $PILGRIM_NWC;
 
 	# Read raw binary to test decode directly
-	open my $fh, '<:raw', $PILGRIM_NWC or skip "Cannot open $PILGRIM_NWC";
+	open my $fh, '<:raw', $PILGRIM_NWC
+		or return note "Cannot open $PILGRIM_NWC";
 	local $/;
 	my $binary = <$fh>;
 	close $fh;
@@ -175,9 +176,10 @@ subtest 'NWC decode pipeline: each stage produces a defined, non-empty value' =>
 };
 
 subtest 'NWC decode: NWCTXT is a UTF-8 string (not binary bytes)' => sub {
-	skip 'No test NWC file available' unless -f $PILGRIM_NWC;
+	return note 'No test NWC file available' unless -f $PILGRIM_NWC;
 
-	open my $fh, '<:raw', $PILGRIM_NWC or skip "Cannot open $PILGRIM_NWC";
+	open my $fh, '<:raw', $PILGRIM_NWC
+		or return note "Cannot open $PILGRIM_NWC";
 	local $/;
 	my $binary = <$fh>;
 	close $fh;
@@ -190,9 +192,10 @@ subtest 'NWC decode: NWCTXT is a UTF-8 string (not binary bytes)' => sub {
 };
 
 subtest 'NWC decode: output is strictly smaller than raw binary (NWCTXT stripped pre-marker bytes)' => sub {
-	skip 'No test NWC file available' unless -f $PILGRIM_NWC;
+	return note 'No test NWC file available' unless -f $PILGRIM_NWC;
 
-	open my $fh, '<:raw', $PILGRIM_NWC or skip "Cannot open $PILGRIM_NWC";
+	open my $fh, '<:raw', $PILGRIM_NWC
+		or return note "Cannot open $PILGRIM_NWC";
 	local $/;
 	my $binary = <$fh>;
 	close $fh;
@@ -206,11 +209,12 @@ subtest 'NWC decode: output is strictly smaller than raw binary (NWCTXT stripped
 
 subtest 'NWC::read result identical to NWC::decode on same file' => sub {
 	# DU chain identity: both paths must produce the same NWCTXT.
-	skip 'No test NWC file available' unless -f $PILGRIM_NWC;
+	return note 'No test NWC file available' unless -f $PILGRIM_NWC;
 
 	my $via_read = Music::NWC2MusicXML::NWC->read($PILGRIM_NWC);
 
-	open my $fh, '<:raw', $PILGRIM_NWC or skip "Cannot open $PILGRIM_NWC";
+	open my $fh, '<:raw', $PILGRIM_NWC
+		or return note "Cannot open $PILGRIM_NWC";
 	local $/;
 	my $binary = <$fh>;
 	close $fh;
@@ -888,7 +892,7 @@ subtest '_annotate_wedges: crescendo arc gets wedge_start on first and wedge_sto
 # Each public method must not clobber $_, $@, or $! as observed by the caller.
 
 subtest 'NWC::read does not clobber $_ (global variable isolation)' => sub {
-	skip 'No test NWC file available' unless -f $PILGRIM_NWC;
+	return note 'No test NWC file available' unless -f $PILGRIM_NWC;
 	local $_ = 'sentinel_nwc_read';
 	Music::NWC2MusicXML::NWC->read($PILGRIM_NWC);
 	is $_, 'sentinel_nwc_read', '$_ unchanged after NWC::read';
@@ -959,7 +963,7 @@ subtest 'Diagnostics methods do not clobber $@' => sub {
 # boundaries without loss or corruption.
 
 subtest 'Full pipeline: NWC binary -> NWCTXT -> Score -> XML all produce defined values' => sub {
-	skip 'No test NWC file available' unless -f $PILGRIM_NWC;
+	return note 'No test NWC file available' unless -f $PILGRIM_NWC;
 
 	# Stage 1: Binary -> NWCTXT (NWC.pm)
 	my $nwctxt = Music::NWC2MusicXML::NWC->read($PILGRIM_NWC);
@@ -981,7 +985,7 @@ subtest 'Full pipeline: NWC binary -> NWCTXT -> Score -> XML all produce defined
 };
 
 subtest 'Full pipeline: staff count consistent across Score and XML part count' => sub {
-	skip 'No test NWC file available' unless -f $PILGRIM_NWC;
+	return note 'No test NWC file available' unless -f $PILGRIM_NWC;
 
 	my $score = Music::NWC2MusicXML::Parser->new->parse(
 		Music::NWC2MusicXML::NWC->read($PILGRIM_NWC));
@@ -994,7 +998,7 @@ subtest 'Full pipeline: staff count consistent across Score and XML part count' 
 };
 
 subtest 'Full pipeline: NWC version from NWCTXT header flows into Score metadata' => sub {
-	skip 'No test NWC file available' unless -f $PILGRIM_NWC;
+	return note 'No test NWC file available' unless -f $PILGRIM_NWC;
 
 	my $nwctxt = Music::NWC2MusicXML::NWC->read($PILGRIM_NWC);
 	my ($expected_ver) = $nwctxt =~ /!NoteWorthyComposer\(([^)]+)\)/;
