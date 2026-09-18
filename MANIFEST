@@ -26,7 +26,6 @@ t/data-flow.t
 t/domain.t
 t/edge_cases.t
 t/function.t
-t/input/Pilgrim.musicxml
 t/input/Pilgrim.nwc
 t/integration.t
 t/locales.t
