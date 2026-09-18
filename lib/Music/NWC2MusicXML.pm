@@ -466,7 +466,12 @@ sub _single_convert {
 	}
 
 	# Write output
-	$self->_write_output($output, $xml, $input);
+	eval { $self->_write_output($output, $xml, $input) };
+	if ($@) {
+		carp _fmt_msg('error_write', $output, $@);
+		$diag->count(outcome => 'failed');
+		return undef;
+	}
 
 	$diag->info(_fmt_msg('info_done', $output));
 	$diag->count(outcome => 'successful');

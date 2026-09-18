@@ -412,6 +412,9 @@ sub rational_from_nwc_duration {
 		unless defined $dur && exists $DURATION_RATIONALS{$dur};
 
 	my $r      = $DURATION_RATIONALS{$dur};
+	# P: table values are already in lowest terms; _reduce_rational is a no-op for dots=0.
+	return $r unless $dots;
+
 	my $base_r = $r;   # preserve original: dot d adds base/2^d, not cur/2^d
 
 	for my $d (1 .. $dots) {

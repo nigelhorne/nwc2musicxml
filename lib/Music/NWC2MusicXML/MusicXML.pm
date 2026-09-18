@@ -7,6 +7,7 @@ use autodie qw(:all);
 our $VERSION = '0.01';
 
 use Carp qw(croak carp);
+use POSIX qw(floor);
 use Readonly;
 use Scalar::Util qw(blessed);
 use Params::Validate::Strict qw(validate_strict);
@@ -100,7 +101,7 @@ Readonly::Hash my %BARLINE_MAP => (
 # Pitch-conversion constants
 # ---------------------------------------------------------------------------
 
-# Reference note (step_index, octave) for NWC position 0 = top line of staff.
+# Reference note (step_index, octave) for NWC position 0 = middle line (3rd from bottom) of each staff.
 # Step indices: C=0, D=1, E=2, F=3, G=4, A=5, B=6
 # Verified against Pilgrim.nwc: Bass pos -7 = A2 (A-drone), Treble pos -9 = D4 (tonic).
 Readonly::Hash my %CLEF_REF => (
@@ -118,6 +119,18 @@ Readonly::Array my @STEP_NAMES => qw(C D E F G A B);
 # Circle-of-fifths order: sharps = F C G D A E B; flats = B E A D G C F
 Readonly::Array my @SHARP_STEPS => ( 3, 0, 4, 1, 5, 2, 6 );
 Readonly::Array my @FLAT_STEPS  => ( 6, 2, 5, 1, 4, 0, 3 );
+
+# NWC accidental prefix -> [ semitone_alter, MusicXML accidental name ]
+# P1: empty prefix and unknown prefixes fall back to key-signature alter (no accidental element).
+# P2: 'x' is NWC's alias for '##' (double-sharp written as a cross).
+Readonly::Hash my %ACCIDENTAL_MAP => (
+	'#'  => [  1, 'sharp'        ],
+	'##' => [  2, 'double-sharp' ],
+	'x'  => [  2, 'double-sharp' ],
+	'b'  => [ -1, 'flat'         ],
+	'bb' => [ -2, 'double-flat'  ],
+	'n'  => [  0, 'natural'      ],
+);
 
 # NWC base-duration name -> MusicXML type string
 Readonly::Hash my %NWC_TYPE_MAP => (
@@ -1370,23 +1383,20 @@ sub _pos_to_pitch {
 	my $ref      = $CLEF_REF{$clef} // $CLEF_REF{Treble};
 	my $index    = $ref->[1] * 7 + $ref->[0] + $pos_num;
 
-	# Floor division: octave = floor(index / 7), step_i = index mod 7 in [0,6]
-	my $octave   = int($index / 7);
-	$octave--    if $index < 0 && ($index % 7) != 0;
+	my $octave   = floor($index / 7);
 	my $step_i   = $index - $octave * 7;
 
 	my $step     = $STEP_NAMES[$step_i];
 	my $key_alt  = _key_alter_for_step($step_i, $key_fifths);
 
+	# Dispatch: known prefixes from %ACCIDENTAL_MAP; empty/unknown -> key-sig alter.
 	my ($alter, $accidental);
-	if    ($acc_prefix eq '')         { $alter =  $key_alt; $accidental = undef       }
-	elsif ($acc_prefix eq '#')        { $alter =  1;        $accidental = 'sharp'     }
-	elsif ($acc_prefix eq '##')       { $alter =  2;        $accidental = 'double-sharp' }
-	elsif ($acc_prefix eq 'x')        { $alter =  2;        $accidental = 'double-sharp' }
-	elsif ($acc_prefix eq 'b')        { $alter = -1;        $accidental = 'flat'      }
-	elsif ($acc_prefix eq 'bb')       { $alter = -2;        $accidental = 'double-flat'  }
-	elsif ($acc_prefix eq 'n')        { $alter =  0;        $accidental = 'natural'   }
-	else                              { $alter =  $key_alt; $accidental = undef       }
+	if (my $acc = $ACCIDENTAL_MAP{$acc_prefix}) {
+		($alter, $accidental) = @$acc;
+	} else {
+		$alter      = $key_alt;
+		$accidental = undef;
+	}
 
 	return { step => $step, octave => $octave, alter => $alter, accidental => $accidental };
 }
@@ -1395,16 +1405,13 @@ sub _key_alter_for_step {
 	my ($step_i, $key_fifths) = @_;
 	return 0 unless $key_fifths;
 
-	if ($key_fifths > 0) {
-		my $n = $key_fifths > 7 ? 7 : $key_fifths;
-		for my $k (0 .. $n - 1) {
-			return 1 if $SHARP_STEPS[$k] == $step_i;
-		}
-	} else {
-		my $n = (-$key_fifths) > 7 ? 7 : (-$key_fifths);
-		for my $k (0 .. $n - 1) {
-			return -1 if $FLAT_STEPS[$k] == $step_i;
-		}
+	# P1: $key_fifths != 0 (guarded above). P2: sharp/flat differ only in sign+table.
+	my ($sign, $steps) = $key_fifths > 0
+		? (1, \@SHARP_STEPS)
+		: (-1, \@FLAT_STEPS);
+	my $n = abs($key_fifths) > 7 ? 7 : abs($key_fifths);
+	for my $k (0 .. $n - 1) {
+		return $sign if $steps->[$k] == $step_i;
 	}
 	return 0;
 }
