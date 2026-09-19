@@ -1,5 +1,9 @@
 Revision history for Music-NWC2MusicXML
 
+0.001.1
+	[ Bug Fixes]
+	- Fix Test Dashboard URL
+
 0.001.0	Fri Sep 18 12:49:11 PM EDT 2026
       Initial CPAN release. Fully functional NWC-to-MusicXML conversion pipeline.
 

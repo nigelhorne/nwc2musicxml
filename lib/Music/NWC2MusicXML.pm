@@ -591,7 +591,7 @@ honour them without repeating the arguments on each call.
 
 =item * L<Configure an Object at Runtime|Object::Configure>
 
-=item * L<Test Dashboard|https://nigelhorne.github.io/Music-NWC2MusicXML/coverage/>
+=item * L<Test Dashboard|https://nigelhorne.github.io/nwc2musicxml/coverage/>
 
 =back
 
