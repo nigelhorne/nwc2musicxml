@@ -35,7 +35,7 @@ WriteMakefile(
 		'List::Util'              => 0,
 		'Object::Configure'       => 0,
 		'Params::Get'             => 0,
-		'Params::Validate::Strict'=> 0,
+		'Params::Validate::Strict'=> 0.40,
 		'Pod::Usage'              => 0,
 		'POSIX'                   => 0,
 		'Readonly'                => 0,

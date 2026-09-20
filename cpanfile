@@ -13,7 +13,7 @@ requires 'List::Util';
 requires 'Object::Configure';
 requires 'POSIX';
 requires 'Params::Get';
-requires 'Params::Validate::Strict';
+requires 'Params::Validate::Strict', '0.40';
 requires 'Pod::Usage';
 requires 'Readonly';
 requires 'Scalar::Util';
