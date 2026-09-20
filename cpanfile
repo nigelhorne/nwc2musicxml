@@ -29,6 +29,7 @@ on 'test' => sub {
 	requires 'File::Copy';
 	requires 'File::Temp';
 	requires 'IPC::System::Simple';
+	requires 'Test::DescribeMe';
 	requires 'Test::Exception';
 	requires 'Test::Memory::Cycle';
 	requires 'Test::Mockingbird';
