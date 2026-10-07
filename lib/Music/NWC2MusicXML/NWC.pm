@@ -217,6 +217,7 @@ sub read {
 
 	my $data;
 	{
+		no autodie 'open';	# autodie would swallow the open failure before or-croak fires
 		open my $fh, '<:raw', $filename
 			or croak _fmt_msg('error_not_a_file', "$filename: $!");
 		local $/;
