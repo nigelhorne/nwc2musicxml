@@ -4,7 +4,7 @@ Music::NWC2MusicXML - Convert NoteWorthy Composer 2 `.nwc` score files to MusicX
 
 ## Version
 
-0.001.1
+0.001.2
 
 ## Synopsis
 
@@ -261,6 +261,10 @@ honour them without repeating the arguments on each call.
 
 - [Configure an Object at Runtime](https://metacpan.org/pod/Object%3A%3AConfigure)
 - [Test Dashboard](https://nigelhorne.github.io/nwc2musicxml/coverage/)
+
+## Support
+
+This module is provided as-is without any warranty.
 
 ## Formal Specification
 
