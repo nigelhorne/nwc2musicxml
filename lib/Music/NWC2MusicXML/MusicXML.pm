@@ -1210,8 +1210,8 @@ sub _emit_measure {
 
 # Walk all events in a staff once and build an annotation hashref keyed by
 # stringified event reference.  Each value is a hashref with:
-#   slur_start      => 1   this note opens a slur arc
-#   slur_stop       => 1   this note closes a slur arc
+#   slur_start      => N   this note opens slur arc N
+#   slur_stop       => N   this note closes slur arc N (placed on the landing note, not the last Slur-bearing note)
 #   tie_stop_keys   => { pos_key => 1, ... }  tie stops arriving at this note
 #   tie_start_keys  => { pos_key => 1, ... }  tie starts leaving from this note
 #
@@ -1266,13 +1266,14 @@ sub _annotate_events {
 				$ann{$key}{slur_start} = $slur_num;
 				$in_slur = 1;
 			}
-			# Rolling assignment: only the last slurred note's key matters for
-			# slur_stop; intermediate dead-stores are intentional.
-			$last_slur_ev  = $key;
+			$last_slur_ev  = $key;   # kept only for the end-of-staff fallback below
 			$last_slur_num = $slur_num;
 		} else {
 			if ($in_slur) {
-				$ann{$last_slur_ev}{slur_stop} = $last_slur_num;
+				# Stop goes on the landing note (first note WITHOUT Slur), not the
+				# last note that carries Slur.  Placing it on the Slur-bearing note
+				# produces a zero-length arc when only one note has the token.
+				$ann{$key}{slur_stop} = $last_slur_num;
 				$in_slur      = 0;
 				$last_slur_ev = undef;
 			}

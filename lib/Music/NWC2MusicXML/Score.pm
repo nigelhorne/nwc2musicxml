@@ -331,7 +331,7 @@ Arrayref of diagnostic strings (empty on success).
 =cut
 
 sub validate {
-	my ($self) = @_;
+	my $self = $_[0];
 
 	# Strategy: iterate staves; for each staff check that:
 	#  - event list is non-empty
