@@ -1,6 +1,6 @@
 Revision history for Music-NWC2MusicXML
 
-0.002.0  2026-10-09
+0.002.0	Fri Oct  9 08:39:33 PM EDT 2026
 	[ Bug Fixes ]
 	- MusicXML::_annotate_events: slur_stop was placed on the last note carrying
 	  the Slur token rather than on the landing note (the first following note
