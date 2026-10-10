@@ -20,15 +20,30 @@ https://pjcj.net
 <h1>Branch Coverage</h1>
 <table>
 <tr><td class="h" align="right">File:</td><td align="left">blib/lib/Music/NWC2MusicXML/Score.pm</td></tr>
-<tr><td class="h" align="right">Coverage:</td><td align="left" class="c1">75.0%</td></tr>
+<tr><td class="h" align="right">Coverage:</td><td align="left" class="c1">81.6%</td></tr>
 </table>
 <div><br/></div>
 <table>
 <tr><th>line</th><th>%</th><th colspan="2">coverage</th><th>branch</th></tr>
-<tr><td class="h"><a id="L85">85</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless defined $args</td></tr>
-<tr><td class="h"><a id="L244">244</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless &amp;blessed($staff) and $staff-&gt;isa(&quot;Music::NWC2MusicXML::Staff&quot;)</td></tr>
-<tr><td class="h"><a id="L344">344</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($self-&gt;staff_count == 0)</td></tr>
-<tr><td class="h"><a id="L366">366</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless exists $MESSAGES{$key}</td></tr>
+<tr><td class="h"><a id="L90">90</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless defined $args</td></tr>
+<tr><td class="h"><a id="L249">249</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless &amp;blessed($staff) and $staff-&gt;isa(&quot;Music::NWC2MusicXML::Staff&quot;)</td></tr>
+<tr><td class="h"><a id="L349">349</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($self-&gt;staff_count == 0)</td></tr>
+<tr><td class="h"><a id="L357">357</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($staff-&gt;event_count == 0)</td></tr>
+<tr><td class="h"><a id="L374">374</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($type eq &quot;TimeSig&quot;)</td></tr>
+<tr><td class="h"><a id="L379">379</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($type eq &quot;Bar&quot;)</td></tr>
+<tr><td class="h"><a id="L380">380</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if ($acc_n &gt; 0 and $exp_n &gt; 0)</td></tr>
+<tr><td class="h"><a id="L383">383</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">unless $cn * $ed == $en * $cd</td></tr>
+<tr><td class="h"><a id="L393">393</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless $type eq &quot;Note&quot; or $type eq &quot;Chord&quot; or $type eq &quot;Rest&quot;</td></tr>
+<tr><td class="h"><a id="L396">396</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">unless ($d-&gt;{&#39;is_grace&#39;})</td></tr>
+<tr><td class="h"><a id="L405">405</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless ($type eq &quot;Rest&quot;)</td></tr>
+<tr><td class="h"><a id="L408">408</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">$type eq &#39;Chord&#39; ? :</td></tr>
+<tr><td class="h"><a id="L412">412</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $ps =~ /\^\z/</td></tr>
+<tr><td class="h"><a id="L417">417</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $type eq &quot;Rest&quot;</td></tr>
+<tr><td class="h"><a id="L418">418</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">@{$d-&gt;{&#39;articulations&#39;} // [];} ? :</td></tr>
+<tr><td class="h"><a id="L424">424</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if $in_slur</td></tr>
+<tr><td class="h"><a id="L436">436</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless exists $MESSAGES{$key}</td></tr>
+<tr><td class="h"><a id="L444">444</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless ref $ts eq &quot;HASH&quot; and $ts-&gt;{&#39;beats&#39;} and $ts-&gt;{&#39;beat_type&#39;}</td></tr>
+<tr><td class="h"><a id="L451">451</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless $n</td></tr>
 </table>
 </body>
 </html>
