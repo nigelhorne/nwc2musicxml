@@ -27,7 +27,7 @@ Music::NWC2MusicXML::Staff - Internal representation of a single NWC staff.
 
 =head1 VERSION
 
-0.001.2
+0.002.0
 
 =head1 SYNOPSIS
 

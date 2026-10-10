@@ -40,7 +40,7 @@ Music::NWC2MusicXML::Score - Internal representation of a complete NWC score.
 
 =head1 VERSION
 
-0.001.2
+0.002.0
 
 =head1 SYNOPSIS
 
@@ -475,8 +475,6 @@ __END__
 =head1 LIMITATIONS
 
 =over 4
-
-=item * C<validate> is a stub; full validation implemented in Phase 3.
 
 =item * Page-layout and graphical properties are stored but not used in MusicXML generation.
 

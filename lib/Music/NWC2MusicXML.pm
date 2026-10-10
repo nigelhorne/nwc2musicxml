@@ -6,6 +6,22 @@ use autodie qw(:all);
 
 our $VERSION = '0.002.0';
 
+# ---------------------------------------------------------------------------
+# Post-release roadmap
+# ---------------------------------------------------------------------------
+# TODO: emit <time-modification>/<tuplet> for triplet and other tuplet groups
+#       (durations are stored as correct rationals; only the notation element is missing)
+# TODO: read custom page dimensions from PgSetup (Width/Height) instead of
+#       assuming A4 (210 x 297 mm) in _compute_page_layout
+# TODO: multi-voice staves -- split simultaneous RestChord streams into
+#       MusicXML voice 2+ with independent stem directions
+# TODO: verify lyrics end-to-end against a golden NWC file that contains
+#       Lyric records (_annotate_lyrics and emission code both exist)
+# TODO: verify FlowControl round-trip against a golden NWC file that contains
+#       Coda/Segno/DaCapo marks (_emit_flow_control is wired but untested)
+# TODO: fill Z calculus placeholders in FORMAL SPECIFICATION POD sections
+# ---------------------------------------------------------------------------
+
 use Carp qw(croak carp);
 use Readonly;
 use File::Spec ();

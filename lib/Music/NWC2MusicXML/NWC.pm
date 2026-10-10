@@ -56,7 +56,7 @@ Music::NWC2MusicXML::NWC - Binary NWC container decoder.
 
 =head1 VERSION
 
-0.001.2
+0.002.0
 
 =head1 SYNOPSIS
 

@@ -1999,32 +1999,9 @@ independent stems -- is deferred to a future release.
 
 =item *
 
-Slur numbering: all slurs use number 1.  If more than one slur arc is open
-simultaneously (which is rare but legal in NWC), the overlapping slurs will
-share the same number and the output will be invalid.  The constant
-C<$MAX_SLUR_NUMBER> documents the intended limit.
-
-=item *
-
-Lyric text (C<Lyric> events) is not yet serialised.  The events are parsed
-and stored in the Score but no C<< <lyric> >> elements appear in the output.
-
-=item *
-
-Flow-control directives (Coda, Segno, DaCapo, Volta brackets, etc.) are
-stored as C<FlowControl> events by the parser but produce no MusicXML output.
-
-=item *
-
 Page dimensions are always assumed to be A4 (210 x 297 mm).  NWC supports
 custom page sizes through C<PgSetup> fields that are not yet read by the
 parser.
-
-=item *
-
-Only uniform margins are supported.  NWC allows different left, right, top,
-and bottom margins, and also supports mirrored margins for left/right pages.
-The generator uses only the left margin value and applies it to all four sides.
 
 =back
 
