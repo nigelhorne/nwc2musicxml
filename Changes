@@ -1,5 +1,9 @@
 Revision history for Music-NWC2MusicXML
 
+0.002.1
+	[ Bug Fixes ]
+	- Fix the handling of pause symbols (fermatas)
+
 0.002.0	Fri Oct  9 08:39:33 PM EDT 2026
 	[ Bug Fixes ]
 	- MusicXML::_annotate_events: slur_stop was placed on the last note carrying

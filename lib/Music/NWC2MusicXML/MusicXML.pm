@@ -1035,6 +1035,7 @@ sub _emit_part {
 	my $ann = $self->_annotate_events($staff->events);
 	$self->_annotate_wedges($staff->events, $ann);
 	$self->_annotate_lyrics($staff->events, $ann);
+	$self->_annotate_fermatas($staff->events, $ann);
 
 	for my $event (@{ $staff->events }) {
 		my $type = $event->type;
@@ -1145,6 +1146,7 @@ sub _emit_measure {
 
 		} elsif ($type eq 'TempoVariance') {
 			my $d = $event->data // {};
+			next if ($d->{style} // '') eq 'Fermata';   # handled as <fermata/> on preceding note
 			push @out, $self->_emit_tempo_variance(
 				$d->{style}, $d->{placement}, $pad . $i);
 
@@ -1350,6 +1352,30 @@ sub _annotate_wedges {
 	return $ann;
 }
 
+# Associate each TempoVariance:Fermata with the immediately following Note,
+# Rest, or Chord.  NWC places the TempoVariance record before the note it
+# decorates; the fermata is a <notations><fermata/> element on that note, not
+# a text direction.
+sub _annotate_fermatas {
+	my ($self, $events, $ann) = @_;
+	$ann //= {};
+
+	my $pending_fermata = 0;
+	for my $ev (@$events) {
+		my $type = $ev->type;
+		if ($type eq 'Note' || $type eq 'Rest' || $type eq 'Chord') {
+			if ($pending_fermata) {
+				$ann->{"$ev"}{fermata} = 1;
+				$pending_fermata = 0;
+			}
+		} elsif ($type eq 'TempoVariance'
+		      && ($ev->data->{style} // '') eq 'Fermata') {
+			$pending_fermata = 1;
+		}
+	}
+	return $ann;
+}
+
 # ---------------------------------------------------------------------------
 # Private: note / rest / chord XML emission
 # ---------------------------------------------------------------------------
@@ -1410,6 +1436,7 @@ sub _emit_note_event {
 	push @nots, "${pad}${i}${i}<tied type=\"start\"/>"              if $tie_start;
 	push @nots, "${pad}${i}${i}<slur number=\"$slur_stop\" type=\"stop\"/>"   if $slur_stop;
 	push @nots, "${pad}${i}${i}<slur number=\"$slur_start\" type=\"start\"/>" if $slur_start;
+	push @nots, "${pad}${i}${i}<fermata/>" if !$is_chord_member && $ev_ann->{fermata};
 
 	# Articulations: only on the first note of a chord (is_chord_member is false)
 	my @artic_tokens = !$is_chord_member
@@ -1479,6 +1506,11 @@ sub _emit_rest_event {
 	push @out, "${pad}${i}<voice>1</voice>";
 	push @out, "${pad}${i}<type>$type</type>";
 	push @out, "${pad}${i}<dot/>" for 1 .. ($d->{dots} // 0);
+	if ($ev_ann->{fermata}) {
+		push @out, "${pad}${i}<notations>";
+		push @out, "${pad}${i}${i}<fermata/>";
+		push @out, "${pad}${i}</notations>";
+	}
 	push @out, "${pad}</note>";
 	return @out;
 }
@@ -1504,6 +1536,7 @@ sub _emit_chord_event {
 				slur_start => $ev_ann->{slur_start},
 				slur_stop  => $ev_ann->{slur_stop},
 				lyrics     => $ev_ann->{lyrics},
+				fermata    => $ev_ann->{fermata},
 			) : ()),
 		);
 		push @out, $self->_emit_note_event(
