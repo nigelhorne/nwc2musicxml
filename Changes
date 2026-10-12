@@ -1,6 +1,6 @@
 Revision history for Music-NWC2MusicXML
 
-0.002.1
+0.002.1	Mon Oct 12 04:14:34 PM EDT 2026
 	[ Bug Fixes ]
 	- NWC TempoVariance:Fermata records were emitted as a text direction
 	  (<words font-style="italic">Fermata</words>) instead of the correct
