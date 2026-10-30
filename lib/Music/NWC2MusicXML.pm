@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use autodie qw(:all);
 
-our $VERSION = '0.002.1';
+use version; our $VERSION = version->declare('0.002.2');
 
 # ---------------------------------------------------------------------------
 # Post-release roadmap
