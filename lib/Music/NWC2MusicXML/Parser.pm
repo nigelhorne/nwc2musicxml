@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use autodie qw(:all);
 
-our $VERSION = '0.002.1';
+our $VERSION = '0.002.2';
 
 use Carp qw(croak carp);
 use Readonly;
@@ -100,6 +100,10 @@ Fields are pipe-delimited.  Values may be:
 
 The parser does B<not> use C<split(/[|]/)> because quoted values and escape
 sequences require a proper tokeniser.
+
+B<Record type aliases>: some NWC versions export C<DynamicVariance> where
+others write the abbreviated C<DynVariance>; the parser accepts both and emits
+the same C<DynVariance> event in either case.
 
 =cut
 

@@ -72,7 +72,7 @@ Music::NWC2MusicXML - Convert NoteWorthy Composer 2 C<.nwc> score files to Music
 
 =head1 VERSION
 
-0.002.1
+0.002.2
 
 =head1 SYNOPSIS
 

@@ -1,6 +1,6 @@
 Revision history for Music-NWC2MusicXML
 
-0.002.2
+0.002.2	Fri Oct 30 04:14:18 PM EDT 2026
 	[ Bug Fixes ]
 	- Parser: NWCTXT files produced by some NWC versions spell the hairpin
 	  dynamic record as DynamicVariance instead of the abbreviated DynVariance.
