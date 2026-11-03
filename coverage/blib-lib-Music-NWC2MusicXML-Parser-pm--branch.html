@@ -59,23 +59,23 @@ https://pjcj.net
 <tr><td class="h"><a id="L540">540</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (not $staff-&gt;has_notes) { }</td></tr>
 <tr><td class="h"><a id="L556">556</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless (defined $beats and defined $beat_type)</td></tr>
 <tr><td class="h"><a id="L564">564</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (not $staff-&gt;has_notes) { }</td></tr>
-<tr><td class="h"><a id="L679">679</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($tok eq &#39;Dotted&#39;) { }</td></tr>
+<tr><td class="h"><a id="L680">680</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($tok eq &#39;Dotted&#39;) { }</td></tr>
 <tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif ($tok eq &#39;DblDotted&#39;) { }</td></tr>
 <tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif ($tok =~ /\ATriplet(?:=(.+))?\z/) { }</td></tr>
 <tr><td class="h"></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">elsif ($tok eq &#39;Grace&#39;) { }</td></tr>
-<tr><td class="h"><a id="L691">691</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $opts_str and length $opts_str</td></tr>
-<tr><td class="h"><a id="L694">694</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($opt =~ /\A(\w+)=(.*)\z/) { }</td></tr>
-<tr><td class="h"><a id="L740">740</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">$ends_h ? :</td></tr>
+<tr><td class="h"><a id="L692">692</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $opts_str and length $opts_str</td></tr>
+<tr><td class="h"><a id="L695">695</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($opt =~ /\A(\w+)=(.*)\z/) { }</td></tr>
+<tr><td class="h"><a id="L741">741</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">$ends_h ? :</td></tr>
 <tr><td class="h"></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">$starts_h ? :</td></tr>
 <tr><td class="h"></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">$starts_h &amp;&amp; $ends_h ? :</td></tr>
-<tr><td class="h"><a id="L809">809</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">$pos &gt;= 0 ? :</td></tr>
-<tr><td class="h"><a id="L853">853</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $staff</td></tr>
-<tr><td class="h"><a id="L864">864</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $sig and length $sig</td></tr>
-<tr><td class="h"><a id="L865">865</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $sig eq $KEY_SIG_NATURAL</td></tr>
-<tr><td class="h"><a id="L870">870</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless @acc</td></tr>
-<tr><td class="h"><a id="L872">872</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (index($acc[0], &#39;#&#39;) != -1) { }</td></tr>
+<tr><td class="h"><a id="L810">810</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">$pos &gt;= 0 ? :</td></tr>
+<tr><td class="h"><a id="L854">854</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $staff</td></tr>
+<tr><td class="h"><a id="L865">865</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $sig and length $sig</td></tr>
+<tr><td class="h"><a id="L866">866</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $sig eq $KEY_SIG_NATURAL</td></tr>
+<tr><td class="h"><a id="L871">871</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless @acc</td></tr>
+<tr><td class="h"><a id="L873">873</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (index($acc[0], &#39;#&#39;) != -1) { }</td></tr>
 <tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif (substr($acc[0], -1, 1) eq &#39;b&#39;) { }</td></tr>
-<tr><td class="h"><a id="L882">882</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless exists $MESSAGES{$key}</td></tr>
+<tr><td class="h"><a id="L883">883</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless exists $MESSAGES{$key}</td></tr>
 </table>
 </body>
 </html>
