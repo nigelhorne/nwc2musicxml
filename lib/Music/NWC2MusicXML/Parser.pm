@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use autodie qw(:all);
 
-our $VERSION = '0.002.3';
+our $VERSION = '0.002.4';
 
 use Carp qw(croak carp);
 use Readonly;
@@ -63,7 +63,7 @@ representation.
 
 =head1 VERSION
 
-0.002.3
+0.002.4
 
 =head1 SYNOPSIS
 
@@ -104,6 +104,22 @@ sequences require a proper tokeniser.
 B<Record type aliases>: some NWC versions export C<DynamicVariance> where
 others write the abbreviated C<DynVariance>; the parser accepts both and emits
 the same C<DynVariance> event in either case.
+
+B<Text event placement>: C<Text> records carry an optional C<Placement:>
+field.  When it is absent the vertical position is inferred from the C<Pos:>
+field: a non-negative C<Pos> value sets placement to C<'Above'>; a negative
+value sets it to C<'Below'>.  This handles common NWC files where performance
+directions such as "Slightly faster" are positioned above the staff via a
+positive C<Pos> number with no explicit C<Placement:> field.
+
+B<EndingBar normalisation>: NWC C<StaffProperties> stores the ending barline
+style as a multi-word string (e.g. C<"Section Close">).  The parser strips
+internal spaces on ingestion so the value matches the compact style tokens used
+by C<Music::NWC2MusicXML::MusicXML> (e.g. C<'SectionClose'>).  When NWC emits
+two C<StaffProperties> records for a staff (the second carrying channel and
+volume data), only the record that actually contains an C<EndingBar:> field
+updates C<_ending_bar>; the second record is not allowed to clobber the value
+set by the first.
 
 =cut
 

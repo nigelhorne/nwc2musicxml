@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use autodie qw(:all);
 
-our $VERSION = '0.002.3';
+our $VERSION = '0.002.4';
 
 use Carp qw(croak carp);
 use POSIX qw(floor);
@@ -163,7 +163,7 @@ Music::NWC2MusicXML::MusicXML - Convert an internal Score object to a MusicXML 4
 
 =head1 VERSION
 
-0.002.3
+0.002.4
 
 =head1 SYNOPSIS
 
@@ -278,6 +278,19 @@ C<< <slur> >> and C<< <tied> >> elements.
 Tie detection uses the raw NWC position string as a key.  A C<^> suffix on a
 position string (e.g. C<Pos:-7^>) means the note is tied forward; the
 generator strips the suffix to match the tied-to note.
+
+=head2 Dynamic variance (text markings)
+
+NWC C<DynVariance> (also exported as C<DynamicVariance> by some NWC versions)
+records represent written-out dynamic variance text — not hairpins.
+C<Style:Crescendo> produces C<< <words font-style="italic">cresc.</words> >>;
+C<Style:Diminuendo> produces C<< <words font-style="italic">dim.</words> >>;
+C<Style:crescOff> (the end-of-phrase marker for an extended text cresc.) emits
+nothing, since MusicXML text directions require no explicit stop element.
+
+Do not confuse these with hairpin crescendo/diminuendo wedges: those come from
+C<Opts:Crescendo> / C<Opts:Diminuendo> attached to individual note or rest
+events (see L</Hairpins (wedges)> below).
 
 =head2 Hairpins (wedges)
 

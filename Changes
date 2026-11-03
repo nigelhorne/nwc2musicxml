@@ -1,6 +1,6 @@
 Revision history for Music-NWC2MusicXML
 
-0.002.4
+0.002.4	Tue Nov  3 04:12:32 PM EST 2026
 	[ Bug Fixes ]
 	- MusicXML: DynVariance events (Style:Crescendo / Style:Diminuendo) were
 	  incorrectly emitted as hairpin wedge elements (<wedge type="crescendo"/
