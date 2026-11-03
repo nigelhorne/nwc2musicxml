@@ -473,7 +473,10 @@ sub _handle_staff_properties {
 	my $staff = $self->_current_staff_or_croak('StaffProperties');
 	$staff->{_visible}         = ($h->{Visible} // 'Y') eq 'Y' ? 1 : 0;
 	$staff->{_lines}           = $h->{Lines} // 5;
-	$staff->{_ending_bar}      = $h->{EndingBar};
+	if (defined $h->{EndingBar}) {
+		(my $ending_bar = $h->{EndingBar}) =~ s/\s+//g;
+		$staff->{_ending_bar} = $ending_bar;
+	}
 	$staff->{_channel}         = $h->{Channel} + 0 if defined $h->{Channel};
 	$staff->{_with_next_staff} = $h->{WithNextStaff} if defined $h->{WithNextStaff};
 	$staff->{_volume}          = $h->{Volume}    + 0 if defined $h->{Volume};
@@ -725,9 +728,13 @@ sub _handle_dyn_variance {
 sub _handle_text {
 	my ($self, $fields) = @_;
 	my $h = $self->_fields_to_hash($fields);
+	my $placement = $h->{Placement};
+	if (!defined $placement && defined $h->{Pos}) {
+		$placement = ($h->{Pos} >= 0) ? 'Above' : 'Below';
+	}
 	$self->_append_event(Music::NWC2MusicXML::Event->new(
 		type => 'Text',
-		data => { text => $h->{Text} // '', placement => $h->{Placement} // '' },
+		data => { text => $h->{Text} // '', placement => $placement // '' },
 	));
 }
 
