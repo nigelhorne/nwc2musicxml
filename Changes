@@ -1,5 +1,9 @@
 Revision history for Music-NWC2MusicXML
 
+0.003.0
+	[ Enhancements ]
+	- Added website
+
 0.002.4	Tue Nov  3 04:12:32 PM EST 2026
 	[ Bug Fixes ]
 	- MusicXML: DynVariance events (Style:Crescendo / Style:Diminuendo) were
