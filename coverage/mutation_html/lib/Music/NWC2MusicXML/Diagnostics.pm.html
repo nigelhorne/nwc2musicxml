@@ -345,7 +345,7 @@ Approximate LCSAJ segments: 27<br>
 </span><span class="">    4: use warnings;
 </span><span class="">    5: use autodie qw(:all);
 </span><span class="">    6: 
-</span><span class="">    7: our $VERSION = &#39;0.002.4&#39;;
+</span><span class="">    7: our $VERSION = &#39;0.003.0&#39;;
 </span><span class="">    8: 
 </span><span class="">    9: use Carp qw(croak carp);
 </span><span class="">   10: use Readonly;
@@ -405,7 +405,7 @@ Approximate LCSAJ segments: 27<br>
 </span><span class="">   64: 
 </span><span class="">   65: =head1 VERSION
 </span><span class="">   66: 
-</span><span class="">   67: 0.002.4
+</span><span class="">   67: 0.003.0
 </span><span class="">   68: 
 </span><span class="">   69: =head1 SYNOPSIS
 </span><span class="">   70: 
@@ -962,7 +962,7 @@ is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
 </span><span class="">  534: 
 </span><span class="">  535: sub summary {
 </span><span class="">  536: 	my ($self) = @_;
-</span><span class="survived-3 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths. Boundary mutation survived. Add tests around edge values (e.g. min, max, off-by-one).">  537: 	return $self if $self-&gt;{_level} &lt; $LOG_NORMAL;
+</span><span class="survived-3 tooltip" data-tooltip="Boundary mutation survived. Add tests around edge values (e.g. min, max, off-by-one). Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  537: 	return $self if $self-&gt;{_level} &lt; $LOG_NORMAL;
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 5, Killed: 0, Survived: 5)</summary>
